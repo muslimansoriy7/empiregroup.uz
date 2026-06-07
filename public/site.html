@@ -143,6 +143,8 @@ header.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:.4s ease}
 @keyframes scroll{to{transform:translateX(-50%)}}
 .marquee .item{font-family:var(--display);font-weight:600;font-size:1.5rem;color:rgba(238,236,232,.45);white-space:nowrap;display:flex;align-items:center;gap:56px}
 .marquee .item::after{content:"◆";color:var(--bronze);font-size:.7rem}
+.client-item{font-family:var(--body);font-weight:600;font-size:.92rem;letter-spacing:.04em;color:var(--muted);background:var(--paper);border:1px solid var(--cream-dark);border-radius:50px;padding:10px 22px;white-space:nowrap;margin:0 10px;transition:.25s}
+.client-item:hover{color:var(--ink);border-color:var(--bronze-light)}
 
 section{position:relative;z-index:2}
 .sec{padding:clamp(72px,11vw,128px) 0}
@@ -553,6 +555,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
       <div class="stat"><div class="n" data-count="40" data-suf="+">0</div><div class="t"><span class="i-uz">Biznes yo'nalishi</span><span class="i-ru">Направлений бизнеса</span></div></div>
       <div class="stat"><div class="n"><span class="suf">$</span><span data-count="2" data-suf="M+">0</span></div><div class="t"><span class="i-uz">Boshqarilgan byudjet</span><span class="i-ru">Управляемый бюджет</span></div></div>
       <div class="stat"><div class="n" data-count="6" data-suf="–10">0</div><div class="t"><span class="i-uz">Hafta — AI-MVP sikli</span><span class="i-ru">Недель — цикл AI-MVP</span></div></div>
+      <div class="stat"><div class="n" data-count="27" data-suf="+">0</div><div class="t"><span class="i-uz">Ishonchli mijozlar</span><span class="i-ru">Клиентов доверяют</span></div></div>
     </div>
   </div>
 </section>
@@ -673,6 +676,22 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
           <div class="hl-stat"><div class="n" style="font-size:1.25rem">iOS · Android · Web</div><div class="t"><span class="i-uz">to'liq platforma qamrovi</span><span class="i-ru">полное покрытие платформ</span></div></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLIENTS MARQUEE ============ -->
+<section class="sec tight" id="clients" style="padding-bottom:0;padding-top:clamp(48px,7vw,80px)">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="margin-bottom:36px">
+      <span class="eyebrow center"><span class="i-uz">Mijozlarimiz</span><span class="i-ru">Наши клиенты</span></span>
+      <h2 class="sec-title" style="font-size:clamp(1.6rem,3.5vw,2.4rem)"><span class="i-uz">Bizga <span class="ital">ishongan</span> kompaniyalar</span><span class="i-ru">Компании, которые нам <span class="ital">доверяют</span></span></h2>
+    </div>
+  </div>
+  <div class="marquee" style="margin-top:0">
+    <div class="marquee-track" style="gap:0">
+      <div class="client-item">Oxus University</div><div class="client-item">Impuls Instituti</div><div class="client-item">PDP University</div><div class="client-item">Yangi Asr Universiteti</div><div class="client-item">Nordic University</div><div class="client-item">Barra24</div><div class="client-item">Blitz o'quv markazi</div><div class="client-item">Timeedu.uz</div><div class="client-item">Bilton English School</div><div class="client-item">PDP School</div><div class="client-item">Grand Ta'lim</div><div class="client-item">AQLY</div><div class="client-item">Registon o'quv markazi</div><div class="client-item">Mohirdev</div><div class="client-item">Topceo.uz</div><div class="client-item">Edfix</div><div class="client-item">Restart Coaching</div><div class="client-item">Relax Body Lab</div><div class="client-item">Digital Garden</div><div class="client-item">OLX.uz</div><div class="client-item">Avtoelon</div><div class="client-item">Orient Group</div><div class="client-item">Figur.uz</div><div class="client-item">Pitaka.uz</div><div class="client-item">Mountain Agency</div><div class="client-item">RevoTech</div><div class="client-item">Asko</div>
+      <div class="client-item">Oxus University</div><div class="client-item">Impuls Instituti</div><div class="client-item">PDP University</div><div class="client-item">Yangi Asr Universiteti</div><div class="client-item">Nordic University</div><div class="client-item">Barra24</div><div class="client-item">Blitz o'quv markazi</div><div class="client-item">Timeedu.uz</div><div class="client-item">Bilton English School</div><div class="client-item">PDP School</div><div class="client-item">Grand Ta'lim</div><div class="client-item">AQLY</div><div class="client-item">Registon o'quv markazi</div><div class="client-item">Mohirdev</div><div class="client-item">Topceo.uz</div><div class="client-item">Edfix</div><div class="client-item">Restart Coaching</div><div class="client-item">Relax Body Lab</div><div class="client-item">Digital Garden</div><div class="client-item">OLX.uz</div><div class="client-item">Avtoelon</div><div class="client-item">Orient Group</div><div class="client-item">Figur.uz</div><div class="client-item">Pitaka.uz</div><div class="client-item">Mountain Agency</div><div class="client-item">RevoTech</div><div class="client-item">Asko</div>
     </div>
   </div>
 </section>
