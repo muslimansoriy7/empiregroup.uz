@@ -2457,7 +2457,10 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
   function show(route,scrollSel){
     if(!ROUTES[route])route='home';
     current=route;
-    Object.keys(ROUTES).forEach(function(r){var el=document.getElementById(ROUTES[r]);if(el)el.classList.toggle('show',r===route);});
+    var pageId=ROUTES[route];
+    var pageEl=document.getElementById(pageId);
+    console.log('📄 show() called:',{route,pageId,pageFound:!!pageEl,classList:pageEl?pageEl.className:null});
+    Object.keys(ROUTES).forEach(function(r){var el=document.getElementById(ROUTES[r]);if(el){if(r===route){el.classList.add('show');console.log('✓ Added .show to',ROUTES[r]);}else{el.classList.remove('show');}}});
     setActiveNav(route);
     try{history.replaceState(null,'','#!'+route);}catch(e){}
     var pg=document.getElementById(ROUTES[route]);
