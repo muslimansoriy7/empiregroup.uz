@@ -355,8 +355,9 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
 .float-msg .wa{background:#25D366}
 .float-msg svg{width:26px;height:26px}
 
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
-.reveal.in{opacity:1;transform:none}
+.reveal{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+html.js-ready .reveal:not(.in){opacity:0;transform:translateY(28px)}
+html.js-ready .reveal.in{opacity:1;transform:none}
 
 @media(max-width:980px){
   .nav-links{display:none}
@@ -395,9 +396,8 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
 </style>
 <style>
 .page{display:none !important}
-#p-home{display:block !important}
 .page.show{display:block !important;animation:pageIn .45s ease}
-@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pageIn{from{transform:translateY(10px)}to{transform:none}}
 .svc{cursor:default}
 .svc-link{padding:8px 15px;border:1.5px solid var(--bronze-light);border-radius:50px;background:rgba(166,124,82,.08);font-weight:600;cursor:pointer}
 .svc-link:hover{background:var(--bronze);border-color:var(--bronze);color:var(--paper)!important}
@@ -509,7 +509,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     <a href="#!home" class="brand" data-route="home"><span class="mark"><svg viewBox="0 0 92 76" fill="currentColor"><path d="M18 6 L36 6 L24 44 L6 44 Z"/><path d="M43 6 L61 6 L49 44 L31 44 Z"/><path d="M68 6 L86 6 L74 70 L56 70 Z"/></svg></span>Empire<span style="font-weight:400;font-style:italic">Group</span></a>
     <ul class="nav-links">
       <li><a href="#!home" data-route="home" data-page="index"><span class="i-uz">Bosh sahifa</span><span class="i-ru">Главная</span></a></li>
-      <li><a href="#!services" data-route="services" data-page="services"><span class="i-uz">Xizmatlar</span><span class="i-ru">Услуги</span></a></li>
+      <li><a href="#!home" data-route="home" data-page="services" data-scroll="services"><span class="i-uz">Xizmatlar</span><span class="i-ru">Услуги</span></a></li>
       <li><a href="#!portfolio" data-route="portfolio" data-page="portfolio">Portfolio</a></li>
       <li><a href="#!blog" data-route="blog" data-page="blog">Blog</a></li>
       <li><a href="#!about" data-route="about" data-page="about"><span class="i-uz">Biz haqimizda</span><span class="i-ru">О нас</span></a></li>
@@ -527,14 +527,14 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#!home" data-route="home"><span class="num">01</span><span class="i-uz">Bosh sahifa</span><span class="i-ru">Главная</span></a>
-  <a href="#!services" data-route="services"><span class="num">02</span><span class="i-uz">Xizmatlar</span><span class="i-ru">Услуги</span></a>
+  <a href="#!home" data-route="home" data-scroll="services"><span class="num">02</span><span class="i-uz">Xizmatlar</span><span class="i-ru">Услуги</span></a>
   <a href="#!portfolio" data-route="portfolio"><span class="num">03</span>Portfolio</a>
   <a href="#!blog" data-route="blog"><span class="num">04</span>Blog</a>
   <a href="#!about" data-route="about"><span class="num">05</span><span class="i-uz">Biz haqimizda</span><span class="i-ru">О нас</span></a>
   <a href="#!contact" data-route="contact"><span class="num">06</span><span class="i-uz">Aloqa</span><span class="i-ru">Контакты</span></a>
   <a href="#!contact" data-route="contact" class="btn btn-ghost-d mm-cta" style="font-family:var(--body);font-size:1rem"><span class="i-uz">Bepul konsultatsiya</span><span class="i-ru">Бесплатная консультация</span> →</a>
 </div>
-<main class="page" id="p-home">
+<main class="page show" id="p-home">
 <!-- ============ HERO ============ -->
 <section class="hero" id="home">
   <div class="glow"></div>
@@ -625,7 +625,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     
     </div>
     <div style="text-align:center;margin-top:40px" class="reveal">
-      <a href="#!services" class="btn btn-fill" data-route="services"><span class="i-uz">O'zimga mos yechimni tanlash</span><span class="i-ru">Подобрать решение под себя</span> <span class="arr">→</span></a>
+      <a href="#!home" class="btn btn-fill" data-route="home" data-scroll="services"><span class="i-uz">O'zimga mos yechimni tanlash</span><span class="i-ru">Подобрать решение под себя</span> <span class="arr">→</span></a>
     </div>
   </div>
 </section>
@@ -1247,7 +1247,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     </div>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap" class="reveal">
       <a href="#!contact" class="btn btn-fill" data-route="contact"><span class="i-uz">Loyihani boshlash</span><span class="i-ru">Начать проект</span> <span class="arr">→</span></a>
-      <a href="#!services" class="btn btn-ghost-d" data-route="services"><span class="i-uz">Xizmatlar</span><span class="i-ru">Услуги</span></a>
+      <a href="#!home" class="btn btn-ghost-d" data-route="home" data-scroll="services"><span class="i-uz">Xizmatlar</span><span class="i-ru">Услуги</span></a>
     </div>
   </div>
 </section>
@@ -1278,7 +1278,6 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
           <button class="filter-btn" data-cat="Product">Product</button>
           <button class="filter-btn" data-cat="Research">Research</button>
         </div>
-        <button class="btn btn-line" id="dashOpen" style="white-space:nowrap">+ <span class="i-uz">Yangi post</span><span class="i-ru">Новый пост</span></button>
       </div>
       <div class="blog-grid" id="blogGrid"></div>
       <p class="price-note reveal" style="margin-top:28px"><span class="i-uz">* Postlar brauzer xotirasida (artifact) saqlanadi. Haqiqiy SEO va doimiy saqlash uchun backend kerak — pastdagi izohga qarang.</span><span class="i-ru">* Посты сохраняются в хранилище (artifact). Для настоящего SEO и постоянного хранения нужен backend — см. примечание ниже.</span></p>
@@ -1286,34 +1285,6 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     <div id="blogSingle" class="post-single" style="display:none"></div>
   </div>
 </section>
-
-<!-- ============ DASHBOARD OVERLAY ============ -->
-<div class="dash-overlay" id="dashOverlay">
-  <div class="dash-panel">
-    <button class="dash-close" id="dashClose" aria-label="close">&times;</button>
-    <h3><span class="i-uz">Blog Dashboard</span><span class="i-ru">Дашборд блога</span></h3>
-    <p class="sub"><span class="i-uz">Yangi maqola qo'shing yoki mavjudlarini boshqaring.</span><span class="i-ru">Добавьте новую статью или управляйте существующими.</span></p>
-
-    <div class="field two">
-      <div><label><span class="i-uz">Sarlavha (UZ)</span><span class="i-ru">Заголовок (UZ)</span></label><input type="text" id="dTuz" placeholder="O'zbekcha sarlavha"></div>
-      <div><label><span class="i-uz">Sarlavha (RU)</span><span class="i-ru">Заголовок (RU)</span></label><input type="text" id="dTru" placeholder="Русский заголовок"></div>
-    </div>
-    <div class="field two">
-      <div><label><span class="i-uz">Turkum</span><span class="i-ru">Категория</span></label><input type="text" id="dCat" placeholder="GEO / Performance / SEO..."></div>
-      <div><label><span class="i-uz">Muqova rangi</span><span class="i-ru">Цвет обложки</span></label><input type="text" id="dColor" placeholder="#304E4D"></div>
-    </div>
-    <div class="field two">
-      <div><label><span class="i-uz">Qisqa tavsif (UZ)</span><span class="i-ru">Краткое описание (UZ)</span></label><input type="text" id="dEuz" placeholder="1–2 jumla"></div>
-      <div><label><span class="i-uz">Qisqa tavsif (RU)</span><span class="i-ru">Краткое описание (RU)</span></label><input type="text" id="dEru" placeholder="1–2 предложения"></div>
-    </div>
-    <div class="field"><label><span class="i-uz">Matn (UZ)</span><span class="i-ru">Текст (UZ)</span></label><textarea class="field-ta" id="dBuz" placeholder="Maqola matni..."></textarea></div>
-    <div class="field"><label><span class="i-uz">Matn (RU)</span><span class="i-ru">Текст (RU)</span></label><textarea class="field-ta" id="dBru" placeholder="Текст статьи..."></textarea></div>
-    <button class="btn btn-fill" id="dashSave" style="width:100%;justify-content:center"><span class="i-uz">Postni saqlash</span><span class="i-ru">Сохранить пост</span> <span class="arr">→</span></button>
-
-    <h3 style="font-size:1.1rem;margin:26px 0 12px"><span class="i-uz">Mavjud postlar</span><span class="i-ru">Существующие посты</span></h3>
-    <div id="dashList"></div>
-  </div>
-</div>
 </main>
 <main class="page" id="p-about">
 <!-- ============ HERO ============ -->
@@ -1501,7 +1472,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
 <section class="hero short">
 <div class="glow"></div>
 <div class="wrap">
-<a class="back-link" data-route="services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Barcha xizmatlar</a>
+<a class="back-link" data-route="home" data-scroll="services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Barcha xizmatlar</a>
 <div class="hero-eyebrow reveal"><span class="eyebrow">Performance · Growth · ROI-Driven</span></div>
 <h1 class="reveal">Raqamli Marketing <em class="ital">Yechimlari</em></h1>
 <div class="hero-sub-row reveal">
@@ -2160,7 +2131,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
 <a class="btn btn-fill" data-route="contact"><span class="i-uz">24 soatda boshlash</span><span class="i-ru">Запустить за 24 часа</span> <span class="arr">→</span></a>
 <a class="btn btn-ghost-d" data-route="home" data-scroll="services"><span class="i-uz">Boshqa xizmatlar</span><span class="i-ru">Другие услуги</span></a>
 </div></div></div></section>
-</main>
+<section class="sec"><div class="wrap">
 <div class="sec-head reveal"><span class="eyebrow"><span class="i-uz">Ishga tushirish uchun</span><span class="i-ru">Для запуска нужно</span></span>
 <h2 class="sec-title"><span class="i-uz">AI Assistent <span class='ital'>100% ishlashi uchun.</span></span><span class="i-ru">Для работы AI Ассистента <span class='ital'>на 100%.</span></span></h2>
 <p class="lede"><span class="i-uz">Qancha ko'p ma'lumot bersangiz — shuncha aniq va tez ishlaydi. Busiz u 'umumiy assistent' bo'lib qoladi.</span><span class="i-ru">Чем больше информации дадите — тем точнее и быстрее работает. Без этого он останется 'общим ассистентом'.</span></p></div>
@@ -2417,8 +2388,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
 </footer>
 
 <div class="float-msg">
-  <a href="#" class="tg" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3l-3.3 15.5c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.3-.1-.5-.6-.2L6.3 13.4l-4.9-1.5c-1-.3-1-1 .2-1.5L20.6 2.7c.9-.3 1.6.2 1.3 1.6z"/></svg></a>
-  <a href="#" class="wa" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.8-2-.9-.3-.1-.5-.2-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.2-.2.2-.3.3-.5.1-.2.1-.4 0-.5-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2z"/></svg></a>
+  <a href="https://t.me/muslimansoriy" target="_blank" class="tg" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3l-3.3 15.5c-.2 1.1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.3-.1-.5-.6-.2L6.3 13.4l-4.9-1.5c-1-.3-1-1 .2-1.5L20.6 2.7c.9-.3 1.6.2 1.3 1.6z"/></svg></a>
 </div>
 
 <script>
@@ -2460,8 +2430,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     current=route;
     var pageId=ROUTES[route];
     var pageEl=document.getElementById(pageId);
-    console.log('📄 show() called:',{route,pageId,pageFound:!!pageEl,classList:pageEl?pageEl.className:null});
-    Object.keys(ROUTES).forEach(function(r){var el=document.getElementById(ROUTES[r]);if(el){if(r===route){el.classList.add('show');console.log('✓ Added .show to',ROUTES[r]);}else{el.classList.remove('show');}}});
+    Object.keys(ROUTES).forEach(function(r){var el=document.getElementById(ROUTES[r]);if(el){if(r===route){el.classList.add('show');}else{el.classList.remove('show');}}});
     setActiveNav(route);
     try{history.replaceState(null,'','#!'+route);}catch(e){}
     var pg=document.getElementById(ROUTES[route]);
@@ -2625,7 +2594,7 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     });
     grid.innerHTML=html;
   }
-  async function renderBlog(){await loadPosts();paintGrid();paintDashList();}
+  async function renderBlog(){await loadPosts();paintGrid();}
   function openPost(id){
     var p=POSTS.find(function(x){return x.id===id;});if(!p)return;viewing=id;
     var s=document.getElementById('blogSingle');
@@ -2638,15 +2607,6 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     s.style.display='block';window.scrollTo({top:0,behavior:'auto'});
   }
   function closePost(){viewing=null;var s=document.getElementById('blogSingle'),l=document.getElementById('blogList');if(s)s.style.display='none';if(l)l.style.display='block';}
-  function paintDashList(){
-    var box=document.getElementById('dashList');if(!box||!POSTS)return;
-    var html='';
-    POSTS.forEach(function(p){
-      html+='<div class="dash-row"><div><div class="t">'+esc(p.tuz)+'</div><div class="c">'+esc(p.cat)+' · '+esc(p.date)+'</div></div>'+
-        '<button data-del="'+p.id+'"><span class="i-uz">o\'chirish</span><span class="i-ru">удалить</span></button></div>';
-    });
-    box.innerHTML=html||'<div class="c" style="color:var(--muted)">—</div>';
-  }
   // delegated buttons
   document.addEventListener('click',function(e){
     var oc=e.target.closest('[data-open]');if(oc){openPost(oc.getAttribute('data-open'));return;}
@@ -2658,25 +2618,14 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
       else{var cat=fb.getAttribute('data-cat');document.querySelectorAll('#pfGrid .pf-card').forEach(function(c){c.style.display=(cat==='all'||c.getAttribute('data-cat')===cat)?'':'none';});}
       return;
     }
-    var del=e.target.closest('[data-del]');if(del){var id=del.getAttribute('data-del');POSTS=POSTS.filter(function(x){return x.id!==id;});persist();paintGrid();paintDashList();return;}
-    if(e.target.closest('#dashOpen')){document.getElementById('dashOverlay').classList.add('show');return;}
-    if(e.target.closest('#dashClose')||e.target.id==='dashOverlay'){document.getElementById('dashOverlay').classList.remove('show');return;}
-    if(e.target.closest('#dashSave')){
-      var g=function(id){var el=document.getElementById(id);return el?el.value.trim():'';};
-      var tuz=g('dTuz');if(!tuz){var t=document.getElementById('dTuz');if(t)t.style.borderColor='#c0593f';return;}
-      var np={id:'u'+Date.now(),cat:g('dCat')||'Blog',color:g('dColor')||'#304E4D',date:new Date().toISOString().slice(0,10),
-        tuz:tuz,tru:g('dTru'),euz:g('dEuz'),eru:g('dEru'),buz:g('dBuz'),bru:g('dBru')};
-      POSTS.unshift(np);persist();paintGrid();paintDashList();
-      ['dTuz','dTru','dCat','dEuz','dEru','dBuz','dBru'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-      document.getElementById('dashOverlay').classList.remove('show');
-    }
+    var del=e.target.closest('[data-del]');if(del){var id=del.getAttribute('data-del');POSTS=POSTS.filter(function(x){return x.id!==id;});persist();paintGrid();return;}
   });
 
   // ============ initial route ============
   var h=location.hash||'';
   var initRoute=(h.indexOf('#!')===0)?h.slice(2):'home';
-  console.log('🔗 Routing init:',{hash:h,route:initRoute,pageEl:document.getElementById(ROUTES[initRoute])});
   show(initRoute,null);
+  document.documentElement.classList.add('js-ready');
 })();
 </script>
 </body>
