@@ -2516,6 +2516,13 @@ footer{background:var(--teal-dark);color:var(--muted-dark);padding:72px 0 36px;p
     show(info.route,info.scroll);
   });
 
+  // handle hash changes (back/forward buttons, direct URLs)
+  window.addEventListener('hashchange',function(){
+    var h=location.hash||'';
+    var route=(h.indexOf('#!')===0)?h.slice(2):'home';
+    show(route,null);
+  });
+
   // FAQ
   document.querySelectorAll('.faq-q').forEach(function(btn){
     btn.addEventListener('click',function(){
