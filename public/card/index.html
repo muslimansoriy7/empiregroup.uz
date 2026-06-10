@@ -145,10 +145,10 @@
   <p class="tagline">IT mahsulotlarni <em>quramiz</em>, <em>joriy qilamiz</em> va <em>bozorga olib kiramiz</em>.</p>
 
   <div class="actions">
-    <button class="btn primary" id="save-vcard" type="button">
+    <a class="btn primary" href="/card/contact.vcf" download="Muslim_Jorazoda_Empire_Group.vcf">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v12m0 0l-4.5-4.5M12 16l4.5-4.5M4 20h16"/></svg>
       Kontaktni saqlash
-    </button>
+    </a>
     <a class="btn" href="https://t.me/muslim_ansoriy">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 4L3 11.2l5.3 1.9M21 4l-3 15.4-6.7-6.3M21 4L8.3 13.1m0 0V19l3-3.2"/></svg>
       Telegramda yozish
@@ -194,29 +194,5 @@
   </footer>
 </main>
 
-<script>
-  document.getElementById('save-vcard').addEventListener('click', function(){
-    var v = [
-      'BEGIN:VCARD',
-      'VERSION:3.0',
-      "N:Jo'razoda;Muslim;;;",
-      "FN:Muslim Jo'razoda",
-      'ORG:Empire Group',
-      'TITLE:Founder & CEO',
-      'TEL;TYPE=CELL:+998991164658',
-      'URL:https://empiregroup.uz',
-      'ADR;TYPE=WORK:;;Bog\u02bbiboston ko\u02bbchasi 186;Toshkent;;;Uzbekistan',
-      'NOTE:Build · Implement · Market',
-      'END:VCARD'
-    ].join('\r\n');
-    var blob = new Blob([v], {type:'text/vcard;charset=utf-8'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'Muslim_Jorazoda_Empire_Group.vcf';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  });
-</script>
 </body>
 </html>
