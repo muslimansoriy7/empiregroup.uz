@@ -37,37 +37,37 @@ function parse(formData) {
 }
 
 export async function createPost(formData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const row = parse(formData);
   const { error } = await supabase.from('posts').insert(row);
   if (error) return redirect('/admin/posts/new?error=' + encodeURIComponent(error.message));
   revalidatePath('/blog');
   revalidatePath('/');
-  redirect('/admin');
+  redirect('/admin/posts');
 }
 
 export async function updatePost(id, formData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const row = parse(formData);
   const { error } = await supabase.from('posts').update(row).eq('id', id);
   if (error) return redirect(`/admin/posts/${id}/edit?error=` + encodeURIComponent(error.message));
   revalidatePath('/blog');
   revalidatePath(`/blog/${row.slug}`);
   revalidatePath('/');
-  redirect('/admin');
+  redirect('/admin/posts');
 }
 
 export async function deletePost(formData) {
   const id = (formData.get('id') || '').toString();
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.from('posts').delete().eq('id', id);
   revalidatePath('/blog');
-  revalidatePath('/admin');
-  redirect('/admin');
+  revalidatePath('/admin/posts');
+  redirect('/admin/posts');
 }
 
 export async function signOut() {
-  const supabase = createClient();
+  const supabase = await createClient();
   await supabase.auth.signOut();
   redirect('/admin/login');
 }

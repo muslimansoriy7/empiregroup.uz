@@ -1,88 +1,189 @@
-import { getLeads, updateLeadStatus } from '../../../lib/data'
+import Link from 'next/link'
+import { getLeads, updateLeadStatus } from '@/lib/data'
 import { revalidatePath } from 'next/cache'
+
+export const dynamic = 'force-dynamic'
 
 async function changeStatus(id, status) {
   'use server'
   await updateLeadStatus(id, status)
   revalidatePath('/admin/leads')
+  revalidatePath('/admin')
 }
 
-const STATUS_COLORS = {
-  new: 'bg-blue-100 text-blue-800',
-  in_progress: 'bg-yellow-100 text-yellow-800',
-  done: 'bg-green-100 text-green-800',
-  spam: 'bg-gray-100 text-gray-500',
-}
-const STATUS_UZ = { new: 'Yangi', in_progress: 'Jarayonda', done: 'Tugagan', spam: 'Spam' }
+const PIPELINE = [
+  { key: 'new', label: 'Yangi', color: '#2563eb', bg: 'rgba(37,99,235,.1)' },
+  { key: 'in_progress', label: 'Jarayonda', color: '#d97706', bg: 'rgba(217,119,6,.1)' },
+  { key: 'done', label: 'Yopilgan', color: '#16a34a', bg: 'rgba(22,163,106,.1)' },
+  { key: 'spam', label: 'Spam', color: '#6b7280', bg: 'rgba(107,114,128,.1)' },
+]
 
-export default async function LeadsPage() {
-  const leads = await getLeads()
-  const counts = leads.reduce((acc, l) => { acc[l.status] = (acc[l.status] || 0) + 1; return acc }, {})
+function fmt(d) {
+  if (!d) return ''
+  try { return new Date(d).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) } catch { return '' }
+}
+
+function money(v) {
+  if (!v) return ''
+  const n = Number(v)
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
+  if (n >= 1_000) return Math.round(n / 1_000) + 'K'
+  return n.toLocaleString()
+}
+
+function KanbanCard({ lead }) {
+  const isOverdue = lead.next_follow_up && new Date(lead.next_follow_up) < new Date() && lead.status !== 'done' && lead.status !== 'spam'
+  return (
+    <Link href={`/admin/leads/${lead.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <div className="crm-card" style={isOverdue ? { borderColor: 'rgba(220,38,38,.4)' } : {}}>
+        <div className="crm-card-name">{lead.name || '—'}</div>
+        <div className="crm-card-meta">
+          {lead.phone && <span>{lead.phone}</span>}
+          {lead.service && <span>{lead.service}</span>}
+        </div>
+        {lead.company && (
+          <div style={{ fontSize: 12, color: '#E8ECF1', marginTop: 4, fontWeight: 500 }}>🏢 {lead.company}</div>
+        )}
+        {lead.deal_value && (
+          <div className="crm-card-value">💰 {money(lead.deal_value)} so'm</div>
+        )}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
+          <span style={{ fontSize: 11, color: 'rgba(123,143,166,.6)' }}>{fmt(lead.created_at)}</span>
+          {isOverdue && <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 8, background: 'rgba(220,38,38,.15)', color: '#ef6b5a', fontWeight: 600 }}>OVERDUE</span>}
+          {lead.utm_source && <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 8, background: 'rgba(37,99,235,.15)', color: '#60a5fa' }}>{lead.utm_source}</span>}
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+export default async function LeadsPage({ searchParams }) {
+  const sp = await searchParams
+  const view = sp?.view || 'kanban'
+  const filterStatus = sp?.status || ''
+  const search = sp?.q || ''
+
+  const allLeads = await getLeads({ search: search || undefined })
+
+  const grouped = {}
+  for (const p of PIPELINE) grouped[p.key] = []
+  for (const l of allLeads) {
+    if (grouped[l.status]) grouped[l.status].push(l)
+    else grouped.new.push(l)
+  }
+
+  const filteredLeads = filterStatus ? allLeads.filter(l => l.status === filterStatus) : allLeads
+  const totalValue = allLeads.reduce((s, l) => s + (Number(l.deal_value) || 0), 0)
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 700 }}>📩 Arizalar (Leads)</h1>
-        <div style={{ display: 'flex', gap: 10 }}>
-          {Object.entries(STATUS_UZ).map(([k, v]) => (
-            <span key={k} style={{ fontSize: 13, padding: '4px 12px', borderRadius: 20, background: '#f3f4f6' }}>
-              {v}: <strong>{counts[k] || 0}</strong>
-            </span>
-          ))}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div>
+          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 2, color: '#E8ECF1' }}>📩 Lead Pipeline</h1>
+          <p style={{ fontSize: 13, color: '#7B8FA6' }}>{allLeads.length} ta lead · Pipeline: {money(totalValue)} so'm</p>
+        </div>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <Link href="/admin/leads?view=kanban" className="crm-pill" style={{ background: view === 'kanban' ? '#C8A24A' : 'rgba(255,255,255,.06)', color: view === 'kanban' ? '#0E1A2B' : '#7B8FA6' }}>
+            ◻ Kanban
+          </Link>
+          <Link href="/admin/leads?view=list" className="crm-pill" style={{ background: view === 'list' ? '#C8A24A' : 'rgba(255,255,255,.06)', color: view === 'list' ? '#0E1A2B' : '#7B8FA6' }}>
+            ☰ Ro'yxat
+          </Link>
         </div>
       </div>
 
-      {leads.length === 0 ? (
-        <p style={{ color: '#6b7280', textAlign: 'center', padding: 40 }}>
-          Hozircha ariza yo'q. Forma yuborilganda bu yerda ko'rinadi.
-        </p>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {leads.map(lead => (
-            <div key={lead.id} style={{
-              background: '#fff', border: '1px solid #e5e7eb', borderRadius: 10, padding: 18,
-              display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'start'
-            }}>
-              <div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 8 }}>
-                  <strong style={{ fontSize: 16 }}>{lead.name || '—'}</strong>
-                  <span style={{
-                    fontSize: 12, padding: '2px 10px', borderRadius: 20,
-                    background: lead.status === 'new' ? '#dbeafe' : lead.status === 'done' ? '#dcfce7' : '#f3f4f6',
-                    color: lead.status === 'new' ? '#1d4ed8' : lead.status === 'done' ? '#15803d' : '#6b7280'
-                  }}>
-                    {STATUS_UZ[lead.status]}
-                  </span>
-                  <span style={{ fontSize: 12, color: '#9ca3af' }}>
-                    {new Date(lead.created_at).toLocaleString('uz-UZ')}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', gap: 20, fontSize: 14, color: '#374151', flexWrap: 'wrap' }}>
-                  {lead.phone && <span>📞 {lead.phone}</span>}
-                  {lead.service && <span>🎯 {lead.service}</span>}
-                  {lead.source_page && <span>🌐 {lead.source_page}</span>}
-                </div>
-                {lead.message && (
-                  <p style={{ marginTop: 8, fontSize: 14, color: '#6b7280', fontStyle: 'italic' }}>
-                    "{lead.message}"
-                  </p>
-                )}
+      {/* Search */}
+      <div className="crm-filters">
+        <form style={{ flex: 1, maxWidth: 320 }}>
+          <input type="hidden" name="view" value={view} />
+          <input name="q" defaultValue={search} placeholder="Qidirish (ism, tel, kompaniya)..."
+            style={{ width: '100%', padding: '8px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 14, color: '#E8ECF1' }} />
+        </form>
+        {search && <Link href={`/admin/leads?view=${view}`} style={{ fontSize: 13, color: '#ef6b5a', textDecoration: 'none' }}>✕ Tozalash</Link>}
+      </div>
+
+      {allLeads.length === 0 && !search ? (
+        <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>📩</div>
+          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, color: '#E8ECF1' }}>Leadlar kutilmoqda</h2>
+          <p style={{ fontSize: 14, color: '#7B8FA6' }}>Saytdagi forma to'ldirilganda leadlar bu yerda ko'rinadi</p>
+        </div>
+      ) : search && allLeads.length === 0 ? (
+        <p style={{ color: '#7B8FA6', textAlign: 'center', padding: 40 }}>"{search}" bo'yicha natija topilmadi</p>
+      ) : view === 'kanban' ? (
+        /* KANBAN VIEW */
+        <div className="crm-kanban">
+          {PIPELINE.map(stage => (
+            <div key={stage.key} className="crm-col" style={{ background: stage.bg }}>
+              <div className="crm-col-head" style={{ background: `${stage.color}20` }}>
+                <h3 style={{ color: stage.color }}>{stage.label}</h3>
+                <span className="count" style={{ color: stage.color }}>{grouped[stage.key].length}</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                {Object.entries(STATUS_UZ).filter(([k]) => k !== lead.status).map(([k, v]) => (
-                  <form key={k} action={changeStatus.bind(null, lead.id, k)}>
-                    <button type="submit" style={{
-                      width: '100%', padding: '5px 12px', borderRadius: 6, border: '1px solid #d1d5db',
-                      background: '#fff', fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap'
-                    }}>
-                      → {v}
-                    </button>
-                  </form>
-                ))}
-              </div>
+              {grouped[stage.key].length === 0 ? (
+                <p style={{ fontSize: 12, color: '#7B8FA6', textAlign: 'center', padding: '20px 0' }}>Bo'sh</p>
+              ) : (
+                grouped[stage.key].map(lead => (
+                  <KanbanCard key={lead.id} lead={lead} />
+                ))
+              )}
             </div>
           ))}
         </div>
+      ) : (
+        /* LIST VIEW */
+        <>
+          <div className="crm-filters" style={{ marginBottom: 14 }}>
+            <Link href={`/admin/leads?view=list`} className="crm-pill" style={{ background: !filterStatus ? '#C8A24A' : 'rgba(255,255,255,.06)', color: !filterStatus ? '#0E1A2B' : '#7B8FA6' }}>
+              Hammasi ({allLeads.length})
+            </Link>
+            {PIPELINE.map(s => (
+              <Link key={s.key} href={`/admin/leads?view=list&status=${s.key}`} className="crm-pill"
+                style={{ background: filterStatus === s.key ? s.color : 'rgba(255,255,255,.06)', color: filterStatus === s.key ? '#fff' : '#7B8FA6' }}>
+                {s.label} ({grouped[s.key].length})
+              </Link>
+            ))}
+          </div>
+          <div className="crm-list">
+            {(filterStatus ? grouped[filterStatus] || [] : allLeads).map(lead => (
+              <div key={lead.id} className="crm-lead-row">
+                <Link href={`/admin/leads/${lead.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 4 }}>
+                    <strong style={{ fontSize: 14, color: '#E8ECF1' }}>{lead.name || '—'}</strong>
+                    {lead.company && <span style={{ fontSize: 12, color: '#7B8FA6' }}>({lead.company})</span>}
+                    <span className="crm-badge" style={{ background: `${PIPELINE.find(p => p.key === lead.status)?.color || '#6b7280'}15`, color: PIPELINE.find(p => p.key === lead.status)?.color || '#6b7280' }}>
+                      {PIPELINE.find(p => p.key === lead.status)?.label || lead.status}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 14, fontSize: 13, color: '#7B8FA6', flexWrap: 'wrap' }}>
+                    {lead.phone && <span>📞 {lead.phone}</span>}
+                    {lead.service && <span>🎯 {lead.service}</span>}
+                    {lead.deal_value && <span>💰 {money(lead.deal_value)}</span>}
+                    {lead.geo_city && <span>📍 {lead.geo_city}</span>}
+                    {lead.utm_source && <span>🔗 {lead.utm_source}</span>}
+                    <span>📅 {fmt(lead.created_at)}</span>
+                  </div>
+                  {lead.message && (
+                    <p style={{ marginTop: 4, fontSize: 12, color: 'rgba(123,143,166,.6)', fontStyle: 'italic' }}>
+                      &ldquo;{lead.message.slice(0, 100)}{lead.message.length > 100 ? '...' : ''}&rdquo;
+                    </p>
+                  )}
+                </Link>
+                <div className="crm-actions" style={{ flexDirection: 'column' }}>
+                  {PIPELINE.filter(s => s.key !== lead.status && s.key !== 'spam').map(s => (
+                    <form key={s.key} action={changeStatus.bind(null, lead.id, s.key)}>
+                      <button type="submit">→ {s.label}</button>
+                    </form>
+                  ))}
+                  {lead.status !== 'spam' && (
+                    <form action={changeStatus.bind(null, lead.id, 'spam')}>
+                      <button type="submit" style={{ color: '#ef6b5a', borderColor: 'rgba(220,38,38,.3)' }}>🗑 Spam</button>
+                    </form>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
