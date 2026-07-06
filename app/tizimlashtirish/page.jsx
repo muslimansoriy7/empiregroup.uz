@@ -1,3 +1,6 @@
+import Navbar from '@/components/home/Navbar'
+import HomeFooter from '@/components/home/HomeFooter'
+
 export const metadata = {
   title: 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group',
   description: "Empire Group — korxonalarni tizimlashtirish va AI yordamida aqlli avtomatlashtirish. ERP joriy etish, AI avtomatlashtirish, maxsus dasturiy yechimlar.",
@@ -23,11 +26,14 @@ function Divider() {
 
 export default function TizimlashtrishPage() {
   return (
-    <div style={{
-      background: bg, color: cream, minHeight: '100vh',
-      fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
-      position: 'relative',
-    }}>
+    <>
+      <Navbar />
+      <div className="hpg" style={{ background: bg }}>
+        <div style={{
+          color: cream,
+          fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
+          position: 'relative',
+        }}>
       {/* Grid overlay */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0,
@@ -38,7 +44,7 @@ export default function TizimlashtrishPage() {
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 760, margin: '0 auto' }}>
 
         {/* Hero */}
-        <div style={{ padding: '80px 40px 40px' }}>
+        <div style={{ padding: '140px 40px 40px' }}>
           <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 30 }}>
             — AI & Custom IT solutions for businesses
           </div>
@@ -255,9 +261,10 @@ export default function TizimlashtrishPage() {
           </div>
         </div>
 
-        {/* Footer spacer */}
-        <div style={{ height: 60 }} />
+        </div>
       </div>
+      <HomeFooter />
     </div>
+    </>
   )
 }
