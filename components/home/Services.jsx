@@ -2,75 +2,39 @@ import Link from 'next/link';
 
 const SERVICES = [
   {
-    tag: 'SVC · 01 — Mobile Development',
-    name: 'Mobil ilovalar',
-    geoSlug: 'mobil-ilova-yaratish-toshkent',
-    uz: 'Kross-platformali va native mobil ilovalar',
-    stack: ['Swift', 'Kotlin', 'Flutter', 'Flutterflow', 'Firebase'],
-    desc: "Bozorga tezkor chiqish uchun MVP'dan tortib, yuqori yuklamali native ilovalar majmuasigacha — App Store va Google Play'ga to'liq tayyor holatda.",
-    incl: [
-      'UI/UX dizayn', 'iOS & Android ilova',
-      'API integratsiya', 'Push-bildirishnomalar',
-      "Store'larga joylash", "4 hafta qo'llab-quvvatlash",
-    ],
-    tiers: [
-      { name: 'Standard', price: '$5,000 dan', time: '2 – 3 oy', scope: "Flutterflow / Flutter yordamida tezkor bozorga chiqish (MVP) uchun tayyor andozali kross-platforma ilovalari." },
-      { name: 'Advanced', price: '$10K – $35K', time: '4 – 6 oy', feat: true, scope: "Murakkab biznes mantiqqa ega, API hamda Firebase integratsiyali mukammal kross-platforma yoki native ilovalar." },
-      { name: 'Mega', price: '$50,000+', time: '1 yil', scope: "Yirik ekotizimlar, yuqori yuklama va unumdorlikka ega, Swift va Kotlin'da noldan yozilgan native ilovalar majmuasi." },
-    ],
-  },
-  {
-    tag: 'SVC · 02 — Web Development',
-    name: 'Veb-ilovalar',
-    geoSlug: 'veb-sayt-yaratish-toshkent',
-    uz: 'Korporativ platformalar va veb-tizimlar',
-    stack: ['React', 'Node.js', 'Laravel', 'Yii2', 'NGINX', 'Apache'],
-    desc: "Landing'dan tortib yuqori yuklamali e-commerce va B2B portallargacha — xavfsiz, barqaror backend va zamonaviy frontend arxitekturasi bilan.",
-    incl: [
-      'UI/UX dizayn', 'Responsiv frontend',
-      'Backend & API', 'Admin panel',
-      'SEO asoslari', 'Hosting sozlash',
-    ],
-    tiers: [
-      { name: 'Standard', price: '$5,000 dan', time: '2 – 3 oy', scope: "Tayyor komponentlar (Ant / Material Design) asosidagi korporativ saytlar, Landing Page va kichik veb-tizimlar." },
-      { name: 'Advanced', price: '$20K – $40K', time: '4 – 6 oy', feat: true, scope: "Laravel/Yii2 yoki Node.js arxitekturasidagi murakkab biznes platformalari, CRM va ERP tizimlari." },
-      { name: 'Mega', price: '$50,000+', time: '1 yil', scope: "High-load, NGINX optimizatsiyali yirik xalqaro veb-platformalar, e-commerce ekotizimlari va B2B portallar." },
-    ],
-  },
-  {
-    tag: 'SVC · 03 — Custom Software',
+    tag: 'Custom Software Development',
     name: 'Maxsus dasturiy ta\'minot',
     geoSlug: 'crm-erp-toshkent',
-    uz: "Biznesingizga to'liq moslashtirilgan tizimlar",
-    stack: ['Docker', 'AWS', 'Azure', 'Google Cloud'],
-    desc: "Nostandart ichki jarayonlarni avtomatlashtiruvchi, oson kengayuvchan va xavfsiz individual yechimlar — kichik utilitdan mikroxizmatlar arxitekturasigacha.",
+    uz: "Biznesingiz ichki jarayonlariga moslashtirilgan yechimlar",
+    stack: ['React', 'Node.js', 'Flutter', 'Swift', 'Kotlin', 'Laravel', 'Docker', 'AWS'],
+    desc: "Real ishlayotgan biznesning operatsion ehtiyojlaridan kelib chiqqan holda maxsus veb-ilovalar, mobil ilovalar va ichki tizimlar ishlab chiqamiz — tayyor shablonlarga moslash emas, biznesingizning o'ziga xos jarayoniga aniq yechim.",
     incl: [
-      'Biznes-tahlil', 'Arxitektura dizayni',
-      'Backend tizim', 'Integratsiyalar',
-      'Docker konteynerlash', 'Texnik hujjatlar',
+      'Biznes-tahlil va jarayon xaritasi', 'UI/UX dizayn',
+      'Veb-ilova yoki mobil ilova (iOS + Android)', 'Backend, API va admin panel',
+      'Integratsiyalar (Telegram, CRM, to\'lov)', "4 hafta qo'llab-quvvatlash",
     ],
     tiers: [
-      { name: 'Standard', price: '$10,000', time: '2 – 3 oy', scope: "Muayyan biznes jarayonni avtomatlashtirishga qaratilgan kichik hajmli maxsus skript, modul va utilitlar." },
-      { name: 'Advanced', price: '$30K – $45K', time: '4 – 6 oy', feat: true, scope: "Docker bilan ta'minlangan, bulutli infratuzilmalarga (AWS / Azure) integratsiyalashgan to'liq dasturiy majmua." },
-      { name: 'Mega', price: '$90,000+', time: '1 yil', scope: "Gibrid bulutda ishlovchi, mikroxizmatlar arxitekturasiga ega yirik korporativ tizimlar va backend infratuzilmalari." },
+      { name: 'Standard', price: '$5,000 dan', time: '2 – 3 oy', scope: "Bitta aniq vazifani hal qiluvchi MVP: landing + forma, kichik mobil ilova yoki ichki veb-panel. Tezkor bozorga chiqish uchun." },
+      { name: 'Advanced', price: '$15K – $40K', time: '4 – 6 oy', feat: true, scope: "Murakkab biznes mantig'iga ega to'liq veb yoki mobil ilova — CRM integratsiya, push-bildirishnomalar, admin panel va API." },
+      { name: 'Mega', price: '$50,000+', time: '6 – 12 oy', scope: "Yirik ekotizimlar: bir nechta ilova (veb + mobil + admin), mikroxizmatlar arxitekturasi, yuqori yuklama va bulutli infratuzilma." },
     ],
   },
   {
-    tag: 'SVC · 04 — Odoo ERP & AI Implementation',
-    name: 'Odoo ERP & AI Implementation',
+    tag: 'Odoo ERP & AI Implementation',
+    name: 'Odoo ERP & AI Joriy qilish',
     geoSlug: 'crm-erp-toshkent',
-    uz: 'Biznes tizimlarini joriy etish va AI integratsiyasi',
+    uz: "Tarqoq jarayonlarni yagona tizimga birlashtirish va AI bilan kuchaytirish",
     stack: ['Odoo ERP', 'AI Automation', 'Predictive Analytics', 'Cloud'],
-    desc: "Barcha operatsiyalarni yagona Odoo ekotizimiga birlashtirish va AI agentlari yordamida qo'l mehnatini minimallashtirish — bazaviy sozlashdan to'liq transformatsiyagacha.",
+    desc: "Korxonadagi alohida ishlayotgan bo'limlar, Excel jadvallar va qo'lda bajariladigan jarayonlarni yagona markazlashgan raqamli tizimga birlashtiramiz. Ustiga AI avtomatlashtirish qo'shib, takrorlanuvchi mexanik ishlardan jamoangizni butunlay xalos qilamiz.",
     incl: [
-      'Biznes-jarayon tahlili', 'Odoo modullarini sozlash',
+      'Biznes-jarayon tahlili va xarita', 'Odoo modullarini sozlash yoki custom ERP',
       "Ma'lumotlar migratsiyasi", 'AI / chatbot integratsiya',
-      "Xodimlarni o'qitish", "Qo'llab-quvvatlash",
+      "Xodimlarni o'qitish", "Qo'llab-quvvatlash va kuzatish",
     ],
     tiers: [
-      { name: 'Standard', price: '$8,800', time: '2 – 3 oy', scope: "Odoo standart modullarini bazaviy sozlash, ma'lumotlar migratsiyasi va xodimlarni o'qitish (kichik biznes uchun)." },
-      { name: 'Advanced', price: '$25K – $30K', time: '4 – 6 oy', feat: true, scope: "Biznes talablariga moslashtirilgan Odoo modullari, aqlli chat-botlar va hujjatlarning intellektual aylanishi." },
-      { name: 'Mega', price: '$85,000+', time: '1 yil', scope: "Yirik korxonalar uchun to'liq Odoo transformatsiyasi, predictive analytics va chuqur AI tizimlari integratsiyasi." },
+      { name: 'Standard', price: '$8,800 dan', time: '2 – 3 oy', scope: "Odoo standart modullarini bazaviy sozlash, ma'lumotlar ko'chirish va xodimlarni o'qitish. Kichik va o'rta biznes uchun dastlabki qadam." },
+      { name: 'Advanced', price: '$25K – $35K', time: '4 – 6 oy', feat: true, scope: "Biznes talablariga moslashtirilgan Odoo modullari, aqlli chat-botlar, hujjat aylanishi va jarayonlarni avtomatlashtirish." },
+      { name: 'Mega', price: '$85,000+', time: '1 yil', scope: "Yirik korxona uchun to'liq raqamli transformatsiya: Odoo ERP barcha bo'limlarga, predictive analytics va chuqur AI integratsiyasi." },
     ],
   },
 ];
@@ -81,7 +45,7 @@ export default function Services() {
       <div className="wrap">
         <div className="reveal">
           <span className="eyebrow">Xizmatlar</span>
-          <h2 className="sec-title">To&apos;rt yo&apos;nalish, bitta standart.</h2>
+          <h2 className="sec-title">Ikki yo&apos;nalish, bitta standart.</h2>
           <p className="sec-intro">
             Har bir loyiha uchun uchta paket — tezkor MVP&apos;dan tortib yirik korporativ tizimgacha.
             Narxlar fixed-scope: loyiha boshida aniq belgilanadi.

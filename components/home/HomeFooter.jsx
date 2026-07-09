@@ -16,10 +16,8 @@ export default function HomeFooter() {
           </div>
           <div className="foot-col">
             <h4>Xizmatlar</h4>
-            <a href="#services">Mobil ilovalar</a>
-            <a href="#services">Veb-ilovalar</a>
             <a href="#services">Maxsus dasturiy ta&apos;minot</a>
-            <a href="#services">Odoo ERP &amp; AI</a>
+            <a href="#services">Odoo ERP &amp; AI Joriy qilish</a>
           </div>
           <div className="foot-col">
             <h4>Kompaniya</h4>
