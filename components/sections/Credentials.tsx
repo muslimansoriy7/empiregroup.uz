@@ -83,17 +83,23 @@ export function Credentials() {
                     </>
                   )}
 
+                  {/* Confirmed reads green so a visitor can tell at a glance
+                      which credentials are in hand and which are in progress;
+                      the fixed colours survive either theme, and the plate
+                      behind the badge is light on every card that has one. */}
                   <span
-                    className={`absolute right-3 top-3 rounded-[var(--radius-btn)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] ${
+                    className={`absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-[var(--radius-btn)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] ${
                       item.status === "pending"
-                        ? "border border-hairline bg-elevated text-mute"
-                        : item.image
-                          ? // the plate behind it is light, so pin the badge
-                            // to dark-on-light in both themes
-                            "bg-[#171717] text-white"
-                          : "bg-ink text-elevated"
+                        ? "border border-hairline bg-white/90 text-[#6b6b6b]"
+                        : "bg-[#16a34a] text-white"
                     }`}
                   >
+                    <span
+                      aria-hidden
+                      className={`size-1.5 rounded-full ${
+                        item.status === "pending" ? "bg-[#b0b0b0]" : "bg-white"
+                      }`}
+                    />
                     {item.status === "pending" ? c.pendingLabel : c.activeLabel}
                   </span>
                 </div>
