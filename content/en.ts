@@ -319,7 +319,7 @@ export const en: Dict = {
         name: "Odoo Learning Partner",
         image: "/sertifikat/odoo-learning-partner.svg",
         issuer: "Odoo S.A.",
-        note: "Official partnership status with Odoo. It grants direct access to product updates, the implementation methodology and vendor support — ERP projects run to the process Odoo itself recommends.",
+        note: "Official partnership status with Odoo. It grants direct access to product updates, the implementation methodology and vendor support.",
         status: "active",
       },
       {
@@ -334,7 +334,7 @@ export const en: Dict = {
         image: "/sertifikat/it-park.svg",
         imageBleed: true,
         issuer: "IT Park Uzbekistan",
-        note: "An application has been filed to join the register of Uzbekistan's IT industry residents. Residency brings technology-park oversight, tax relief and access to state support programmes. The application is under review.",
+        note: "An application has been filed to join the register of Uzbekistan's IT industry residents. Residency brings technology-park oversight, tax relief and access to state support programmes.",
         status: "pending",
       },
       {

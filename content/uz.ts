@@ -319,7 +319,7 @@ export const uz: Dict = {
         name: "Odoo Learning Partner",
         image: "/sertifikat/odoo-learning-partner.svg",
         issuer: "Odoo S.A.",
-        note: "Odoo kompaniyasi bilan rasmiy hamkorlik maqomi. Mahsulot yangilanishlari, joriy qilish metodologiyasi va vendor qo'llab-quvvatlashiga to'g'ridan-to'g'ri kirish huquqini beradi — ERP loyihalari Odoo tavsiya qilgan tartibda olib boriladi.",
+        note: "Odoo kompaniyasi bilan rasmiy hamkorlik maqomi. Mahsulot yangilanishlari, joriy qilish metodologiyasi va vendor qo'llab-quvvatlashiga to'g'ridan-to'g'ri kirish huquqini beradi.",
         status: "active",
       },
       {
@@ -334,7 +334,7 @@ export const uz: Dict = {
         image: "/sertifikat/it-park.svg",
         imageBleed: true,
         issuer: "IT Park O'zbekiston",
-        note: "O'zbekiston IT sohasi rezidentlari reyestriga kirish uchun ariza topshirilgan. Rezidentlik texnologik park nazorati, soliq imtiyozlari va davlat qo'llab-quvvatlash dasturlariga kirish imkonini beradi. Ariza ko'rib chiqilmoqda.",
+        note: "O'zbekiston IT sohasi rezidentlari reyestriga kirish uchun ariza topshirilgan. Rezidentlik texnologik park nazorati, soliq imtiyozlari va davlat qo'llab-quvvatlash dasturlariga kirish imkonini beradi.",
         status: "pending",
       },
       {
