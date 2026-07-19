@@ -4,8 +4,10 @@
        pending, and a seal claiming certification we do not hold would be a
        false statement to every visitor who only glances at the image. -->
   <defs>
-    <path id="arcTop" d="M 338 460 A 262 262 0 0 1 862 460"/>
-    <path id="arcBottom" d="M 352 460 A 248 248 0 0 0 848 460"/>
+    <!-- radii chosen so the glyphs sit inside the white band between the
+         r=214 inner ring and the r=298 outer ring -->
+    <path id="arcTop" d="M 354 460 A 246 246 0 0 1 846 460"/>
+    <path id="arcBottom" d="M 328 460 A 272 272 0 0 0 872 460"/>
     <clipPath id="innerClip"><circle cx="600" cy="460" r="196"/></clipPath>
   </defs>
 
