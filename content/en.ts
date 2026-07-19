@@ -323,6 +323,12 @@ export const en: Dict = {
         status: "active",
       },
       {
+        name: "Certificate of state registration",
+        issuer: "Tashkent, Mirzo Ulugbek district PSC",
+        note: "\"EMPIRE GROUP CORP\" LLC — on the state register since 16 July 2025.",
+        status: "active",
+      },
+      {
         name: "IT Park resident",
         issuer: "IT Park Uzbekistan",
         note: "Residency application under review.",

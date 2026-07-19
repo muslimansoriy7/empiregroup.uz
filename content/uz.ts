@@ -323,6 +323,12 @@ export const uz: Dict = {
         status: "active",
       },
       {
+        name: "Davlat ro'yxatidan o'tganlik guvohnomasi",
+        issuer: "Toshkent sh., Mirzo Ulug'bek tumani DXM",
+        note: "\"EMPIRE GROUP CORP\" MCHJ — 2025-yil 16-iyuldan davlat reyestrida.",
+        status: "active",
+      },
+      {
         name: "IT Park rezidenti",
         issuer: "IT Park O'zbekiston",
         note: "Rezidentlik arizasi ko'rib chiqilmoqda.",
