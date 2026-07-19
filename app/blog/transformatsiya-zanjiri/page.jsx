@@ -1,6 +1,6 @@
-import Navbar from '@/components/home/Navbar'
-import HomeFooter from '@/components/home/HomeFooter'
-import ScrollReveal from '@/components/home/ScrollReveal'
+import { Nav } from '@/components/Nav'
+import { Footer } from '@/components/Footer'
+import ScrollReveal from '@/components/ScrollReveal'
 import './tz.css'
 
 export const metadata = {
@@ -16,7 +16,7 @@ export const metadata = {
 export default function TransformatsiyaZanjiriPage() {
   return (
     <>
-      <Navbar />
+      <Nav />
       <div className="hpg" style={{ background: '#F3F5F8' }}>
         <article className="tz">
 
@@ -596,7 +596,7 @@ export default function TransformatsiyaZanjiriPage() {
           </section>
 
         </article>
-        <HomeFooter />
+        <Footer />
         <ScrollReveal />
       </div>
     </>

@@ -1,0 +1,9 @@
+/* This landing page keeps its own (pre-redesign) typography: Outfit + JetBrains
+   Mono, referenced through the --body / --mono vars its inline styles use.
+   The rest of the site moved to Geist, so the fonts are loaded here only. */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+.tz-page {
+  --body: 'Outfit', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}

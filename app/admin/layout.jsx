@@ -1,4 +1,7 @@
 import Link from 'next/link'
+// The admin/CRM panel keeps its own (pre-redesign) stylesheet — the marketing
+// site moved to Tailwind tokens, the panel did not.
+import '@/styles/legacy.css'
 import { signOut } from './actions'
 
 export const metadata = { robots: { index: false, follow: false } };

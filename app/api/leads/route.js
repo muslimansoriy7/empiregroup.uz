@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod/v4';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { ratelimit } from '@/lib/ratelimit';
 import { sendTelegram } from '@/lib/telegram';
 
@@ -38,7 +38,10 @@ export async function POST(req) {
     return NextResponse.json({ success: true });
   }
 
-  const supabase = createClient();
+  // Visitors are anonymous, and `leads` is RLS-protected — the anon key cannot
+  // insert. This route is the only writer, and it validates + rate-limits its
+  // input above, so it writes with the service role instead.
+  const supabase = createAdminClient();
   const { data: lead, error } = await supabase.from('leads').insert({
     name: data.name,
     phone: data.phone,

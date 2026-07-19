@@ -1,5 +1,14 @@
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+// Pin the workspace root to THIS project — a stray lockfile in the parent
+// directory otherwise makes Next infer the wrong root.
+const projectRoot = dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  outputFileTracingRoot: projectRoot,
   images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
   async headers() {
     return [
