@@ -188,15 +188,25 @@ export type Dict = {
     proofTitle: string;
     proofNote: string;
   };
-  brands: {
+  credentials: {
     eyebrow: string;
     title: string;
     subtitle: string;
-  };
-  stack: {
-    eyebrow: string;
-    title: string;
-    subtitle: string;
+    /** badge on a confirmed document */
+    activeLabel: string;
+    /** badge on a document still being issued */
+    pendingLabel: string;
+    /** heading of a reserved, not-yet-filled slot */
+    placeholderTitle: string;
+    placeholderNote: string;
+    items: {
+      name: string;
+      issuer: string;
+      note: string;
+      status: "active" | "pending";
+      /** scan of the real document, once we have one */
+      image?: string;
+    }[];
   };
   faq: {
     eyebrow: string;

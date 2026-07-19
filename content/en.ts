@@ -301,17 +301,29 @@ export const en: Dict = {
     proofTitle: "Live proof from Telegram",
     proofNote: "Real conversations with clients",
   },
-  brands: {
-    eyebrow: "Global standard",
-    title: "We work to a world-class standard.",
+  credentials: {
+    eyebrow: "Standing and proof",
+    title: "Official status and certificates.",
     subtitle:
-      "The technologies, platforms and standards the biggest companies trust — now in your project too.",
-  },
-  stack: {
-    eyebrow: "Our stack",
-    title: "Reliable, industry-standard technologies.",
-    subtitle:
-      "Every project runs on modern, stable tools proven across millions of users.",
+      "Every partnership and status here is backed by an official document. The list grows as new certificates are issued.",
+    activeLabel: "Confirmed",
+    pendingLabel: "In progress",
+    placeholderTitle: "Certificate",
+    placeholderNote: "Reserved for the next certificate in progress.",
+    items: [
+      {
+        name: "Odoo Learning Partner",
+        issuer: "Odoo S.A.",
+        note: "Official partner status for Odoo ERP implementation.",
+        status: "active",
+      },
+      {
+        name: "IT Park resident",
+        issuer: "IT Park Uzbekistan",
+        note: "Residency application under review.",
+        status: "pending",
+      },
+    ],
   },
   faq: {
     eyebrow: "Q&A",

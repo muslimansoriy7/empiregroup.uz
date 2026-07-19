@@ -301,17 +301,29 @@ export const uz: Dict = {
     proofTitle: "Telegram orqali — jonli isbot",
     proofNote: "Mijozlar bilan haqiqiy yozishmalar",
   },
-  brands: {
-    eyebrow: "Global standart",
-    title: "Dunyo yetakchilari darajasida ishlaymiz.",
+  credentials: {
+    eyebrow: "Ishonch va tasdiq",
+    title: "Rasmiy maqom va sertifikatlar.",
     subtitle:
-      "Eng yirik kompaniyalar ishonadigan texnologiyalar, platformalar va standartlar — sizning loyihangizda ham.",
-  },
-  stack: {
-    eyebrow: "Bizning stack",
-    title: "Ishonchli, sanoat standarti bo'lgan texnologiyalar.",
-    subtitle:
-      "Har bir loyihada millionlab foydalanuvchida sinovdan o'tgan, zamonaviy va barqaror asboblardan foydalanamiz.",
+      "Har bir hamkorlik va maqom rasmiy hujjat bilan tasdiqlangan. Ro'yxat yangi sertifikatlar bilan to'ldirib boriladi.",
+    activeLabel: "Tasdiqlangan",
+    pendingLabel: "Kutilmoqda",
+    placeholderTitle: "Sertifikat",
+    placeholderNote: "Jarayondagi keyingi sertifikat uchun joy.",
+    items: [
+      {
+        name: "Odoo Learning Partner",
+        issuer: "Odoo S.A.",
+        note: "Odoo ERP joriy qilish bo'yicha rasmiy hamkorlik maqomi.",
+        status: "active",
+      },
+      {
+        name: "IT Park rezidenti",
+        issuer: "IT Park O'zbekiston",
+        note: "Rezidentlik arizasi ko'rib chiqilmoqda.",
+        status: "pending",
+      },
+    ],
   },
   faq: {
     eyebrow: "Savol-javob",
