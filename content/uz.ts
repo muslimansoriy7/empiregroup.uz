@@ -313,6 +313,7 @@ export const uz: Dict = {
     items: [
       {
         name: "Odoo Learning Partner",
+        image: "/sertifikat/odoo-learning-partner.svg",
         issuer: "Odoo S.A.",
         note: "Odoo ERP joriy qilish bo'yicha rasmiy hamkorlik maqomi.",
         status: "active",

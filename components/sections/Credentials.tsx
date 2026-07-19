@@ -34,27 +34,38 @@ export function Credentials() {
           {c.items.map((item, i) => (
             <Reveal key={item.name} delay={i * 0.06} className="h-full">
               <article className="flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-colors hover:border-mute">
-                {/* document preview */}
-                <div className="relative flex aspect-[4/3] items-center justify-center border-b border-hairline bg-canvas">
-                  <span
-                    aria-hidden
-                    className="grid-lines pointer-events-none absolute inset-0 opacity-40"
-                  />
+                {/* document preview — brand marks sit on a white plate so a
+                    dark wordmark never disappears into a dark canvas */}
+                <div
+                  className={`relative flex aspect-[4/3] items-center justify-center border-b border-hairline ${
+                    item.image ? "bg-white" : "bg-canvas"
+                  }`}
+                >
                   {item.image ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="relative size-full object-contain p-4"
+                      className="relative max-h-full max-w-full object-contain p-6"
                     />
                   ) : (
-                    <Seal className="relative size-14 text-mute" />
+                    <>
+                      <span
+                        aria-hidden
+                        className="grid-lines pointer-events-none absolute inset-0 opacity-40"
+                      />
+                      <Seal className="relative size-14 text-mute" />
+                    </>
                   )}
                   <span
                     className={`absolute right-3 top-3 rounded-[var(--radius-btn)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] ${
                       item.status === "pending"
                         ? "border border-hairline bg-elevated text-mute"
-                        : "bg-ink text-elevated"
+                        : item.image
+                          ? // the plate behind it is always white, so pin the
+                            // badge to dark-on-light in both themes
+                            "bg-[#171717] text-white"
+                          : "bg-ink text-elevated"
                     }`}
                   >
                     {item.status === "pending" ? c.pendingLabel : c.activeLabel}
