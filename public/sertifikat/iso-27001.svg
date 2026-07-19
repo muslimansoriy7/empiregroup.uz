@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900">
+  <!-- Neutral standard mark: it names ISO/IEC 27001, it does not claim
+       certification. A "Certified" seal would be a false claim until an
+       accredited body issues one. -->
+  <rect width="1200" height="900" fill="#ffffff"/>
+
+  <g transform="translate(600 400)">
+    <!-- shield -->
+    <path d="M0 -190 L150 -132 V-6 C150 82 84 152 0 190 C-84 152 -150 82 -150 -6 V-132 Z"
+          fill="#f6f9ff" stroke="#0070f3" stroke-width="9" stroke-linejoin="round"/>
+    <!-- padlock -->
+    <path d="M-42 -34 V-64 A42 42 0 0 1 42 -64 V-34"
+          fill="none" stroke="#171717" stroke-width="15" stroke-linecap="round"/>
+    <rect x="-62" y="-34" width="124" height="98" rx="14" fill="#171717"/>
+    <circle cx="0" cy="8" r="12" fill="#ffffff"/>
+    <rect x="-5" y="8" width="10" height="26" rx="5" fill="#ffffff"/>
+  </g>
+
+  <text x="600" y="672" text-anchor="middle"
+        font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        font-size="92" font-weight="600" letter-spacing="-3" fill="#171717">ISO/IEC 27001</text>
+
+  <text x="600" y="736" text-anchor="middle"
+        font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+        font-size="34" letter-spacing="5" fill="#8f8f8f">INFORMATION SECURITY</text>
+</svg>

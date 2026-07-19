@@ -337,6 +337,13 @@ export const en: Dict = {
         note: "Residency application under review.",
         status: "pending",
       },
+      {
+        name: "ISO/IEC 27001",
+        image: "/sertifikat/iso-27001.svg",
+        issuer: "Information security standard",
+        note: "The international standard under which an independent auditor verifies how client data is stored and protected. Certification is planned.",
+        status: "pending",
+      },
     ],
   },
   faq: {

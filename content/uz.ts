@@ -337,6 +337,13 @@ export const uz: Dict = {
         note: "Rezidentlik arizasi ko'rib chiqilmoqda.",
         status: "pending",
       },
+      {
+        name: "ISO/IEC 27001",
+        image: "/sertifikat/iso-27001.svg",
+        issuer: "Axborot xavfsizligi standarti",
+        note: "Mijoz ma'lumotlari qanday saqlanishi va himoyalanishini mustaqil auditor tekshiradigan xalqaro standart. Sertifikatlash rejalashtirilgan.",
+        status: "pending",
+      },
     ],
   },
   faq: {
