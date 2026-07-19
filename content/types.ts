@@ -199,6 +199,11 @@ export type Dict = {
     /** heading of a reserved, not-yet-filled slot */
     placeholderTitle: string;
     placeholderNote: string;
+    /** hover affordance on a card whose document can be opened */
+    viewLabel: string;
+    closeLabel: string;
+    prevLabel: string;
+    nextLabel: string;
     items: {
       name: string;
       issuer: string;

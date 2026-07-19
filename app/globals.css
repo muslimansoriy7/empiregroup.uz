@@ -418,6 +418,60 @@
   backdrop-filter: blur(4px);
 }
 
+/* ============================================================
+   Certificate lightbox — the dialog fills the viewport and acts as its
+   own backdrop area, so a click outside the document closes it.
+   ============================================================ */
+.cert-dialog {
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  max-height: 100dvh;
+  margin: 0;
+  padding: clamp(16px, 5vw, 56px);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  overflow: auto;
+  display: none;
+}
+.cert-dialog[open] {
+  display: grid;
+  place-items: center;
+}
+.cert-dialog::backdrop {
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0);
+  transition:
+    background 0.3s ease,
+    backdrop-filter 0.3s ease,
+    overlay 0.3s ease allow-discrete,
+    display 0.3s ease allow-discrete;
+}
+.cert-dialog[open]::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+}
+.cert-dialog > * {
+  width: min(1100px, 100%);
+  animation: cert-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cert-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cert-dialog > * {
+    animation: none;
+  }
+}
+
 .consult-input {
   width: 100%;
   height: 44px;

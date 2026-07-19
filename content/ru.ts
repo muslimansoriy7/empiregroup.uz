@@ -310,6 +310,10 @@ export const ru: Dict = {
     pendingLabel: "В процессе",
     placeholderTitle: "Сертификат",
     placeholderNote: "Место для следующего сертификата в работе.",
+    viewLabel: "Нажмите, чтобы посмотреть",
+    closeLabel: "Закрыть",
+    prevLabel: "Предыдущий",
+    nextLabel: "Следующий",
     items: [
       {
         name: "Odoo Learning Partner",

@@ -310,6 +310,10 @@ export const uz: Dict = {
     pendingLabel: "Kutilmoqda",
     placeholderTitle: "Sertifikat",
     placeholderNote: "Jarayondagi keyingi sertifikat uchun joy.",
+    viewLabel: "Ko'rish uchun bosing",
+    closeLabel: "Yopish",
+    prevLabel: "Oldingi",
+    nextLabel: "Keyingi",
     items: [
       {
         name: "Odoo Learning Partner",
