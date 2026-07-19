@@ -62,10 +62,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
+  // one colour: the site does not follow the device scheme
+  themeColor: "#0a0a0a",
   width: "device-width",
   initialScale: 1,
 };
@@ -122,8 +120,8 @@ const websiteSchema = {
   },
 };
 
-// Arms the scroll-reveal `.js` flag before paint. Dark mode is handled
-// entirely by CSS (prefers-color-scheme) — no theme JS needed.
+// Arms the scroll-reveal `.js` flag before paint. The site is permanently
+// dark, so there is no theme to restore and no theme JS.
 const BOOT_SCRIPT = `document.documentElement.classList.add('js')`;
 
 export default async function RootLayout({

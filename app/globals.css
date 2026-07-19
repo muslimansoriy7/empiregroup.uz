@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
-/* Dark mode follows the device automatically (prefers-color-scheme).
-   Tailwind v4's default `dark:` variant is already media-query based,
-   so no custom-variant override — the site adapts with zero JS. */
+/* The site is dark, always — regardless of the device's colour-scheme
+   setting. The dark values live directly in @theme (there is no light set
+   to switch away from), and `color-scheme: dark` on <html> makes the
+   browser paint form controls, scrollbars and autofill dark to match.
+   Tailwind's `dark:` variant is forced on so any dark:-prefixed utility
+   still applies. */
+@custom-variant dark (&);
 
 /* ============================================================
    Shift Digital — Vercel/Geist design tokens (Tailwind v4 @theme)
@@ -16,18 +20,18 @@
     Consolas, monospace;
 
   /* ---- Color: ink / canvas ladder ---- */
-  --color-ink: #171717;          /* graphite — headings, primary CTA, borders */
-  --color-body: #4d4d4d;         /* felt-gray — body copy */
+  --color-ink: #ededed;          /* headings, primary CTA, borders */
+  --color-body: #a0a0a0;         /* body copy */
   --color-mute: #8f8f8f;         /* secondary captions, logo-strip labels */
-  --color-faint: #a1a1a1;        /* lowest tier — placeholders */
-  --color-hairline: #ebebeb;     /* 1px borders + dividers */
-  --color-hairline-soft: #f2f2f2;/* faint inset wells */
-  --color-canvas: #fafafa;       /* marble-white — page background */
-  --color-elevated: #ffffff;     /* pearl — card / button surface */
+  --color-faint: #6e6e6e;        /* lowest tier — placeholders */
+  --color-hairline: #2a2a2a;     /* 1px borders + dividers */
+  --color-hairline-soft: #1c1c1c;/* faint inset wells */
+  --color-canvas: #0a0a0a;       /* page background */
+  --color-elevated: #161616;     /* card / button surface */
   --color-carbon: #000000;
 
   /* ---- Color: accent (links + gradient only) ---- */
-  --color-link: #0070f3;
+  --color-link: #3b9eff;
   --color-link-deep: #0761d1;
   --color-link-soft: #d3e5ff;
 
@@ -78,36 +82,13 @@
   --radius-round: 9999px;
 
   /* ---- Elevation (1px hairline first, whisper shadow at most) ---- */
-  --shadow-whisper: 0px 1px 2px rgba(0, 0, 0, 0.04), 0px 0px 0px 1px rgba(0, 0, 0, 0.03);
-  --shadow-float: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px,
-    rgba(0, 0, 0, 0.06) 0px 2px 4px 0px, rgba(0, 0, 0, 0.06) 0px 12px 24px -8px;
+  --shadow-whisper: 0px 1px 2px rgba(0, 0, 0, 0.5),
+    0px 0px 0px 1px rgba(255, 255, 255, 0.05);
+  --shadow-float: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.5) 0px 2px 8px 0px, rgba(0, 0, 0, 0.6) 0px 16px 40px -8px;
 
   /* ---- Container ---- */
   --container-page: 1200px;
-}
-
-/* ============================================================
-   Dark theme — Vercel-style true-black, applied automatically when
-   the device prefers dark. Overriding the semantic color vars flips
-   every token-based utility.
-   ============================================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-ink: #ededed;
-    --color-body: #a0a0a0;
-    --color-mute: #8f8f8f;
-    --color-faint: #6e6e6e;
-    --color-hairline: #2a2a2a;
-    --color-hairline-soft: #1c1c1c;
-    --color-canvas: #0a0a0a;
-    --color-elevated: #161616;
-    --color-link: #3b9eff;
-
-    --shadow-whisper: 0px 1px 2px rgba(0, 0, 0, 0.5),
-      0px 0px 0px 1px rgba(255, 255, 255, 0.05);
-    --shadow-float: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px,
-      rgba(0, 0, 0, 0.5) 0px 2px 8px 0px, rgba(0, 0, 0, 0.6) 0px 16px 40px -8px;
-  }
 }
 
 /* ============================================================
@@ -121,7 +102,7 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    color-scheme: light dark;
+    color-scheme: dark;
   }
 
   body {
