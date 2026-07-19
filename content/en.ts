@@ -47,13 +47,23 @@ export const en: Dict = {
     flow: {
       problemLabel: "PROBLEM",
       solutionLabel: "SOLUTION",
-      problemTitle: "Scattered, manual processes",
-      problemItems: ["Excel spreadsheets", "Scattered chats", "Manual bookkeeping", "Lost orders"],
-      solutionTitle: "Empire — one system",
-      solutionItems: ["A single dashboard", "Automated", "Real-time control"],
+      problemTitle: "Siloed departments, manual books",
+      problemItems: [
+        "Stock levels unclear",
+        "Departments siloed",
+        "Reports arrive late",
+        "Manual Excel books",
+      ],
+      solutionTitle: "Empire — one ERP system",
+      solutionItems: [
+        "One database, one panel",
+        "Processes automated",
+        "Real-time reporting",
+      ],
       metricValue: "−70%",
       metricLabel: "manual work",
     },
+
   },
   showcase: {
     caption: "Real products built by Empire Group.",

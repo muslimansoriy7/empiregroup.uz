@@ -47,13 +47,23 @@ export const uz: Dict = {
     flow: {
       problemLabel: "MUAMMO",
       solutionLabel: "YECHIM",
-      problemTitle: "Tarqoq, qo'lda jarayonlar",
-      problemItems: ["Excel jadvallar", "Tarqoq chatlar", "Qo'lda hisob-kitob", "Yo'qolgan buyurtmalar"],
-      solutionTitle: "Empire — yagona tizim",
-      solutionItems: ["Bitta boshqaruv paneli", "Avtomatlashtirilgan", "Real vaqtda nazorat"],
+      problemTitle: "Tarqoq bo'limlar, qo'lda hisob",
+      problemItems: [
+        "Ombor qoldig'i noaniq",
+        "Bo'limlar uzilgan",
+        "Hisobot kech keladi",
+        "Qo'lda Excel hisobi",
+      ],
+      solutionTitle: "Empire — yagona ERP tizimi",
+      solutionItems: [
+        "Yagona baza, bitta panel",
+        "Jarayonlar avtomatlashgan",
+        "Real vaqtda hisobot",
+      ],
       metricValue: "−70%",
       metricLabel: "qo'l mehnati",
     },
+
   },
   showcase: {
     caption: "Empire Group tomonidan qurilgan real mahsulotlar.",
