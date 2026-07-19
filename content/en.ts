@@ -326,7 +326,7 @@ export const en: Dict = {
         name: "Certificate of state registration",
         image: "/sertifikat/davlat-royxat-guvohnomasi.png",
         issuer: "Officially registered",
-        note: "\"EMPIRE GROUP CORP\" LLC was entered on the state register on 16 July 2025. The right to sign contracts, issue invoices and meet tax obligations as a registered legal entity is confirmed by the document.",
+        note: "\"EMPIRE GROUP CORP\" LLC is a registered legal entity. The right to sign contracts, issue invoices and meet tax obligations is confirmed by the document.",
         status: "active",
       },
       {

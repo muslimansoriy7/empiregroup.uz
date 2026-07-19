@@ -326,7 +326,7 @@ export const uz: Dict = {
         name: "Davlat ro'yxatidan o'tganlik guvohnomasi",
         image: "/sertifikat/davlat-royxat-guvohnomasi.png",
         issuer: "Rasmiy faoliyat",
-        note: "\"EMPIRE GROUP CORP\" MCHJ 2025-yil 16-iyulda davlat reyestriga kiritilgan. Rasmiy yuridik shaxs sifatida shartnoma tuzish, hisob-faktura berish va soliq majburiyatlarini bajarish huquqi hujjat bilan tasdiqlangan.",
+        note: "\"EMPIRE GROUP CORP\" MCHJ — rasmiy yuridik shaxs. Shartnoma tuzish, hisob-faktura berish va soliq majburiyatlarini bajarish huquqi hujjat bilan tasdiqlangan.",
         status: "active",
       },
       {
