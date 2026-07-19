@@ -340,8 +340,8 @@ export const en: Dict = {
       {
         name: "ISO/IEC 27001",
         image: "/sertifikat/iso-27001.svg",
-        issuer: "Information security standard",
-        note: "The international standard under which an independent auditor verifies how client data is stored and protected. Certification is planned.",
+        issuer: "ISO / IEC",
+        note: "The international standard for information security management. It sets out how a client database, finances and intellectual property are protected against cyberattacks and theft. Certification is pending.",
         status: "pending",
       },
     ],

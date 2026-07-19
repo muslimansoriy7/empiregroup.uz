@@ -340,8 +340,8 @@ export const uz: Dict = {
       {
         name: "ISO/IEC 27001",
         image: "/sertifikat/iso-27001.svg",
-        issuer: "Axborot xavfsizligi standarti",
-        note: "Mijoz ma'lumotlari qanday saqlanishi va himoyalanishini mustaqil auditor tekshiradigan xalqaro standart. Sertifikatlash rejalashtirilgan.",
+        issuer: "ISO / IEC",
+        note: "Axborot xavfsizligini boshqarish bo'yicha xalqaro standart. Mijozlar bazasi, moliya va intellektual mulkni kiberhujumlar hamda o'g'rilikdan himoya qilish tartibini belgilaydi. Sertifikatlash kutilmoqda.",
         status: "pending",
       },
     ],
