@@ -28,8 +28,34 @@ function fmt(d) {
   } catch { return ''; }
 }
 
+const STATIC_POSTS = [
+  {
+    id: 'static-odoo',
+    slug: 'odoo-joriy-qilish-bosqichlari',
+    title_uz: "Odoo ERP joriy qilishning 5 fazasi",
+    excerpt_uz: "Discovery, Design, Build, Deploy va Support — Odoo ERP joriy qilishning beshta fazasi. Har biri uchun maqsad, faoliyat, natija va xavflar.",
+    category: 'Odoo ERP',
+    published_at: '2025-07-18',
+    cover_url: null,
+  },
+  {
+    id: 'static-tz',
+    slug: 'transformatsiya-zanjiri',
+    title_uz: "Biznes transformatsiyasining 5 bosqichli zanjiri",
+    excerpt_uz: "Raqamlashtirish — bu faqat dastur o'rnatish emas. Besh bosqichli zanjir orqali biznesingizni tizimli transformatsiya qiling.",
+    category: 'Transformatsiya',
+    published_at: '2025-07-15',
+    cover_url: null,
+  },
+];
+
 export default async function BlogPage() {
-  const posts = await getPublishedPosts();
+  const dbPosts = await getPublishedPosts();
+  const dbSlugs = new Set(dbPosts.map(p => p.slug));
+  const posts = [
+    ...dbPosts,
+    ...STATIC_POSTS.filter(s => !dbSlugs.has(s.slug)),
+  ];
 
   const itemListSchema = {
     '@context': 'https://schema.org',
