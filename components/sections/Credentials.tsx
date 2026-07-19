@@ -56,7 +56,7 @@ export function Credentials() {
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="relative max-h-full max-w-full object-contain p-6 transition-transform duration-500 group-hover:scale-[1.04]"
+                        className="relative max-h-full max-w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.04]"
                       />
                       {/* hover affordance */}
                       <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#171717]/55 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">

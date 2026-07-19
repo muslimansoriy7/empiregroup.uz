@@ -324,6 +324,7 @@ export const en: Dict = {
       },
       {
         name: "Certificate of state registration",
+        image: "/sertifikat/davlat-royxat-guvohnomasi.png",
         issuer: "Tashkent, Mirzo Ulugbek district PSC",
         note: "\"EMPIRE GROUP CORP\" LLC — on the state register since 16 July 2025.",
         status: "active",

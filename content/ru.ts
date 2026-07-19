@@ -324,6 +324,7 @@ export const ru: Dict = {
       },
       {
         name: "Свидетельство о государственной регистрации",
+        image: "/sertifikat/davlat-royxat-guvohnomasi.png",
         issuer: "г. Ташкент, ЦГУ Мирзо-Улугбекского района",
         note: "ООО \"EMPIRE GROUP CORP\" — в государственном реестре с 16 июля 2025 года.",
         status: "active",
