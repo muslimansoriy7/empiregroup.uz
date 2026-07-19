@@ -211,6 +211,8 @@ export type Dict = {
       status: "active" | "pending";
       /** scan of the real document, once we have one */
       image?: string;
+      /** image carries its own background — let it fill the frame edge to edge */
+      imageBleed?: boolean;
     }[];
   };
   faq: {

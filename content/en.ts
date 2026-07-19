@@ -331,6 +331,8 @@ export const en: Dict = {
       },
       {
         name: "IT Park resident",
+        image: "/sertifikat/it-park.svg",
+        imageBleed: true,
         issuer: "IT Park Uzbekistan",
         note: "Residency application under review.",
         status: "pending",

@@ -331,6 +331,8 @@ export const uz: Dict = {
       },
       {
         name: "IT Park rezidenti",
+        image: "/sertifikat/it-park.svg",
+        imageBleed: true,
         issuer: "IT Park O'zbekiston",
         note: "Rezidentlik arizasi ko'rib chiqilmoqda.",
         status: "pending",

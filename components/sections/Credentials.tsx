@@ -19,8 +19,10 @@ export function Credentials() {
   const c = t.credentials;
   const emptySlots = Math.max(0, 4 - c.items.length);
 
-  // only documents with a scan are viewable; the lightbox indexes into these
-  const viewable = c.items.filter((i) => i.image);
+  // Only confirmed documents open in the lightbox. A pending card may still
+  // show the issuer's mark, but there is no document behind it yet — offering
+  // a "view" affordance there would promise something we cannot show.
+  const viewable = c.items.filter((i) => i.image && i.status === "active");
   const [openAt, setOpenAt] = useState<number | null>(null);
 
   return (
@@ -37,9 +39,8 @@ export function Credentials() {
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {c.items.map((item, i) => {
-            const viewIndex = item.image
-              ? viewable.findIndex((v) => v.name === item.name)
-              : -1;
+            const viewIndex = viewable.findIndex((v) => v.name === item.name);
+            const zoomable = viewIndex >= 0;
 
             const preview = (
               <>
@@ -47,7 +48,7 @@ export function Credentials() {
                     wordmark never sinks into the dark canvas */}
                 <div
                   className={`relative flex aspect-[4/3] items-center justify-center overflow-hidden border-b border-hairline ${
-                    item.image ? "bg-white" : "bg-canvas"
+                    item.image && !item.imageBleed ? "bg-white" : "bg-canvas"
                   }`}
                 >
                   {item.image ? (
@@ -56,15 +57,21 @@ export function Credentials() {
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="relative max-h-full max-w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.04]"
+                        className={
+                          item.imageBleed
+                            ? "relative size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                            : "relative max-h-full max-w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.04]"
+                        }
                       />
-                      {/* hover affordance */}
-                      <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#171717]/55 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-                        <Magnifier className="size-7" />
-                        <span className="text-[13px] font-medium">
-                          {c.viewLabel}
+                      {/* hover affordance — only where a document can open */}
+                      {zoomable && (
+                        <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#171717]/55 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                          <Magnifier className="size-7" />
+                          <span className="text-[13px] font-medium">
+                            {c.viewLabel}
+                          </span>
                         </span>
-                      </span>
+                      )}
                     </>
                   ) : (
                     <>
@@ -81,8 +88,8 @@ export function Credentials() {
                       item.status === "pending"
                         ? "border border-hairline bg-elevated text-mute"
                         : item.image
-                          ? // the plate behind it is always white, so pin the
-                            // badge to dark-on-light in both themes
+                          ? // the plate behind it is light, so pin the badge
+                            // to dark-on-light in both themes
                             "bg-[#171717] text-white"
                           : "bg-ink text-elevated"
                     }`}
@@ -108,7 +115,7 @@ export function Credentials() {
 
             return (
               <Reveal key={item.name} delay={i * 0.06} className="h-full">
-                {item.image ? (
+                {zoomable ? (
                   <button
                     type="button"
                     onClick={() => setOpenAt(viewIndex)}
