@@ -1,22 +1,26 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { marked } from 'marked';
-import Navbar from '@/components/home/Navbar';
-import HomeFooter from '@/components/home/HomeFooter';
-import { getPostBySlug, getAllSlugs, getAdjacentPosts, L } from '@/lib/posts';
+import { Nav } from '@/components/Nav';
+import { Footer } from '@/components/Footer';
+import { MobileDock } from '@/components/MobileDock';
+import { TelegramFab } from '@/components/TelegramFab';
+import { Container } from '@/components/Container';
+import { getPostBySlug, getAdjacentPosts, L } from '@/lib/posts';
 
-export const revalidate = 60;
+// Rendered per request: the article body comes from Supabase (so admin edits
+// show up immediately) and `?lang=ru` switches the language — both of which
+// rule out prerendering this route.
+export const dynamic = 'force-dynamic';
+
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
 
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
-  return slugs.map((s) => ({ slug: s.slug }));
-}
-
 export async function generateMetadata({ params, searchParams }) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const sp = await searchParams;
+  const post = await getPostBySlug(slug);
   if (!post) return { title: 'Topilmadi' };
-  const lang = searchParams?.lang === 'ru' ? 'ru' : 'uz';
+  const lang = sp?.lang === 'ru' ? 'ru' : 'uz';
   const title = L(post, 'seo_title', lang) || L(post, 'title', lang);
   const desc = L(post, 'seo_desc', lang) || L(post, 'excerpt', lang);
   const url = `${SITE}/blog/${post.slug}`;
@@ -50,15 +54,17 @@ function fmt(d, lang) {
 }
 
 export default async function PostPage({ params, searchParams }) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const sp = await searchParams;
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const lang = searchParams?.lang === 'ru' ? 'ru' : 'uz';
+  const lang = sp?.lang === 'ru' ? 'ru' : 'uz';
   const title = L(post, 'title', lang);
   const body = L(post, 'body', lang);
   const html = marked.parse(body || '');
 
-  const { prev, next, related } = await getAdjacentPosts(params.slug);
+  const { prev, next, related } = await getAdjacentPosts(slug);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -74,79 +80,142 @@ export default async function PostPage({ params, searchParams }) {
     inLanguage: lang,
   };
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Bosh sahifa', item: SITE },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE}/blog` },
+      { '@type': 'ListItem', position: 3, name: title, item: `${SITE}/blog/${post.slug}` },
+    ],
+  };
+
   return (
-    <div className="hpg">
-      <Navbar />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <Nav />
+      <main>
+        {/* Post hero */}
+        <section className="relative overflow-hidden border-b border-hairline">
+          <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" aria-hidden />
+          <Container className="relative py-12 md:py-16">
+            <div className="mx-auto max-w-3xl">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-1.5 text-sm text-mute transition-colors hover:text-ink"
+              >
+                ← Blog
+              </Link>
+              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+                {post.category && <span className="eyebrow">{post.category}</span>}
+                <span className="font-mono text-xs text-faint">
+                  {fmt(post.published_at, lang)}
+                </span>
+                <span className="ml-auto inline-flex overflow-hidden rounded-[var(--radius-btn)] border border-hairline">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className={`px-2.5 py-1 font-mono text-xs transition-colors ${
+                      lang === 'uz' ? 'bg-ink text-elevated' : 'text-mute hover:text-ink'
+                    }`}
+                  >
+                    UZ
+                  </Link>
+                  <Link
+                    href={`/blog/${post.slug}?lang=ru`}
+                    className={`px-2.5 py-1 font-mono text-xs transition-colors ${
+                      lang === 'ru' ? 'bg-ink text-elevated' : 'text-mute hover:text-ink'
+                    }`}
+                  >
+                    RU
+                  </Link>
+                </span>
+              </div>
+              <h1 className="mt-4 text-h2 font-semibold">{title}</h1>
+              {L(post, 'excerpt', lang) && (
+                <p className="mt-4 text-lead-lg text-body">{L(post, 'excerpt', lang)}</p>
+              )}
+            </div>
+          </Container>
+        </section>
 
-      {/* Post hero */}
-      <section className="blog-hero blog-hero--post">
-        <div className="wrap">
-          <Link href="/blog" className="blog-back">← Blog</Link>
-          <div className="blog-post-meta">
-            {post.category && <span className="blog-card-cat">{post.category}</span>}
-            <span className="blog-post-date">{fmt(post.published_at, lang)}</span>
-            <span className="blog-lang">
-              <Link href={`/blog/${post.slug}`} className={lang === 'uz' ? 'on' : ''}>UZ</Link>
-              <Link href={`/blog/${post.slug}?lang=ru`} className={lang === 'ru' ? 'on' : ''}>RU</Link>
-            </span>
-          </div>
-          <h1>{title}</h1>
-          {post.excerpt_uz && <p className="lead">{L(post, 'excerpt', lang)}</p>}
-        </div>
-      </section>
-
-      {/* Article body */}
-      <section className="sec blog-post-sec">
-        <div className="wrap">
-          <div className="blog-post-inner">
+        {/* Article body */}
+        <Container className="py-12 md:py-16">
+          <article className="mx-auto max-w-3xl">
             {post.cover_url && (
               /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={post.cover_url} alt={title} className="blog-post-cover" />
+              <img
+                src={post.cover_url}
+                alt={title}
+                className="mb-10 w-full rounded-[var(--radius-card-lg)] border border-hairline object-cover"
+              />
             )}
-            <div className="blog-prose" dangerouslySetInnerHTML={{ __html: html }} />
-            {/* Next / Prev */}
-            <nav className="blog-nav-adj">
-              {prev ? (
-                <Link href={`/blog/${prev.slug}`} className="blog-nav-link blog-nav-prev">
-                  <span className="blog-nav-dir">← Oldingi</span>
-                  <span className="blog-nav-title">{L(prev, 'title', lang)}</span>
-                </Link>
-              ) : <span />}
-              {next ? (
-                <Link href={`/blog/${next.slug}`} className="blog-nav-link blog-nav-next">
-                  <span className="blog-nav-dir">Keyingi →</span>
-                  <span className="blog-nav-title">{L(next, 'title', lang)}</span>
-                </Link>
-              ) : <span />}
-            </nav>
 
-            {/* Related posts */}
+            <div className="prose-eg" dangerouslySetInnerHTML={{ __html: html }} />
+
+            {/* Prev / Next */}
+            {(prev || next) && (
+              <nav className="mt-14 grid gap-3 border-t border-hairline pt-8 sm:grid-cols-2">
+                {prev ? (
+                  <Link
+                    href={`/blog/${prev.slug}`}
+                    className="group flex flex-col gap-1.5 rounded-[var(--radius-card)] border border-hairline bg-elevated p-4 transition-colors hover:border-ink"
+                  >
+                    <span className="eyebrow">← Oldingi</span>
+                    <span className="text-sm font-medium text-ink">{L(prev, 'title', lang)}</span>
+                  </Link>
+                ) : <span />}
+                {next ? (
+                  <Link
+                    href={`/blog/${next.slug}`}
+                    className="group flex flex-col gap-1.5 rounded-[var(--radius-card)] border border-hairline bg-elevated p-4 text-right transition-colors hover:border-ink sm:items-end"
+                  >
+                    <span className="eyebrow">Keyingi →</span>
+                    <span className="text-sm font-medium text-ink">{L(next, 'title', lang)}</span>
+                  </Link>
+                ) : <span />}
+              </nav>
+            )}
+
+            {/* Related */}
             {related.length > 0 && (
-              <div className="blog-related">
-                <h3>Shu mavzuda</h3>
-                <div className="blog-related-grid">
+              <div className="mt-12">
+                <h2 className="text-h3 font-semibold text-ink">Shu mavzuda</h2>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   {related.map((r) => (
-                    <Link key={r.slug} href={`/blog/${r.slug}`} className="blog-related-card">
-                      <span className="blog-card-cat">{r.category}</span>
-                      <span className="blog-related-title">{L(r, 'title', lang)}</span>
+                    <Link
+                      key={r.slug}
+                      href={`/blog/${r.slug}`}
+                      className="flex flex-col gap-1.5 rounded-[var(--radius-card)] border border-hairline bg-elevated p-4 transition-colors hover:border-ink"
+                    >
+                      {r.category && <span className="eyebrow">{r.category}</span>}
+                      <span className="text-sm font-medium text-ink">{L(r, 'title', lang)}</span>
                     </Link>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="blog-post-back">
-              <Link href="/blog" className="btn btn-line on-dark">← Blogga qaytish</Link>
+            <div className="mt-12 border-t border-hairline pt-8">
+              <Link
+                href="/blog"
+                className="inline-flex h-10 items-center rounded-[var(--radius-btn)] border border-hairline bg-elevated px-4 text-sm font-medium text-ink transition-colors hover:border-ink"
+              >
+                ← Blogga qaytish
+              </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <HomeFooter />
-    </div>
+          </article>
+        </Container>
+      </main>
+      <Footer />
+      <MobileDock />
+      <TelegramFab />
+    </>
   );
 }

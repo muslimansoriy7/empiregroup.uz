@@ -1,5 +1,5 @@
-import Navbar from '@/components/home/Navbar'
-import HomeFooter from '@/components/home/HomeFooter'
+import Link from 'next/link'
+import './fonts.css'
 
 export const metadata = {
   title: 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group',
@@ -27,8 +27,21 @@ function Divider() {
 export default function TizimlashtrishPage() {
   return (
     <>
-      <Navbar />
-      <div className="hpg" style={{ background: bg }}>
+      <div className="tz-page" style={{ background: bg, minHeight: '100vh' }}>
+        <header style={{
+          position: 'sticky', top: 0, zIndex: 20,
+          background: 'rgba(12,25,41,.85)', backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid rgba(240,237,225,0.1)',
+        }}>
+          <div style={{ maxWidth: 760, margin: '0 auto', padding: '16px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+            <Link href="/" style={{ color: cream, fontSize: 15, fontWeight: 600, letterSpacing: '-0.01em', textDecoration: 'none' }}>
+              Empire Group
+            </Link>
+            <Link href="/" style={{ color: gold, fontSize: 12, letterSpacing: '0.08em', textDecoration: 'none' }}>
+              Bosh sahifa →
+            </Link>
+          </div>
+        </header>
         <div style={{
           color: cream,
           fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
@@ -263,7 +276,15 @@ export default function TizimlashtrishPage() {
 
         </div>
       </div>
-      <HomeFooter />
+      <footer style={{ borderTop: '1px solid rgba(240,237,225,0.1)', padding: '28px 40px', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: 760, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', fontSize: 12, color: 'rgba(240,237,225,0.5)' }}>
+          <span>© 2026 Empire Group</span>
+          <span style={{ display: 'flex', gap: 16 }}>
+            <a href="tel:+998991164658" style={{ color: 'inherit', textDecoration: 'none' }}>+998 99 116 46 58</a>
+            <Link href="/blog" style={{ color: 'inherit', textDecoration: 'none' }}>Blog</Link>
+          </span>
+        </div>
+      </footer>
     </div>
     </>
   )

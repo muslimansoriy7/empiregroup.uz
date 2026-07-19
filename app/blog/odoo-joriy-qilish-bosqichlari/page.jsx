@@ -1,6 +1,6 @@
-import Navbar from '@/components/home/Navbar';
-import HomeFooter from '@/components/home/HomeFooter';
-import ScrollReveal from '@/components/home/ScrollReveal';
+import { Nav } from '@/components/Nav';
+import { Footer } from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
 import './oj.css';
 
 export const metadata = {
@@ -20,7 +20,7 @@ export const metadata = {
 export default function OdooJoriyQilishPage() {
   return (
     <>
-      <Navbar />
+      <Nav />
       <div className="hpg" style={{ background: '#0E1A2B' }}>
         <article className="oj">
           <div className="oj-glow" />
@@ -785,7 +785,7 @@ export default function OdooJoriyQilishPage() {
 
           </div>{/* end oj-main */}
         </article>
-        <HomeFooter />
+        <Footer />
         <ScrollReveal />
       </div>
     </>

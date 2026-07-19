@@ -38,7 +38,7 @@ export async function POST(req) {
     return NextResponse.json({ success: true });
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: lead, error } = await supabase.from('leads').insert({
     name: data.name,
     phone: data.phone,

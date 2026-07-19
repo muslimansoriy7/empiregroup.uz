@@ -1,13 +1,17 @@
 import Link from 'next/link';
-import Navbar from '@/components/home/Navbar';
-import HomeFooter from '@/components/home/HomeFooter';
+import { Nav } from '@/components/Nav';
+import { Footer } from '@/components/Footer';
+import { MobileDock } from '@/components/MobileDock';
+import { TelegramFab } from '@/components/TelegramFab';
+import { Container } from '@/components/Container';
+import { Reveal } from '@/components/Reveal';
 import { getPublishedPosts, L } from '@/lib/posts';
 
 export const revalidate = 60;
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
 
 export const metadata = {
-  title: 'Blog — IT, SEO, AI va Biznes | Empire Group',
+  title: { absolute: 'Blog — IT, SEO, AI va Biznes | Empire Group' },
   description: "IT, SEO/GEO, AI avtomatlashtirish, mobil ilova va veb-sayt yaratish bo'yicha maqolalar. O'zbekiston IT sohasida bilim bazasi.",
   alternates: { canonical: `${SITE}/blog` },
   openGraph: {
@@ -69,57 +73,89 @@ export default async function BlogPage() {
   };
 
   return (
-    <div className="hpg">
-      <Navbar />
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
+      <Nav />
+      <main>
+        {/* Hero */}
+        <section className="relative overflow-hidden border-b border-hairline">
+          <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" aria-hidden />
+          <Container className="relative py-16 md:py-24">
+            <Reveal>
+              <div className="eyebrow">Blog</div>
+              <h1 className="mt-3 max-w-3xl text-h2 font-semibold">
+                Bilim — o&apos;sish uchun
+              </h1>
+              <p className="mt-4 max-w-xl text-lead text-body">
+                SEO, GEO, AI va biznesni avtomatlashtirish bo&apos;yicha maqolalar.
+              </p>
+            </Reveal>
+          </Container>
+        </section>
 
-      {/* Hero */}
-      <section className="blog-hero">
-        <div className="wrap">
-          <span className="eyebrow">Blog</span>
-          <h1>Bilim — <span className="hl">o&apos;sish uchun</span></h1>
-          <p className="lead">SEO, GEO, AI va biznesni avtomatlashtirish bo&apos;yicha maqolalar.</p>
-        </div>
-      </section>
-
-      {/* Posts */}
-      <section className="sec">
-        <div className="wrap">
+        {/* Posts */}
+        <Container className="py-14 md:py-20">
           {posts.length === 0 ? (
-            <div className="blog-empty">
-              <div className="mono-mark">B</div>
-              <p>Hozircha maqola yo&apos;q.<br />Admin paneldan birinchi maqolani qo&apos;shing.</p>
+            <div className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated px-6 py-16 text-center">
+              <div className="mx-auto grid size-12 place-items-center rounded-[var(--radius-btn)] border border-hairline font-mono text-lg text-ink">
+                B
+              </div>
+              <p className="mt-4 text-sm text-mute">
+                Hozircha maqola yo&apos;q.<br />Admin paneldan birinchi maqolani qo&apos;shing.
+              </p>
             </div>
           ) : (
-            <div className="blog-grid">
-              {posts.map((p) => (
-                <Link key={p.id} href={`/blog/${p.slug}`} className="blog-card">
-                  <div className={`blog-card-thumb${!p.cover_url ? ' blog-card-thumb--empty' : ''}`}>
-                    {p.cover_url && (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img src={p.cover_url} alt={L(p, 'title', 'uz')} />
-                    )}
-                  </div>
-                  <div className="blog-card-body">
-                    {p.category && <span className="blog-card-cat">{p.category}</span>}
-                    <h3>{L(p, 'title', 'uz')}</h3>
-                    <p>{L(p, 'excerpt', 'uz')}</p>
-                    <div className="blog-card-foot">
-                      <span className="blog-card-date">{fmt(p.published_at)}</span>
-                      <span className="blog-card-arr">O&apos;qish →</span>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((p, i) => (
+                <Reveal key={p.id} delay={Math.min(i, 5) * 0.05} className="h-full">
+                  <Link
+                    href={`/blog/${p.slug}`}
+                    className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-float)]"
+                  >
+                    <div className="relative aspect-[16/9] overflow-hidden border-b border-hairline bg-hairline-soft">
+                      {p.cover_url ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={p.cover_url}
+                          alt={L(p, 'title', 'uz')}
+                          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="grid size-full place-items-center grid-lines">
+                          <span className="font-mono text-2xl text-faint">EG</span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                </Link>
+                    <div className="flex flex-1 flex-col gap-2.5 p-5">
+                      {p.category && (
+                        <span className="eyebrow">{p.category}</span>
+                      )}
+                      <h2 className="text-h3 font-semibold text-ink">
+                        {L(p, 'title', 'uz')}
+                      </h2>
+                      <p className="flex-1 text-sm text-body">
+                        {L(p, 'excerpt', 'uz')}
+                      </p>
+                      <div className="mt-2 flex items-center justify-between border-t border-hairline pt-3 text-xs">
+                        <span className="font-mono text-faint">{fmt(p.published_at)}</span>
+                        <span className="font-medium text-ink transition-transform duration-300 group-hover:translate-x-0.5">
+                          O&apos;qish →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           )}
-        </div>
-      </section>
-
-      <HomeFooter />
-    </div>
+        </Container>
+      </main>
+      <Footer />
+      <MobileDock />
+      <TelegramFab />
+    </>
   );
 }
