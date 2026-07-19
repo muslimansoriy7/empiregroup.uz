@@ -101,11 +101,8 @@ const orgSchema = {
     "@type": "OfferCatalog",
     name: "IT Xizmatlar",
     itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Mobil ilova yaratish" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Veb-sayt yaratish" } },
       { "@type": "Offer", itemOffered: { "@type": "Service", name: "Maxsus dasturiy ta'minot" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Odoo ERP joriy etish" } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "AI avtomatlashtirish" } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Odoo ERP & AI Joriy qilish" } },
     ],
   },
 };

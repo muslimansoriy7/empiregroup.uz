@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { Container } from "../Container";
 import { Reveal } from "../Reveal";
@@ -28,15 +29,14 @@ export function Services() {
             const Icon =
               serviceIcons[item.icon as keyof typeof serviceIcons] ??
               serviceIcons.systems;
-            const Visual =
-              serviceVisuals[item.icon] ?? serviceVisuals.systems;
+            const Visual = serviceVisuals[item.icon] ?? serviceVisuals.systems;
             const flip = i % 2 === 1;
 
             return (
               <Reveal as="div" key={item.title}>
                 <div className="border-t border-hairline pt-12">
-                  <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
-                    {/* copy */}
+                  {/* headline row — discipline, name, positioning line */}
+                  <div className="grid gap-8 lg:grid-cols-2 lg:gap-14">
                     <div className={cn(flip && "lg:order-2")}>
                       <div className="flex items-center gap-4">
                         <span className="font-mono text-[13px] text-faint">
@@ -48,32 +48,20 @@ export function Services() {
                         >
                           <Icon className="size-5" />
                         </span>
-                        <h3 className="text-[22px] font-semibold tracking-tight text-ink sm:text-[26px]">
-                          {item.title}
-                        </h3>
+                        <div className="eyebrow">{item.tag}</div>
                       </div>
 
-                      <p className="mt-5 max-w-md text-[15px] leading-relaxed text-body">
-                        {item.body}
-                      </p>
-
-                      <div className="mt-6 flex flex-wrap gap-2">
-                        {item.points.map((p) => (
-                          <span
-                            key={p}
-                            className="rounded-full border border-hairline bg-elevated px-3 py-1 text-[12px] font-medium text-body"
-                          >
-                            {p}
-                          </span>
-                        ))}
-                      </div>
+                      <h3 className="mt-5 text-[26px] font-semibold tracking-tight text-ink sm:text-[32px]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-[15px] text-body">{item.subtitle}</p>
 
                       {item.stack.length > 0 && (
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <div className="mt-6 flex flex-wrap items-center gap-2">
                           {item.stack.map((s) => (
                             <span
                               key={s}
-                              className="rounded-[var(--radius-btn)] bg-canvas px-2.5 py-1 font-mono text-[11px] text-mute"
+                              className="rounded-[var(--radius-btn)] border border-hairline bg-canvas px-3 py-1.5 font-mono text-[12px] text-body"
                             >
                               {s}
                             </span>
@@ -91,24 +79,85 @@ export function Services() {
                       </button>
                     </div>
 
-                    {/* animated visual */}
+                    {/* description + what's included */}
                     <div className={cn(flip && "lg:order-1")}>
-                      <div className="relative overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-canvas">
-                        {/* accent wash + grid texture */}
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full opacity-[0.14] blur-2xl"
-                          style={{ background: accentGradient(item.accent) }}
-                        />
-                        <span
-                          aria-hidden
-                          className="grid-lines pointer-events-none absolute inset-0 opacity-40"
-                        />
-                        <div className="relative flex min-h-[280px] items-center justify-center py-6 sm:min-h-[320px]">
-                          <Visual accent={item.accent} />
+                      <p className="max-w-xl text-[15px] leading-relaxed text-body">
+                        {item.body}
+                      </p>
+
+                      <div className="eyebrow mt-7">{services.inclLabel}</div>
+                      <ul className="mt-3 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+                        {item.points.map((p) => (
+                          <li key={p} className="flex items-start gap-2.5 text-[14px] text-body">
+                            <span
+                              aria-hidden
+                              className="mt-[3px] size-3 shrink-0 rotate-45 rounded-[2px] border"
+                              style={{ borderColor: "var(--color-mute)" }}
+                            />
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* package tiers */}
+                  <div className="mt-10 grid gap-4 lg:grid-cols-3">
+                    {item.packages.map((pkg) => (
+                      <div
+                        key={pkg.name}
+                        className={cn(
+                          "relative flex flex-col rounded-[var(--radius-card-lg)] border bg-elevated p-6 transition-colors",
+                          pkg.popular
+                            ? "border-ink shadow-[var(--shadow-whisper)]"
+                            : "border-hairline hover:border-mute"
+                        )}
+                      >
+                        {pkg.popular && (
+                          <span className="absolute -top-[11px] left-6 rounded-[var(--radius-btn)] bg-ink px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-elevated">
+                            {services.popularLabel}
+                          </span>
+                        )}
+                        <div className="eyebrow">{pkg.name}</div>
+                        <div className="mt-3 text-[26px] font-semibold tracking-[-0.03em] text-ink">
+                          {pkg.price}
                         </div>
+                        <div className="mt-1 font-mono text-[12px] text-mute">
+                          {pkg.term}
+                        </div>
+                        <div className="my-4 border-t border-hairline" />
+                        <p className="text-[14px] leading-relaxed text-body">
+                          {pkg.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* animated visual */}
+                  <div className="mt-10 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+                    <div className="relative overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-canvas">
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full opacity-[0.14] blur-2xl"
+                        style={{ background: accentGradient(item.accent) }}
+                      />
+                      <span
+                        aria-hidden
+                        className="grid-lines pointer-events-none absolute inset-0 opacity-40"
+                      />
+                      <div className="relative flex min-h-[240px] items-center justify-center py-6 sm:min-h-[280px]">
+                        <Visual accent={item.accent} />
                       </div>
                     </div>
+
+                    {item.geoSlug && (
+                      <Link
+                        href={`/xizmatlar/${item.geoSlug}`}
+                        className="font-mono text-[13px] text-mute transition-colors hover:text-ink lg:pb-2 lg:text-right"
+                      >
+                        {item.detailsLabel.replace("{name}", item.title)}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </Reveal>

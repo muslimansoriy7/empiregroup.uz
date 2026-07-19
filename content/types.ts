@@ -21,6 +21,8 @@ export type Dict = {
     title: string;
     /** substring of `title` rendered in the accent gradient */
     titleAccent: string;
+    /** words cycled in place of the `{word}` token inside `title` */
+    rotatingWords: string[];
     subtitle: string;
     primaryCta: { label: string; href: string };
     secondaryCta: { label: string; href: string };
@@ -93,10 +95,20 @@ export type Dict = {
     ctaLabel: string;
     ctaHref: string;
     priceFromLabel: string;
+    /** heading above the "what the package includes" checklist */
+    inclLabel: string;
     items: {
       no: string;
       icon: string;
+      /** English discipline label printed above the service name */
+      tag: string;
       title: string;
+      /** one-line positioning under the service name */
+      subtitle: string;
+      /** slug of the /xizmatlar landing page this service links to */
+      geoSlug: string;
+      /** label of the "read more" link, `{name}` is replaced by the title */
+      detailsLabel: string;
       body: string;
       /** capability chips */
       points: string[];
@@ -203,5 +215,7 @@ export type Dict = {
     tagline: string;
     columns: { title: string; links: { label: string; href: string }[] }[];
     copyright: string;
+    /** right-hand side of the bottom bar */
+    legal: string;
   };
 };

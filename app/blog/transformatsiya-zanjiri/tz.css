@@ -1,22 +1,25 @@
 .tz {
-  --tz-paper:#F3F5F8;
-  --tz-panel:#FFFFFF;
-  --tz-ink:#0C1524;
-  --tz-navy:#122540;
-  --tz-navy-2:#0A1526;
-  --tz-brass:#B5842F;
-  --tz-brass-2:#C99B45;
-  --tz-brass-soft:#E8D9B4;
-  --tz-slate:#54637A;
-  --tz-slate-2:#7C8AA0;
-  --tz-line:#D8DEE7;
-  --tz-line-2:#E7ECF2;
-  --tz-paper-dk:#EBEEF3;
-  --tz-shadow:0 1px 2px rgba(12,21,36,.04), 0 12px 40px -18px rgba(12,21,36,.22);
-  --tz-maxw:1080px;
+  /* Re-skinned onto the site design tokens — the light surfaces follow the
+     page (and flip with the device's colour scheme), the dark bands stay
+     dark, and the old brass accent becomes the prism blue. */
+  --tz-paper: var(--color-canvas);
+  --tz-panel: var(--color-elevated);
+  --tz-ink: var(--color-ink);
+  --tz-navy: #101010;
+  --tz-navy-2: #050505;
+  --tz-brass: var(--color-link);
+  --tz-brass-2: #52aeff;
+  --tz-brass-soft: var(--color-hairline);
+  --tz-slate: var(--color-body);
+  --tz-slate-2: var(--color-mute);
+  --tz-line: var(--color-hairline);
+  --tz-line-2: var(--color-hairline-soft);
+  --tz-paper-dk: var(--color-hairline-soft);
+  --tz-shadow: var(--shadow-whisper);
+  --tz-maxw: 1080px;
 
-  color: var(--tz-ink);
-  font-family: "Outfit", system-ui, -apple-system, sans-serif;
+  color: var(--color-body);
+  font-family: var(--font-sans);
   font-size: 16.5px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -24,9 +27,9 @@
 }
 
 .tz .tz-wrap { max-width: var(--tz-maxw); margin: 0 auto; padding: 0 24px }
-.tz .mono { font-family: "JetBrains Mono", monospace }
+.tz .mono { font-family: var(--font-mono) }
 .tz .tz-eyebrow {
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
   color: var(--tz-brass); font-weight: 600;
 }
@@ -34,9 +37,9 @@
 /* ---- HERO ---- */
 .tz .tz-hero {
   background:
-    radial-gradient(120% 100% at 82% -10%, rgba(201,155,69,.14), transparent 55%),
+    radial-gradient(120% 100% at 82% -10%, rgba(82,174,255,.14), transparent 55%),
     linear-gradient(180deg, var(--tz-navy) 0%, var(--tz-navy-2) 100%);
-  color: #EAEFF6;
+  color: #ededed;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid rgba(255,255,255,.06);
@@ -56,13 +59,13 @@
 .tz .brandmark {
   width: 26px; height: 26px; border: 1.5px solid var(--tz-brass-2);
   display: grid; place-items: center; border-radius: 5px;
-  font-family: "Fraunces", serif; font-weight: 700; color: var(--tz-brass-2); font-size: 15px; line-height: 1;
+  font-family: var(--font-sans); font-weight: 700; color: var(--tz-brass-2); font-size: 15px; line-height: 1;
 }
-.tz .brandline .nm { font-family: "JetBrains Mono", monospace; font-size: 12.5px; letter-spacing: .16em; color: #B9C6D8 }
-.tz .brandline .nm b { color: #EAEFF6; font-weight: 600 }
+.tz .brandline .nm { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .16em; color: #B9C6D8 }
+.tz .brandline .nm b { color: #ededed; font-weight: 600 }
 
 .tz h1.tz-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: clamp(32px, 6.2vw, 60px);
   line-height: 1.04;
@@ -73,9 +76,9 @@
 .tz h1.tz-title em { font-style: italic; color: var(--tz-brass-2) }
 .tz .lede {
   font-size: clamp(16px, 2.2vw, 19.5px);
-  color: #C4D0DF; max-width: 60ch; line-height: 1.6; margin: 0 0 8px;
+  color: #a0a0a0; max-width: 60ch; line-height: 1.6; margin: 0 0 8px;
 }
-.tz .lede strong { color: #EAEFF6; font-weight: 600 }
+.tz .lede strong { color: #ededed; font-weight: 600 }
 
 /* ---- HERO CHAIN ---- */
 .tz .chain {
@@ -87,8 +90,8 @@
 }
 .tz .chain-head {
   display: flex; justify-content: space-between; gap: 12px;
-  font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .12em;
-  text-transform: uppercase; color: #8FA1B8; margin-bottom: 18px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em;
+  text-transform: uppercase; color: #8f8f8f; margin-bottom: 18px;
 }
 .tz .chain-head .r { color: var(--tz-brass-2) }
 .tz .steps { display: flex; gap: 0; align-items: stretch }
@@ -98,22 +101,22 @@
 .tz .step .node {
   width: 38px; height: 38px; margin: 0 auto 12px; border-radius: 9px;
   display: grid; place-items: center;
-  font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 14px;
+  font-family: var(--font-mono); font-weight: 600; font-size: 14px;
   background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-  border: 1px solid rgba(201,155,69,.4); color: var(--tz-brass-2);
+  border: 1px solid rgba(82,174,255,.4); color: var(--tz-brass-2);
   position: relative; z-index: 2;
 }
-.tz .step.last .node { background: linear-gradient(180deg, var(--tz-brass-2), var(--tz-brass)); border-color: var(--tz-brass-2); color: #1a1206 }
-.tz .step .nm { font-weight: 600; font-size: 13.5px; color: #EAEFF6; margin-bottom: 2px; line-height: 1.25 }
-.tz .step .en { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .06em; color: #7E90A8; text-transform: uppercase }
+.tz .step.last .node { background: linear-gradient(180deg, var(--tz-brass-2), var(--tz-brass)); border-color: var(--tz-brass-2); color: #04121f }
+.tz .step .nm { font-weight: 600; font-size: 13.5px; color: #ededed; margin-bottom: 2px; line-height: 1.25 }
+.tz .step .en { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; color: #7E90A8; text-transform: uppercase }
 .tz .step:not(:last-child)::after {
   content: ""; position: absolute; top: 18px; left: 50%; width: 100%; height: 2px;
-  background: linear-gradient(90deg, rgba(201,155,69,.5), rgba(201,155,69,.18)); z-index: 1;
+  background: linear-gradient(90deg, rgba(82,174,255,.5), rgba(82,174,255,.18)); z-index: 1;
 }
 .tz .chain-scale {
   display: flex; justify-content: space-between; margin-top: 16px; padding-top: 12px;
   border-top: 1px dashed rgba(255,255,255,.12);
-  font-size: 12px; color: #8FA1B8;
+  font-size: 12px; color: #8f8f8f;
 }
 .tz .chain-scale b { color: #C9D6E5; font-weight: 600 }
 .tz .chain-scale .lo { color: #C98A8A }
@@ -123,7 +126,7 @@
 .tz .tz-sec { padding: 64px 0 }
 .tz .sec-eyebrow { margin-bottom: 14px }
 .tz h2.sec-title {
-  font-family: "Fraunces", serif; font-weight: 700;
+  font-family: var(--font-sans); font-weight: 700;
   font-size: clamp(24px, 3.6vw, 34px); line-height: 1.12; letter-spacing: -.01em;
   margin: 0 0 14px;
 }
@@ -137,9 +140,9 @@
   position: relative; overflow: hidden;
 }
 .tz .mat::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--tz-brass) }
-.tz .mat .lvl { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--tz-brass); letter-spacing: .08em }
-.tz .mat h4 { font-family: "Fraunces", serif; font-weight: 700; font-size: 18px; margin: 6px 0 4px }
-.tz .mat .state { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--tz-slate-2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px }
+.tz .mat .lvl { font-family: var(--font-mono); font-size: 11px; color: var(--tz-brass); letter-spacing: .08em }
+.tz .mat h4 { font-family: var(--font-sans); font-weight: 700; font-size: 18px; margin: 6px 0 4px }
+.tz .mat .state { font-family: var(--font-mono); font-size: 11px; color: var(--tz-slate-2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px }
 .tz .mat p { font-size: 13.5px; color: var(--tz-slate); margin: 0; line-height: 1.5 }
 
 /* ---- STAGES (spine) ---- */
@@ -152,9 +155,9 @@
   position: absolute; left: 0; top: 0; width: 54px; height: 54px; border-radius: 14px;
   background: var(--tz-ink); color: var(--tz-brass-2);
   display: grid; place-items: center; z-index: 2; box-shadow: var(--tz-shadow);
-  font-family: "JetBrains Mono", monospace; font-weight: 600;
+  font-family: var(--font-mono); font-weight: 600;
 }
-.tz .stage.final .marker { background: linear-gradient(180deg, var(--tz-brass-2), var(--tz-brass)); color: #1a1206 }
+.tz .stage.final .marker { background: linear-gradient(180deg, var(--tz-brass-2), var(--tz-brass)); color: #04121f }
 .tz .marker .n { font-size: 20px; line-height: 1 }
 
 .tz .tz-card {
@@ -162,13 +165,13 @@
   padding: 28px 28px 24px; box-shadow: var(--tz-shadow);
 }
 .tz .card-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 6px }
-.tz .card-top h3 { font-family: "Fraunces", serif; font-weight: 700; font-size: clamp(22px, 3vw, 28px); margin: 0; letter-spacing: -.01em }
-.tz .card-top .en { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--tz-brass); letter-spacing: .06em; text-transform: uppercase }
+.tz .card-top h3 { font-family: var(--font-sans); font-weight: 700; font-size: clamp(22px, 3vw, 28px); margin: 0; letter-spacing: -.01em }
+.tz .card-top .en { font-family: var(--font-mono); font-size: 12px; color: var(--tz-brass); letter-spacing: .06em; text-transform: uppercase }
 .tz .tagline { font-size: 16px; color: var(--tz-ink); font-weight: 500; margin: 0 0 20px; padding-left: 14px; border-left: 3px solid var(--tz-brass-soft) }
 
 .tz .block { margin-bottom: 18px }
 .tz .block .lab {
-  font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .14em;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em;
   text-transform: uppercase; color: var(--tz-slate-2); font-weight: 600; margin-bottom: 7px;
   display: flex; align-items: center; gap: 8px;
 }
@@ -189,27 +192,27 @@
 }
 .tz .ex-list li::before {
   content: "\2192"; position: absolute; left: 0; top: 0; color: var(--tz-brass); font-weight: 700;
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--font-mono);
 }
 .tz .ex-list li b { color: var(--tz-ink); font-weight: 600 }
 
 .tz .signal {
   margin-top: 18px; display: flex; gap: 12px; align-items: flex-start;
-  background: linear-gradient(0deg, rgba(181,132,47,.05), rgba(181,132,47,.05));
+  background: linear-gradient(0deg, rgba(0,112,243,.05), rgba(0,112,243,.05));
   border: 1px solid var(--tz-brass-soft); border-radius: 10px; padding: 13px 15px;
 }
 .tz .signal .ic {
   flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; background: var(--tz-brass); color: #fff;
-  display: grid; place-items: center; font-size: 14px; font-weight: 700; font-family: "Fraunces", serif;
+  display: grid; place-items: center; font-size: 14px; font-weight: 700; font-family: var(--font-sans);
 }
 .tz .signal .ic.warn { background: #B4453C }
 .tz .signal .txt { font-size: 14px; color: var(--tz-ink); line-height: 1.5 }
 .tz .signal .txt b { color: var(--tz-ink) }
-.tz .signal .txt .tag { font-family: "JetBrains Mono", monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--tz-slate-2); display: block; margin-bottom: 2px }
+.tz .signal .txt .tag { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--tz-slate-2); display: block; margin-bottom: 2px }
 
 /* ---- MINI SVG DIAGRAMS ---- */
 .tz .diagram { margin: 18px 0 4px; background: var(--tz-paper); border: 1px solid var(--tz-line-2); border-radius: 12px; padding: 18px }
-.tz .diagram-cap { font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tz-slate-2); margin-bottom: 12px; text-align: center }
+.tz .diagram-cap { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tz-slate-2); margin-bottom: 12px; text-align: center }
 .tz .diagram svg { display: block; width: 100%; height: auto }
 
 /* ---- DECISION TABLE ---- */
@@ -217,20 +220,20 @@
 .tz .tz-table { margin-top: 34px; border: 1px solid var(--tz-line); border-radius: 14px; overflow: hidden; background: var(--tz-panel) }
 .tz .trow { display: grid; grid-template-columns: 1.3fr 1fr 1.5fr; gap: 0; border-bottom: 1px solid var(--tz-line-2) }
 .tz .trow:last-child { border-bottom: none }
-.tz .trow.head { background: var(--tz-ink); color: #EAEFF6 }
-.tz .trow.head .cell { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--tz-brass-2); font-weight: 600 }
+.tz .trow.head { background: var(--tz-ink); color: #ededed }
+.tz .trow.head .cell { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--tz-brass-2); font-weight: 600 }
 .tz .cell { padding: 16px 18px; font-size: 14.5px; line-height: 1.5; border-right: 1px solid var(--tz-line-2); display: flex; align-items: center }
 .tz .cell:last-child { border-right: none }
 .tz .trow:not(.head) .cell:first-child { color: var(--tz-slate) }
-.tz .trow .term { font-weight: 700; color: var(--tz-ink); font-family: "Fraunces", serif; font-size: 16px }
+.tz .trow .term { font-weight: 700; color: var(--tz-ink); font-family: var(--font-sans); font-size: 16px }
 .tz .trow .q { color: var(--tz-slate); font-style: italic }
 
 /* ---- AI FORMULA ---- */
 .tz .tz-aif {
   background:
-    radial-gradient(110% 120% at 0% 0%, rgba(201,155,69,.14), transparent 58%),
+    radial-gradient(110% 120% at 0% 0%, rgba(82,174,255,.14), transparent 58%),
     linear-gradient(180deg, var(--tz-navy-2), var(--tz-navy));
-  color: #EAEFF6; position: relative; overflow: hidden;
+  color: #ededed; position: relative; overflow: hidden;
   border-top: 1px solid rgba(255,255,255,.06);
 }
 .tz .tz-aif::before {
@@ -242,9 +245,9 @@
 }
 .tz .tz-aif .tz-wrap { position: relative }
 .tz .tz-aif .sec-eyebrow { color: var(--tz-brass-2) }
-.tz .tz-aif h2 { font-family: "Fraunces", serif; font-weight: 700; font-size: clamp(24px, 3.8vw, 36px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 14px; max-width: 22ch }
+.tz .tz-aif h2 { font-family: var(--font-sans); font-weight: 700; font-size: clamp(24px, 3.8vw, 36px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 14px; max-width: 22ch }
 .tz .tz-aif h2 em { font-style: italic; color: var(--tz-brass-2) }
-.tz .tz-aif .sec-intro { color: #C4D0DF }
+.tz .tz-aif .sec-intro { color: #a0a0a0 }
 
 .tz .formula { margin-top: 34px }
 .tz .fterms { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap }
@@ -253,35 +256,35 @@
   background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09);
   border-radius: 13px; padding: 20px 18px 18px; position: relative;
 }
-.tz .fterm .fn { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .14em; color: var(--tz-slate-2); margin-bottom: 16px }
+.tz .fterm .fn { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; color: var(--tz-slate-2); margin-bottom: 16px }
 .tz .fterm .ft { font-weight: 700; font-size: clamp(19px, 2.5vw, 24px); letter-spacing: -.01em; text-transform: uppercase; line-height: 1.1; margin-bottom: 8px }
-.tz .fterm .fs { font-size: 12.5px; color: #93A4BB; line-height: 1.45 }
-.tz .fterm .fs b { color: var(--tz-brass-2); font-weight: 600; font-family: "JetBrains Mono", monospace; font-size: 11.5px }
-.tz .op { flex: 0 0 44px; display: grid; place-items: center; font-family: "Fraunces", serif; font-size: 30px; font-weight: 600; color: var(--tz-brass-2) }
+.tz .fterm .fs { font-size: 12.5px; color: #8f8f8f; line-height: 1.45 }
+.tz .fterm .fs b { color: var(--tz-brass-2); font-weight: 600; font-family: var(--font-mono); font-size: 11.5px }
+.tz .op { flex: 0 0 44px; display: grid; place-items: center; font-family: var(--font-sans); font-size: 30px; font-weight: 600; color: var(--tz-brass-2) }
 
 .tz .frule { height: 1px; background: linear-gradient(90deg, rgba(255,255,255,.16), rgba(255,255,255,.02)); margin: 26px 0 }
 .tz .fresult { display: flex; align-items: center; gap: 22px }
-.tz .fresult .eq { font-family: "Fraunces", serif; font-size: clamp(30px, 5vw, 44px); font-weight: 600; color: var(--tz-brass-2); line-height: 1 }
+.tz .fresult .eq { font-family: var(--font-sans); font-size: clamp(30px, 5vw, 44px); font-weight: 600; color: var(--tz-brass-2); line-height: 1 }
 .tz .fresult .foyda {
-  font-family: "Fraunces", serif; font-weight: 700; font-style: italic;
+  font-family: var(--font-sans); font-weight: 700; font-style: italic;
   font-size: clamp(40px, 8vw, 74px); line-height: .95; letter-spacing: -.02em;
   color: var(--tz-brass-2);
-  text-shadow: 0 0 34px rgba(201,155,69,.28);
+  text-shadow: 0 0 34px rgba(82,174,255,.28);
 }
-.tz .fresult .fnote { margin-left: auto; max-width: 24ch; font-size: 13.5px; color: #93A4BB; line-height: 1.5; text-align: right }
+.tz .fresult .fnote { margin-left: auto; max-width: 24ch; font-size: 13.5px; color: #8f8f8f; line-height: 1.5; text-align: right }
 
 .tz .fkey { margin-top: 26px; display: flex; align-items: flex-start; gap: 16px;
   border-top: 1px solid rgba(255,255,255,.08); padding-top: 22px }
-.tz .fkey .kl { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .16em; color: var(--tz-brass-2); text-transform: uppercase; flex-shrink: 0; padding-top: 4px }
-.tz .fkey .kt { font-family: "Fraunces", serif; font-size: clamp(17px, 2.4vw, 22px); font-weight: 500; color: #EAEFF6; line-height: 1.4 }
+.tz .fkey .kl { font-family: var(--font-mono); font-size: 11px; letter-spacing: .16em; color: var(--tz-brass-2); text-transform: uppercase; flex-shrink: 0; padding-top: 4px }
+.tz .fkey .kt { font-family: var(--font-sans); font-size: clamp(17px, 2.4vw, 22px); font-weight: 500; color: #ededed; line-height: 1.4 }
 .tz .fkey .kt b { color: var(--tz-brass-2); font-style: italic; font-weight: 600 }
 
 /* ---- GOLDEN RULE ---- */
 .tz .tz-golden {
   background:
-    radial-gradient(100% 120% at 100% 0%, rgba(201,155,69,.16), transparent 60%),
+    radial-gradient(100% 120% at 100% 0%, rgba(82,174,255,.16), transparent 60%),
     linear-gradient(180deg, var(--tz-navy), var(--tz-navy-2));
-  color: #EAEFF6; position: relative; overflow: hidden;
+  color: #ededed; position: relative; overflow: hidden;
 }
 .tz .tz-golden::before {
   content: ""; position: absolute; inset: 0;
@@ -292,13 +295,13 @@
 }
 .tz .tz-golden .tz-wrap { position: relative }
 .tz .tz-golden .sec-eyebrow { color: var(--tz-brass-2) }
-.tz .tz-golden h2 { font-family: "Fraunces", serif; font-weight: 700; font-size: clamp(26px, 4vw, 40px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 26px; max-width: 20ch }
+.tz .tz-golden h2 { font-family: var(--font-sans); font-weight: 700; font-size: clamp(26px, 4vw, 40px); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 26px; max-width: 20ch }
 .tz .tz-golden h2 em { font-style: italic; color: var(--tz-brass-2) }
 .tz .rule-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px }
 .tz .rule { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09); border-radius: 14px; padding: 22px 22px 20px }
-.tz .rule .k { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--tz-brass-2); margin-bottom: 10px }
+.tz .rule .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--tz-brass-2); margin-bottom: 10px }
 .tz .rule p { margin: 0; font-size: 15.5px; color: #C7D3E2; line-height: 1.6 }
-.tz .rule p b { color: #EAEFF6; font-weight: 600 }
+.tz .rule p b { color: #ededed; font-weight: 600 }
 .tz .rule.warn { border-color: rgba(180,69,60,.4); background: rgba(180,69,60,.08) }
 .tz .rule.warn .k { color: #E39A93 }
 
@@ -338,3 +341,7 @@
 @media (prefers-reduced-motion:reduce) {
   .tz .reveal { opacity: 1; transform: none; transition: none }
 }
+
+/* --- contrast fixes after the token re-skin --- */
+.tz .trow.head { background: var(--color-ink); color: var(--color-canvas) }
+.tz .trow.head .cell { color: var(--color-canvas) }

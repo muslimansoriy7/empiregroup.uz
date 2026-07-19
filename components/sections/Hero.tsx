@@ -5,6 +5,7 @@ import { Button } from "../Button";
 import { MeshGradient } from "../MeshGradient";
 import { Reveal } from "../Reveal";
 import { HeroTransform } from "../HeroTransform";
+import { RotatingWord } from "../RotatingWord";
 import { ArrowRight } from "../Icons";
 import { useI18n } from "@/lib/i18n";
 import { useConsult } from "../ConsultModal";
@@ -13,6 +14,8 @@ export function Hero() {
   const { t } = useI18n();
   const { open: openConsult } = useConsult();
   const hero = t.hero;
+  // The headline carries a `{word}` slot the rotating word drops into.
+  const [titleBefore, titleAfter = ""] = hero.title.split("{word}");
 
   return (
     <section id="top" className="relative overflow-hidden">
@@ -38,7 +41,9 @@ export function Hero() {
                 className="mt-6 text-balance text-display text-ink"
                 style={{ fontSize: "clamp(2.34rem, 1.19rem + 4.42vw, 4.25rem)" }}
               >
-                {hero.title}
+                {titleBefore}
+                <RotatingWord words={hero.rotatingWords} />
+                {titleAfter}
               </h1>
             </Reveal>
 
