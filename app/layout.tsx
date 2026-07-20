@@ -71,20 +71,16 @@ const orgSchema = {
   },
 };
 
+// No SearchAction: it told Google the site answers /blog?q=, which it does
+// not — the parameter is ignored. Claiming a sitelinks searchbox that leads
+// nowhere is worse than not having one.
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Empire Group",
   url: SITE,
   inLanguage: ["uz", "ru", "en"],
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${SITE}/blog?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
-  },
+  publisher: { "@type": "Organization", name: "Empire Group", url: SITE },
 };
 
 // Arms the scroll-reveal `.js` flag before paint. The site is permanently
