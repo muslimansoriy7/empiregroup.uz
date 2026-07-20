@@ -1,92 +1,154 @@
-# Empire Group CMS — To'liq O'rnatish Qo'llanmasi
+# empiregroup.uz
 
-## Tezkor boshlash
+Empire Group sayti. Next.js 15 + React 19 + Tailwind v4, kontent Supabase'da,
+hosting Vercel'da. Sayt uch tilli va **doimiy qorong'i rejimda** — oq rejim yo'q.
 
-### 1. Supabase loyiha yarating
-1. **supabase.com** → New Project
-2. **SQL Editor** → Yangi query:
-   ```sql
-   -- Avval 0001_init.sql ni joylashtiring
-   -- Keyin 0002_extend.sql ni joylashtiring
-   ```
-3. **Authentication → Users → Add User** (admin email + parol)
+---
 
-### 2. .env.local faylini to'ldiring
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-NEXT_PUBLIC_SITE_URL=https://empiregroup.uz
-```
+## Boshlash
 
-### 3. Lokal ishga tushirish
 ```bash
 npm install
-npm run dev
-# → http://localhost:3000/admin
+cp .env.local.example .env.local   # kalitlarni to'ldiring
+npm run dev                        # http://localhost:3000
 ```
 
-### 4. Vercel deploy
+`.env.local` uchun kerak bo'ladigan kalitlar:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+> `SUPABASE_SERVICE_ROLE_KEY` **faqat serverda** kerak (ariza qabul qilish uchun).
+> U RLS'ni chetlab o'tadi va barcha mijoz ma'lumotlariga kirish beradi —
+> lokalda dizayn ustida ishlash uchun shart emas.
+
+---
+
+## Ish tartibi
+
+`main` himoyalangan — to'g'ridan-to'g'ri push qilib bo'lmaydi.
+
+```
+branch ochasiz  →  push  →  Vercel avtomatik preview havolasi beradi
+                                ↓
+                        Pull Request ochasiz
+                                ↓
+                    tasdiqlangach main'ga qo'shiladi = deploy
+```
+
 ```bash
-# GitHub'ga yuklang yoki zip'dan import qiling
-# Vercel dashboard → Environment Variables → 4 ta kalit kiriting
-# Deploy
+git checkout -b dizayn/hero-yangilash
+# ... ish ...
+git push -u origin dizayn/hero-yangilash
 ```
 
 ---
 
-## Analytics o'rnatish (empiregroup.uz/empire-group-site.html)
+## Papka tuzilmasi
 
-### GA4
-1. analytics.google.com → Yangi property → Web → URL: empiregroup.uz
-2. Measurement ID ni oling (G-XXXXXXXXXX)
-3. `head_index.html` faylida `GA_MEASUREMENT_ID` ni almashtiring
+```
+app/
+├── layout.tsx            HTML qobiq, Schema.org, analitika
+├── globals.css           ⭐ BARCHA RANG VA USLUB — dizayn tokenlari shu yerda
+├── [locale]/             sayt sahifalari (uz prefikssiz, /ru, /en)
+│   ├── page.tsx          bosh sahifa — bloklar tartibi
+│   ├── narxlar/          narxlar sahifasi
+│   ├── blog/             blog ro'yxati va maqolalar
+│   ├── xizmatlar/[slug]/ shahar bo'yicha GEO sahifalar
+│   └── tizimlashtirish/  alohida landing (o'z uslubida)
+├── admin/                CMS paneli — alohida eski uslubda, tegmang
+└── api/leads/            ariza qabul qilish
 
-### Meta Pixel
-1. business.facebook.com → Events Manager → Yangi pixel
-2. Pixel ID ni oling
-3. `head_index.html` faylida `META_PIXEL_ID` ni almashtiring
+components/
+├── sections/             ⭐ bosh sahifa bloklari
+│   ├── Hero, Showcase, ProofBar, Services, Process,
+│   ├── Portfolio, WhyUs, Testimonials, Credentials, Faq, CtaBand
+├── Nav.tsx  Footer.tsx  ConsultForm.tsx  ConsultModal.tsx
+└── ...
 
-### Telegram Bot (forma)
-1. Telegram → @BotFather → /newbot → Token oling
-2. @userinfobot → Chat ID oling
-3. `foot_spa.html` faylida:
-   ```javascript
-   var TG_TOKEN='your_bot_token_here';
-   var TG_CHAT='your_chat_id_here';
-   ```
+content/                  ⭐ BARCHA MATN
+├── uz.ts  ru.ts  en.ts   uchtasi bir xil tuzilmada
+└── types.ts              tuzilma ta'rifi
 
----
-
-## Admin paneli sahifalari
-
-| Sahifa | URL | Maqsad |
-|--------|-----|--------|
-| Dashboard | /admin | Umumiy ko'rinish, statistika |
-| Blog | /admin/posts | Maqolalar yozish/tahrirlash |
-| **Leads** | /admin/leads | Forma arizalarini ko'rish va boshqarish |
-| **Cases** | /admin/cases | Portfolio case study'larni qo'shish |
-| **Testimonials** | /admin/testimonials | Mijoz izohlarini boshqarish |
-| **FAQs** | /admin/faqs | Savol-javoblar (Schema.org uchun) |
+lib/                      supabase, i18n, geo, posts
+public/                   rasmlar, sertifikatlar, og.png
+middleware.js             til yo'naltirish + admin himoyasi
+```
 
 ---
 
-## SQL Migratsiyalar (ketma-ketlik muhim!)
+## Dizayn qayerdan boshqariladi
 
-1. `supabase/migrations/0001_init.sql` — Blog posts, RLS
-2. `supabase/migrations/0002_extend.sql` — Leads, Cases, Testimonials, FAQs, Glossary
+Barcha rang, shrift, oraliq va radius **`app/globals.css`** dagi `@theme`
+blokida. Bitta joyni o'zgartirsangiz — butun sayt o'zgaradi.
+
+```css
+--color-ink        matn va asosiy tugmalar
+--color-body       oddiy matn
+--color-mute       ikkilamchi matn
+--color-hairline   chegaralar
+--color-canvas     sahifa foni
+--color-elevated   karta foni
+--color-link       havola/aksent
+--radius-card, --radius-btn, --radius-pill
+--shadow-whisper, --shadow-float
+```
+
+Tailwind klasslari shu tokenlarga bog'langan: `text-ink`, `bg-canvas`,
+`border-hairline`, `rounded-[var(--radius-card)]` va hokazo.
+**To'g'ridan-to'g'ri hex rang yozmang** — kerak bo'lsa yangi token qo'shing.
 
 ---
 
-## SEO va GEO tekshiruv ro'yxati
+## Qoidalar
 
-- [ ] GA4 o'rnatildi
-- [ ] Meta Pixel o'rnatildi
-- [ ] Telegram bot ulandi
-- [ ] Google Search Console → sayt tasdiqlandi
-- [ ] Sitemap.xml yuborildi (GSC → Sitemaps → /sitemap.xml)
-- [ ] Schema.org tekshirildi (search.google.com/test/rich-results)
-- [ ] Blog'da birinchi 3 maqola joylandi
-- [ ] Case studies qo'shildi
-- [ ] Testimoniallar qo'shildi
-- [ ] FAQlar Schema.org bilan qo'shildi
+**Matnga tegmang.** Barcha matn `content/uz.ts`, `ru.ts`, `en.ts` da.
+Uchtasi bir xil tuzilmada bo'lishi shart — biriga maydon qo'shsangiz,
+qolgan ikkisiga ham qo'shing, aks holda build yiqiladi (`types.ts` tekshiradi).
+
+**Sayt faqat qorong'i.** `prefers-color-scheme` ishlatilmaydi, oq rejim yo'q.
+Ataylab oq qolgan yagona joy — sertifikat kartalaridagi hujjat skanlari.
+
+**Havolalarni qo'lda yozmang.** Til prefiksi avtomatik qo'shiladi:
+
+```tsx
+const sectionHref = useSectionHref();
+<Link href={sectionHref("/blog")}>        // uz: /blog, ru: /ru/blog
+```
+
+**Sahifalar statik.** Komponentda `cookies()` yoki `headers()` chaqirmang —
+bu butun sahifani dinamik qiladi va keshni o'chiradi.
+
+**Animatsiya.** Scroll reveal uchun `<Reveal>`, smooth scroll — lenis,
+murakkab animatsiya — framer-motion. `prefers-reduced-motion` hurmat qilinadi.
+
+**Tegilmaydigan joylar:** `app/admin/`, `app/api/`, `middleware.js`,
+`lib/supabase/`, `app/sitemap.js`, `app/robots.js`.
+
+---
+
+## Tekshirish
+
+```bash
+npm run build     # build yiqilmasligi shart
+npm run lint
+```
+
+Build o'tmaguncha PR ochmang.
+
+---
+
+## Supabase jadvallari
+
+| Jadval | Nima |
+|---|---|
+| `posts` | blog maqolalari (uz/ru, draft/published) |
+| `leads` | saytdan kelgan arizalar |
+| `testimonials`, `cases`, `faqs` | admin panelda tahrirlanadi |
+| `companies` | ichki CRM |
+
+Blog kontenti `lib/posts.js` orqali sessiyasiz mijoz bilan o'qiladi
+(`lib/supabase/public.js`) — bu sahifalar keshlanishi uchun zarur.
