@@ -12,6 +12,7 @@ export const en: Dict = {
       { label: "Process", href: "#jarayon" },
       { label: "Projects", href: "#loyihalar" },
       { label: "Reviews", href: "#sharhlar" },
+      { label: "Pricing", href: "/narxlar" },
       { label: "Blog", href: "/blog" },
     ],
     cta: { label: "Free consultation", href: "#aloqa" },
@@ -370,6 +371,54 @@ export const en: Dict = {
     formTitle: "Free consultation",
     formSubtitle: "Leave your details — we'll be in touch shortly.",
   },
+  pricing: {
+    slug: "narxlar",
+    metaTitle: "Pricing — Odoo ERP implementation and custom software | Empire Group",
+    metaDescription:
+      "Odoo ERP implementation from $8,800, custom software from $5,000. Three packages, timelines, and what the price is made of — stated openly.",
+    eyebrow: "Pricing",
+    title: "What does it cost?",
+    intro:
+      "We do not hide prices. Below are three packages for each discipline, their timelines and what they contain. The exact figure is set after the first conversation, based on scope, and fixed in the contract.",
+    howLabel: "How the price is set",
+    how: [
+      "Fixed-scope: not hourly, an exact figure at the start of the project. No hidden charges.",
+      "Payment in stages — an initial advance, then an agreed share at the end of each stage.",
+      "Every package includes 4 weeks of support.",
+      "At the end of the project all code, design and intellectual property transfer to you.",
+    ],
+    faqTitle: "Questions about price",
+    faq: [
+      {
+        q: "How much does an Odoo ERP implementation cost?",
+        a: "The standard package starts at $8,800 and runs 2–3 months: baseline configuration of standard Odoo modules, data migration and staff training. If you need modules tailored to your requirements, chatbots and process automation, it is $25,000–$35,000 over 4–6 months. A full digital transformation for a large company starts at $85,000 and takes roughly a year.",
+      },
+      {
+        q: "How much does custom software cost?",
+        a: "An MVP solving one clear job starts at $5,000 over 2–3 months. A full web or mobile app with complex business logic — CRM integration, push notifications, admin panel and API — is $15,000–$40,000 over 4–6 months. A large ecosystem of several applications starts at $50,000 and takes 6–12 months.",
+      },
+      {
+        q: "Why is the price given as a range?",
+        a: "Because it depends on the number of features, how complex the integrations are and how much data is involved. In the first conversation we walk through your processes, and only then quote an exact figure — which then does not move in the contract.",
+      },
+      {
+        q: "What is the minimum budget?",
+        a: "$5,000. Below that we would rather not take the work: something that cannot produce a real result serves neither of us.",
+      },
+      {
+        q: "How does payment work?",
+        a: "In stages: an initial advance, then an agreed share at the end of each stage. You see the result of a stage before you pay for it.",
+      },
+      {
+        q: "Are there extra costs after launch?",
+        a: "Every package includes 4 weeks of support. Ongoing maintenance beyond that is agreed separately and is not compulsory — the code is yours, and your own team can carry it if you prefer.",
+      },
+    ],
+    ctaTitle: "Want the exact figure?",
+    ctaBody:
+      "Twenty minutes on your processes and we will give you a realistic budget range. Free, and it commits you to nothing.",
+    ctaLabel: "Free consultation",
+  },
   blogCta: {
     title: "Have a project along these lines?",
     body: "We will work through how what the article describes applies to your business. The conversation is free and commits you to nothing.",
@@ -386,6 +435,7 @@ export const en: Dict = {
       { title: "Services", links: [
         { label: "Custom software", href: "#xizmatlar" },
         { label: "Odoo ERP & AI implementation", href: "#xizmatlar" },
+        { label: "Pricing", href: "/narxlar" },
       ]},
       { title: "Company", links: [
         { label: "Projects", href: "#loyihalar" },

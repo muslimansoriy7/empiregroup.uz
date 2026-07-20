@@ -12,6 +12,7 @@ export const uz: Dict = {
       { label: "Jarayon", href: "#jarayon" },
       { label: "Loyihalar", href: "#loyihalar" },
       { label: "Sharhlar", href: "#sharhlar" },
+      { label: "Narxlar", href: "/narxlar" },
       { label: "Blog", href: "/blog" },
     ],
     cta: { label: "Bepul konsultatsiya", href: "#aloqa" },
@@ -370,6 +371,54 @@ export const uz: Dict = {
     formTitle: "Bepul konsultatsiya",
     formSubtitle: "Ma'lumotlaringizni qoldiring — tez orada bog'lanamiz.",
   },
+  pricing: {
+    slug: "narxlar",
+    metaTitle: "Narxlar — Odoo ERP joriy qilish va maxsus dasturiy ta'minot | Empire Group",
+    metaDescription:
+      "Odoo ERP joriy qilish $8,800 dan, maxsus dasturiy ta'minot $5,000 dan. Uchta paket, aniq muddatlar va narx nimadan tashkil topishi — ochiq yozilgan.",
+    eyebrow: "Narxlar",
+    title: "Qancha turadi?",
+    intro:
+      "Narxni yashirmaymiz. Quyida ikkala yo'nalish bo'yicha uchta paket, ularning muddati va nimani o'z ichiga olishi keltirilgan. Aniq summa loyiha ko'lamiga qarab birinchi suhbatdan keyin belgilanadi va shartnomada qotiriladi.",
+    howLabel: "Narx qanday belgilanadi",
+    how: [
+      "Fixed-scope: soatbay emas, loyiha boshida aniq summa. Yashirin to'lov yo'q.",
+      "To'lov bosqichma-bosqich — boshlang'ich avans, so'ngra har bosqich yakunida.",
+      "Har paketda 4 hafta bepul qo'llab-quvvatlash.",
+      "Loyiha yakunida barcha kod, dizayn va intellektual mulk sizga o'tadi.",
+    ],
+    faqTitle: "Narx bo'yicha savollar",
+    faq: [
+      {
+        q: "Odoo ERP joriy qilish qancha turadi?",
+        a: "Standart paket $8,800 dan boshlanadi va 2–3 oy davom etadi: Odoo standart modullarini bazaviy sozlash, ma'lumotlarni ko'chirish va xodimlarni o'qitish. Biznes talablariga moslashtirilgan modullar, chat-botlar va jarayon avtomatlashtirish kerak bo'lsa — $25,000–$35,000, 4–6 oy. Yirik korxonaning to'liq raqamli transformatsiyasi $85,000 dan, taxminan bir yil.",
+      },
+      {
+        q: "Maxsus dasturiy ta'minot qancha turadi?",
+        a: "Bitta aniq vazifani hal qiluvchi MVP $5,000 dan, 2–3 oy. Murakkab biznes mantig'iga ega to'liq veb yoki mobil ilova — CRM integratsiya, push-bildirishnomalar, admin panel va API bilan — $15,000–$40,000, 4–6 oy. Bir nechta ilovadan iborat yirik ekotizim $50,000 dan, 6–12 oy.",
+      },
+      {
+        q: "Nega narx oralig'i bilan ko'rsatilgan?",
+        a: "Chunki narx funksiyalar soniga, integratsiyalar murakkabligiga va ma'lumot hajmiga bog'liq. Birinchi suhbatda jarayonlaringizni ko'rib chiqamiz va shundan keyin aniq summa aytamiz — u shartnomada o'zgarmas bo'lib qoladi.",
+      },
+      {
+        q: "Minimal byudjet qancha?",
+        a: "$5,000. Bundan pastda jiddiy natija bermaydigan ish qilishni ma'qul ko'rmaymiz — sizga ham, bizga ham foydasi yo'q.",
+      },
+      {
+        q: "To'lov qanday amalga oshiriladi?",
+        a: "Bosqichma-bosqich: boshlang'ich avans, so'ngra har bir bosqich yakunida belgilangan ulush. Har bosqich natijasini ko'rib, keyin to'laysiz.",
+      },
+      {
+        q: "Ishga tushgandan keyin qo'shimcha to'lov bormi?",
+        a: "Har paketda 4 hafta bepul qo'llab-quvvatlash bor. Undan keyingi doimiy texnik xizmat alohida kelishiladi va majburiy emas — kod sizniki, xohlasangiz o'z jamoangiz davom ettiradi.",
+      },
+    ],
+    ctaTitle: "Aniq summani bilmoqchimisiz?",
+    ctaBody:
+      "Jarayonlaringizni 20 daqiqada ko'rib chiqamiz va real byudjet oralig'ini aytamiz. Bepul, majburiyat yo'q.",
+    ctaLabel: "Bepul konsultatsiya",
+  },
   blogCta: {
     title: "Shu mavzuda loyihangiz bormi?",
     body: "Maqolada yozilganlarni sizning biznesingizga qanday qo'llash mumkinligini birga ko'rib chiqamiz. Suhbat bepul, majburiyat yo'q.",
@@ -386,6 +435,7 @@ export const uz: Dict = {
       { title: "Xizmatlar", links: [
         { label: "Maxsus dasturiy ta'minot", href: "#xizmatlar" },
         { label: "Odoo ERP & AI Joriy qilish", href: "#xizmatlar" },
+        { label: "Narxlar", href: "/narxlar" },
       ]},
       { title: "Kompaniya", links: [
         { label: "Loyihalar", href: "#loyihalar" },

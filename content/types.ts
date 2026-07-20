@@ -230,6 +230,22 @@ export type Dict = {
     formTitle: string;
     formSubtitle: string;
   };
+  /** the standalone pricing / "how much does it cost" page */
+  pricing: {
+    slug: string;
+    metaTitle: string;
+    metaDescription: string;
+    eyebrow: string;
+    title: string;
+    intro: string;
+    howLabel: string;
+    how: string[];
+    faqTitle: string;
+    faq: { q: string; a: string }[];
+    ctaTitle: string;
+    ctaBody: string;
+    ctaLabel: string;
+  };
   /** the block that closes every blog article */
   blogCta: {
     title: string;

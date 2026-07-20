@@ -71,6 +71,7 @@ export default async function sitemap() {
   return [
     entry('/', { lastModified: now, changeFrequency: 'weekly', priority: 1.0 }),
     entry('/blog', { lastModified: now, changeFrequency: 'daily', priority: 0.9 }),
+    entry('/narxlar', { lastModified: now, changeFrequency: 'monthly', priority: 0.9 }),
     entry('/tizimlashtirish', { lastModified: now, changeFrequency: 'monthly', priority: 0.8 }),
     ...geoPages,
     ...posts,

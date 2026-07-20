@@ -70,6 +70,7 @@ intellektual mulk mijozga o'tadi.
 ## Sahifalar
 
 - [Bosh sahifa](${SITE}/): xizmatlar, narxlar, jarayon, loyihalar, sharhlar, savol-javob
+- [Narxlar](${SITE}/narxlar): ikkala yo'nalish bo'yicha uchta paket, muddatlar va narx bo'yicha savol-javob
 - [Blog](${SITE}/blog): IT, ERP, SEO/GEO, AI va biznesni avtomatlashtirish bo'yicha maqolalar
 - [Raqamli transformatsiya](${SITE}/tizimlashtirish): tizimlashtirish va aqlli avtomatlashtirish metodologiyasi
 
