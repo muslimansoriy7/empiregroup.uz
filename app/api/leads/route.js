@@ -16,7 +16,10 @@ const LeadSchema = z.object({
   utm_source: z.string().trim().max(100).optional(),
   utm_medium: z.string().trim().max(100).optional(),
   utm_campaign: z.string().trim().max(150).optional(),
-  company_website: z.string().max(0).optional(),
+  // Honeypot. Deliberately permissive: rejecting a filled value here would
+  // hand the bot a 400 and an invitation to retry. It is accepted, then
+  // dropped below with a success response, so the bot believes it is done.
+  company_website: z.string().max(300).optional(),
 });
 
 export async function POST(req) {
@@ -34,6 +37,8 @@ export async function POST(req) {
 
   const data = parsed.data;
 
+  // Only a bot fills the honeypot — a real visitor never sees the field.
+  // Answer as if it worked and write nothing.
   if (data.company_website) {
     return NextResponse.json({ success: true });
   }
