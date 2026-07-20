@@ -6,13 +6,20 @@ import { Footer } from '@/components/Footer';
 import { MobileDock } from '@/components/MobileDock';
 import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
-import { getPostBySlug, getAdjacentPosts, L } from '@/lib/posts';
+import { getPostBySlug, getAdjacentPosts, getAllSlugs, L } from '@/lib/posts';
 import { localePath, localeAlternates, canonicalFor, postLocales } from '@/lib/locale-path';
 import { isLocale, defaultLocale } from '@/content';
 
 // The language now comes from the URL rather than a query string, so the page
 // can be cached and revalidated instead of rendered on every request.
 export const revalidate = 60;
+
+// Prerender the posts that exist at build time; anything published later is
+// rendered on first request and then cached like the rest.
+export async function generateStaticParams() {
+  const slugs = await getAllSlugs();
+  return slugs.map((s) => ({ slug: s.slug }));
+}
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
 
