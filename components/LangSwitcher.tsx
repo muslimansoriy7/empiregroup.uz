@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useI18n } from "@/lib/i18n";
-import { locales, localeNames, localeShort, type Locale } from "@/content";
+import { locales, localeNames, localeShort } from "@/content";
+import { localePath, stripLocale } from "@/lib/locale-path";
 import { Globe, ChevronDown, Check } from "./Icons";
 import { cn } from "@/lib/cn";
 
@@ -17,9 +20,14 @@ export function LangSwitcher({
   /** open upward instead of downward (used in the mobile menu) */
   up?: boolean;
 }) {
-  const { locale, setLocale } = useI18n();
+  const { locale } = useI18n();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  // Each language is a real URL, so switching is a navigation, not a state
+  // flip — the same page in the chosen language, indexable and shareable.
+  const bare = stripLocale(pathname || "/");
 
   useEffect(() => {
     if (!open) return;
@@ -34,11 +42,6 @@ export function LangSwitcher({
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-
-  const choose = (l: Locale) => {
-    setLocale(l);
-    setOpen(false);
-  };
 
   return (
     <div ref={ref} className={cn("relative", className)}>
@@ -70,11 +73,13 @@ export function LangSwitcher({
           )}
         >
           {locales.map((l) => (
-            <button
+            <Link
               key={l}
+              href={localePath(l, bare)}
+              hrefLang={l}
               role="menuitemradio"
               aria-checked={l === locale}
-              onClick={() => choose(l)}
+              onClick={() => setOpen(false)}
               className={cn(
                 "flex w-full items-center justify-between rounded-[var(--radius-btn)] px-2.5 py-2 text-sm transition-colors",
                 l === locale
@@ -89,7 +94,7 @@ export function LangSwitcher({
                 {localeNames[l]}
               </span>
               {l === locale && <Check className="size-4 text-ink" />}
-            </button>
+            </Link>
           ))}
         </div>
       )}

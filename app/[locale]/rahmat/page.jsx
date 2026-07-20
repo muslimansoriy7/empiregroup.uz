@@ -5,13 +5,17 @@ import { Footer } from '@/components/Footer';
 import { MobileDock } from '@/components/MobileDock';
 import { Container } from '@/components/Container';
 import ConversionTracker from '@/components/ConversionTracker';
+import { localePath } from '@/lib/locale-path';
+import { isLocale, defaultLocale } from '@/content';
 
 export const metadata = {
   title: { absolute: "So'rovingiz qabul qilindi — Empire Group" },
   robots: { index: false, follow: false },
 };
 
-export default function RahmatPage() {
+export default async function RahmatPage({ params }) {
+  const { locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
   return (
     <>
       <Nav />
@@ -31,13 +35,13 @@ export default function RahmatPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/"
+              href={localePath(lang, "/")}
               className="inline-flex h-11 items-center rounded-[var(--radius-pill)] bg-ink px-6 text-sm font-medium text-elevated transition-colors hover:bg-[#383838]"
             >
               Bosh sahifaga →
             </Link>
             <Link
-              href="/blog"
+              href={localePath(lang, "/blog")}
               className="inline-flex h-11 items-center rounded-[var(--radius-pill)] border border-hairline bg-elevated px-6 text-sm font-medium text-ink transition-colors hover:border-ink"
             >
               Blog o&apos;qish

@@ -4,6 +4,8 @@ import ScrollReveal from '@/components/ScrollReveal';
 import './oj.css';
 
 export const metadata = {
+  // Written in Uzbek only — every locale points at the same document.
+  alternates: { canonical: '/blog/odoo-joriy-qilish-bosqichlari' },
   title: { absolute: "Odoo ERP joriy qilishning 5 fazasi — Empire Group" },
   description:
     "Discovery, Design, Build, Deploy va Support — Odoo ERP joriy qilishning beshta fazasi. Har biri uchun maqsad, faoliyat, natija va xavflar. Amaliy metodologiya qo'llanma.",
