@@ -15,6 +15,7 @@ export const uz: Dict = {
       { label: "Blog", href: "/blog" },
     ],
     cta: { label: "Bepul konsultatsiya", href: "#aloqa" },
+    phone: { label: "+998 99 116 46 58", href: "tel:+998991164658" },
     langLabel: "Til",
     themeLabel: "Mavzu",
   },
@@ -368,6 +369,15 @@ export const uz: Dict = {
     button: { label: "Bepul konsultatsiya", href: "https://t.me/muslimansoriy" },
     formTitle: "Bepul konsultatsiya",
     formSubtitle: "Ma'lumotlaringizni qoldiring — tez orada bog'lanamiz.",
+  },
+  blogCta: {
+    title: "Shu mavzuda loyihangiz bormi?",
+    body: "Maqolada yozilganlarni sizning biznesingizga qanday qo'llash mumkinligini birga ko'rib chiqamiz. Suhbat bepul, majburiyat yo'q.",
+    cta: "Bepul konsultatsiya",
+  },
+  blogIndex: {
+    allLabel: "Barchasi",
+    emptyFiltered: "Bu yo'nalishda hozircha maqola yo'q.",
   },
   footer: {
     tagline:

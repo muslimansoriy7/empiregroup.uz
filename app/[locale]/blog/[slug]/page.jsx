@@ -6,8 +6,10 @@ import { Footer } from '@/components/Footer';
 import { MobileDock } from '@/components/MobileDock';
 import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
+import { ArticleCta } from '@/components/ArticleCta';
 import { getPostBySlug, getAdjacentPosts, getAllSlugs, L } from '@/lib/posts';
 import { localePath, localeAlternates, canonicalFor, postLocales } from '@/lib/locale-path';
+import { faqSchemaFromMarkdown } from '@/lib/article-faq';
 import { isLocale, defaultLocale } from '@/content';
 
 // The language now comes from the URL rather than a query string, so the page
@@ -72,6 +74,8 @@ export default async function PostPage({ params }) {
   const title = L(post, 'title', lang);
   const body = L(post, 'body', lang);
   const html = marked.parse(body || '');
+  // Articles are written as questions; surface that as FAQ markup.
+  const faqSchema = faqSchemaFromMarkdown(body);
 
   const { prev, next, related } = await getAdjacentPosts(slug);
 
@@ -109,6 +113,12 @@ export default async function PostPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <Nav />
       <main>
         {/* Post hero */}
@@ -163,6 +173,8 @@ export default async function PostPage({ params }) {
             )}
 
             <div className="prose-eg" dangerouslySetInnerHTML={{ __html: html }} />
+
+            <ArticleCta />
 
             {/* Prev / Next */}
             {(prev || next) && (

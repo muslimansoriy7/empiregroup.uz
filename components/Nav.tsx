@@ -8,7 +8,7 @@ import { useConsult } from "./ConsultModal";
 import { Button } from "./Button";
 import { Wordmark } from "./Wordmark";
 import { LangSwitcher } from "./LangSwitcher";
-import { Menu, Close } from "./Icons";
+import { Menu, Close, Phone } from "./Icons";
 
 export function Nav() {
   const { t } = useI18n();
@@ -67,6 +67,15 @@ export function Nav() {
 
         {/* desktop actions */}
         <div className="hidden items-center gap-2 md:flex">
+          {/* Some visitors want to call, not fill a form — give them the number
+              rather than making them hunt for it in the footer. */}
+          <a
+            href={t.nav.phone.href}
+            className="mr-1 hidden items-center gap-1.5 text-sm font-medium text-body transition-colors hover:text-ink lg:inline-flex"
+          >
+            <Phone className="size-4 text-mute" />
+            {t.nav.phone.label}
+          </a>
           <LangSwitcher />
           <Button onClick={openConsult} variant="nav" size="sm">
             {t.nav.cta.label}
@@ -111,10 +120,18 @@ export function Nav() {
                 {l.label}
               </a>
             ))}
+            <a
+              href={t.nav.phone.href}
+              onClick={() => setOpen(false)}
+              className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-[var(--radius-btn)] border border-hairline bg-elevated text-[15px] font-medium text-ink"
+            >
+              <Phone className="size-4 text-mute" />
+              {t.nav.phone.label}
+            </a>
             <Button
               variant="primary"
               size="lg"
-              className="mt-6 w-full"
+              className="mt-2 w-full"
               onClick={() => {
                 setOpen(false);
                 openConsult();

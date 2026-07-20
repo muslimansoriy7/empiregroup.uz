@@ -1,10 +1,10 @@
-import Link from 'next/link';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { MobileDock } from '@/components/MobileDock';
 import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
 import { Reveal } from '@/components/Reveal';
+import { BlogGrid } from '@/components/BlogGrid';
 import { getPublishedPosts, L } from '@/lib/posts';
 import { localePath, localeAlternates, canonicalFor, postLocales } from '@/lib/locale-path';
 import { isLocale, dictionaries, defaultLocale } from '@/content';
@@ -119,48 +119,18 @@ export default async function BlogPage({ params }) {
               </p>
             </div>
           ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((p, i) => (
-                <Reveal key={p.id} delay={Math.min(i, 5) * 0.05} className="h-full">
-                  <Link
-                    href={localePath(lang, `/blog/${p.slug}`)}
-                    className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-float)]"
-                  >
-                    <div className="relative aspect-[16/9] overflow-hidden border-b border-hairline bg-hairline-soft">
-                      {p.cover_url ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img
-                          src={p.cover_url}
-                          alt={L(p, 'title', lang)}
-                          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="grid size-full place-items-center grid-lines">
-                          <span className="font-mono text-2xl text-faint">EG</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex flex-1 flex-col gap-2.5 p-5">
-                      {p.category && (
-                        <span className="eyebrow">{p.category}</span>
-                      )}
-                      <h2 className="text-h3 font-semibold text-ink">
-                        {L(p, 'title', lang)}
-                      </h2>
-                      <p className="flex-1 text-sm text-body">
-                        {L(p, 'excerpt', lang)}
-                      </p>
-                      <div className="mt-2 flex items-center justify-between border-t border-hairline pt-3 text-xs">
-                        <span className="font-mono text-faint">{fmt(p.published_at)}</span>
-                        <span className="font-medium text-ink transition-transform duration-300 group-hover:translate-x-0.5">
-                          O&apos;qish →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
+            <BlogGrid
+              posts={posts.map((p) => ({
+                id: String(p.id),
+                slug: p.slug,
+                href: localePath(lang, `/blog/${p.slug}`),
+                title: L(p, 'title', lang),
+                excerpt: L(p, 'excerpt', lang),
+                category: p.category || null,
+                date: fmt(p.published_at),
+                cover: p.cover_url || null,
+              }))}
+            />
           )}
         </Container>
       </main>

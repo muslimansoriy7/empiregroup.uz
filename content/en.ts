@@ -15,6 +15,7 @@ export const en: Dict = {
       { label: "Blog", href: "/blog" },
     ],
     cta: { label: "Free consultation", href: "#aloqa" },
+    phone: { label: "+998 99 116 46 58", href: "tel:+998991164658" },
     langLabel: "Language",
     themeLabel: "Theme",
   },
@@ -368,6 +369,15 @@ export const en: Dict = {
     button: { label: "Free consultation", href: "https://t.me/muslimansoriy" },
     formTitle: "Free consultation",
     formSubtitle: "Leave your details — we'll be in touch shortly.",
+  },
+  blogCta: {
+    title: "Have a project along these lines?",
+    body: "We will work through how what the article describes applies to your business. The conversation is free and commits you to nothing.",
+    cta: "Free consultation",
+  },
+  blogIndex: {
+    allLabel: "All",
+    emptyFiltered: "No articles in this area yet.",
   },
   footer: {
     tagline:

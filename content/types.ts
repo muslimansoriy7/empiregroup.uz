@@ -13,6 +13,8 @@ export type Dict = {
   nav: {
     links: { label: string; href: string }[];
     cta: { label: string; href: string };
+    /** click-to-call shown in the header and the mobile menu */
+    phone: { label: string; href: string };
     langLabel: string;
     themeLabel: string;
   };
@@ -227,6 +229,17 @@ export type Dict = {
     button: { label: string; href: string };
     formTitle: string;
     formSubtitle: string;
+  };
+  /** the block that closes every blog article */
+  blogCta: {
+    title: string;
+    body: string;
+    cta: string;
+  };
+  /** blog index controls */
+  blogIndex: {
+    allLabel: string;
+    emptyFiltered: string;
   };
   footer: {
     tagline: string;
