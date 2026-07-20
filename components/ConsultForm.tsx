@@ -7,6 +7,50 @@ import { Check, ArrowRight, Telegram } from "./Icons";
 
 type Status = "idle" | "sending" | "success";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+/**
+ * Fires the lead conversion the moment the API confirms the write.
+ *
+ * The form resolves in place rather than navigating to /rahmat, so nothing
+ * else on the page would ever report the conversion. Both events are sent:
+ * `generate_lead` for GA4 reporting and the Ads conversion for bidding.
+ * When gtag is absent (analytics not configured yet) this is a no-op, so the
+ * wiring can land before the measurement IDs do.
+ */
+function reportConversion(leadId?: string) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+
+  const id = leadId || "anon";
+  const key = `conv_${id}`;
+  try {
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+  } catch {
+    // private mode — reporting once more beats not reporting at all
+  }
+
+  window.gtag("event", "generate_lead", {
+    event_category: "engagement",
+    event_label: "consult_form_submit",
+    value: 1,
+  });
+
+  const convId = process.env.NEXT_PUBLIC_GADS_CONVERSION_ID;
+  if (convId) {
+    window.gtag("event", "conversion", {
+      send_to: convId,
+      transaction_id: id,
+      value: 1.0,
+      currency: "USD",
+    });
+  }
+}
+
 const TELEGRAM = "https://t.me/muslimansoriy";
 
 /**
@@ -38,7 +82,11 @@ export function ConsultForm({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [field, setField] = useState(defaultField);
+  const [budget, setBudget] = useState("");
   const [message, setMessage] = useState("");
+  // Honeypot: invisible to people, irresistible to bots. The API treats a
+  // filled value as spam and silently drops the submission.
+  const [companyWebsite, setCompanyWebsite] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -78,7 +126,9 @@ export function ConsultForm({
           name: name.trim(),
           phone: phone.trim(),
           service: field.trim(),
+          budget: budget.trim(),
           message: message.trim(),
+          company_website: companyWebsite,
           source_page:
             typeof window !== "undefined" ? window.location.pathname : "/",
           geo_city: geoCity || undefined,
@@ -92,8 +142,10 @@ export function ConsultForm({
       setName("");
       setPhone("");
       setField(defaultField);
+      setBudget("");
       setMessage("");
       setStatus("success");
+      reportConversion(payload?.leadId);
     } catch {
       setStatus("idle");
       setSubmitError(c.errorSubmit);
@@ -201,6 +253,15 @@ export function ConsultForm({
         />
       </Field>
 
+      <Field label={c.budgetLabel}>
+        <Select
+          value={budget}
+          onChange={setBudget}
+          placeholder={c.budgetPlaceholder}
+          options={c.budgetOptions}
+        />
+      </Field>
+
       <Field label={c.messageLabel}>
         <textarea
           value={message}
@@ -210,6 +271,20 @@ export function ConsultForm({
           className="consult-input !h-auto resize-none py-2.5"
         />
       </Field>
+
+      {/* honeypot — off-screen, not focusable, not announced */}
+      <div aria-hidden className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0">
+        <label>
+          Company website
+          <input
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={companyWebsite}
+            onChange={(e) => setCompanyWebsite(e.target.value)}
+          />
+        </label>
+      </div>
 
       <Button
         type="submit"

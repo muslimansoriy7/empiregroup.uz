@@ -93,9 +93,10 @@ export const ru: Dict = {
     budgetLabel: "Бюджет",
     budgetPlaceholder: "Выберите бюджет",
     budgetOptions: [
-      "$7,500 – $15,000",
+      "$5,000 – $15,000",
       "$15,000 – $50,000",
       "$50,000+",
+      "Пока не определён",
     ],
     messageLabel: "Сообщение / о проекте",
     messagePlaceholder: "Кратко опишите ваш проект…",

@@ -93,9 +93,10 @@ export const uz: Dict = {
     budgetLabel: "Byudjet",
     budgetPlaceholder: "Byudjetni tanlang",
     budgetOptions: [
-      "$7,500 – $15,000",
+      "$5,000 – $15,000",
       "$15,000 – $50,000",
       "$50,000+",
+      "Hali aniq emas",
     ],
     messageLabel: "Xabar / loyiha haqida",
     messagePlaceholder: "Loyihangiz haqida qisqacha yozing…",

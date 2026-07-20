@@ -93,9 +93,10 @@ export const en: Dict = {
     budgetLabel: "Budget",
     budgetPlaceholder: "Select a budget",
     budgetOptions: [
-      "$7,500 – $15,000",
+      "$5,000 – $15,000",
       "$15,000 – $50,000",
       "$50,000+",
+      "Not decided yet",
     ],
     messageLabel: "Message / about the project",
     messagePlaceholder: "Briefly describe your project…",
