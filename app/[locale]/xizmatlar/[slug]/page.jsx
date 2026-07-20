@@ -7,6 +7,8 @@ import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
 import { ConsultForm } from '@/components/ConsultForm';
 import { getGeoEntry, geoSlugs } from '@/lib/geo';
+import { localePath, localeAlternates } from '@/lib/locale-path';
+import { isLocale, defaultLocale } from '@/content';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
 
@@ -15,13 +17,17 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
   const entry = getGeoEntry(slug);
   if (!entry) return { title: { absolute: 'IT Xizmatlar — Empire Group' } };
   return {
     title: { absolute: entry.title },
     description: entry.description,
-    alternates: { canonical: `${SITE}/xizmatlar/${slug}` },
+    alternates: {
+      canonical: localePath(lang, `/xizmatlar/${slug}`),
+      languages: { ...localeAlternates(`/xizmatlar/${slug}`), 'x-default': `/xizmatlar/${slug}` },
+    },
     openGraph: {
       type: 'website',
       title: entry.title,
@@ -34,7 +40,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function GeoServicePage({ params }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
   const entry = getGeoEntry(slug);
   if (!entry) notFound();
 
@@ -57,7 +64,7 @@ export default async function GeoServicePage({ params }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Bosh sahifa', item: SITE },
+      { '@type': 'ListItem', position: 1, name: 'Bosh sahifa', item: `${SITE}${localePath(lang, '/')}` },
       { '@type': 'ListItem', position: 2, name: 'Xizmatlar', item: `${SITE}/#xizmatlar` },
       { '@type': 'ListItem', position: 3, name: entry.h1, item: `${SITE}/xizmatlar/${slug}` },
     ],
@@ -80,7 +87,7 @@ export default async function GeoServicePage({ params }) {
           <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" aria-hidden />
           <Container className="relative py-14 md:py-20">
             <Link
-              href="/"
+              href={localePath(lang, "/")}
               className="inline-flex items-center gap-1.5 text-sm text-mute transition-colors hover:text-ink"
             >
               ← Bosh sahifa

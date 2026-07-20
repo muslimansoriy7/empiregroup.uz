@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import './fonts.css'
+import { localePath } from '@/lib/locale-path'
+import { isLocale, defaultLocale } from '@/content'
 
 export const metadata = {
   title: 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group',
@@ -24,7 +26,9 @@ function Divider() {
   )
 }
 
-export default function TizimlashtrishPage() {
+export default async function TizimlashtrishPage({ params }) {
+  const { locale } = await params
+  const lang = isLocale(locale) ? locale : defaultLocale
   return (
     <>
       <div className="tz-page" style={{ background: bg, minHeight: '100vh' }}>
@@ -34,10 +38,10 @@ export default function TizimlashtrishPage() {
           borderBottom: '1px solid rgba(240,237,225,0.1)',
         }}>
           <div style={{ maxWidth: 760, margin: '0 auto', padding: '16px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-            <Link href="/" style={{ color: cream, fontSize: 15, fontWeight: 600, letterSpacing: '-0.01em', textDecoration: 'none' }}>
+            <Link href={localePath(lang, "/")} style={{ color: cream, fontSize: 15, fontWeight: 600, letterSpacing: '-0.01em', textDecoration: 'none' }}>
               Empire Group
             </Link>
-            <Link href="/" style={{ color: gold, fontSize: 12, letterSpacing: '0.08em', textDecoration: 'none' }}>
+            <Link href={localePath(lang, "/")} style={{ color: gold, fontSize: 12, letterSpacing: '0.08em', textDecoration: 'none' }}>
               Bosh sahifa →
             </Link>
           </div>
@@ -281,7 +285,7 @@ export default function TizimlashtrishPage() {
           <span>© 2026 Empire Group</span>
           <span style={{ display: 'flex', gap: 16 }}>
             <a href="tel:+998991164658" style={{ color: 'inherit', textDecoration: 'none' }}>+998 99 116 46 58</a>
-            <Link href="/blog" style={{ color: 'inherit', textDecoration: 'none' }}>Blog</Link>
+            <Link href={localePath(lang, "/blog")} style={{ color: 'inherit', textDecoration: 'none' }}>Blog</Link>
           </span>
         </div>
       </footer>

@@ -1,65 +1,30 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { cookies } from "next/headers";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Providers } from "@/components/Providers";
-import { dictionaries, defaultLocale, isLocale, type Locale } from "@/content";
+import { defaultLocale } from "@/content";
 import "./globals.css";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GADS_ID = process.env.NEXT_PUBLIC_GADS_ID;
 
-async function getLocale(): Promise<Locale> {
-  const cookieStore = await cookies();
-  const value = cookieStore.get("locale")?.value;
-  return isLocale(value) ? value : defaultLocale;
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  const t = dictionaries[await getLocale()];
-  return {
-    metadataBase: new URL(SITE),
-    title: { default: t.meta.title, template: "%s | Empire Group" },
-    description: t.meta.description,
-    keywords: [
-      "mobil ilova",
-      "veb sayt",
-      "ERP",
-      "Odoo",
-      "AI",
-      "IT kompaniya",
-      "Toshkent",
-      "empire group",
-    ],
-    alternates: { canonical: SITE },
-    openGraph: {
-      type: "website",
-      siteName: "Empire Group",
-      locale: "uz_UZ",
-      url: SITE,
-      title: t.meta.title,
-      description: t.meta.description,
-      images: [
-        { url: "/og.png", width: 1200, height: 630, alt: "Empire Group" },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@empiregroup_uz",
-      title: t.meta.title,
-      description: t.meta.description,
-      images: ["/og.png"],
-    },
-    icons: {
-      icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-      shortcut: "/icon.svg",
-      apple: "/icon.svg",
-    },
-    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-  };
-}
+/**
+ * Root shell. Deliberately free of `cookies()` and `headers()` — reading
+ * either here marks every route in the app dynamic and costs the CDN cache.
+ * The language now comes from the URL, so per-locale metadata lives in
+ * app/[locale]/layout.tsx and this file stays static.
+ */
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE),
+  title: { default: "Empire Group", template: "%s | Empire Group" },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+};
 
 export const viewport: Viewport = {
   // one colour: the site does not follow the device scheme
@@ -72,6 +37,7 @@ const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Empire Group",
+  legalName: '"EMPIRE GROUP CORP" MCHJ',
   alternateName: "Empire IT Solutions",
   url: SITE,
   logo: `${SITE}/logos/empire-white.png`,
@@ -88,7 +54,7 @@ const orgSchema = {
   areaServed: "UZ",
   foundingDate: "2023",
   numberOfEmployees: { "@type": "QuantitativeValue", value: 10 },
-  sameAs: ["https://t.me/empiregroup_uz", "https://instagram.com/empiregroup.uz"],
+  sameAs: ["https://t.me/muslimansoriy", "https://instagram.com/empiregroup.uz"],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+998991164658",
@@ -110,6 +76,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "Empire Group",
   url: SITE,
+  inLanguage: ["uz", "ru", "en"],
   potentialAction: {
     "@type": "SearchAction",
     target: {
@@ -124,14 +91,12 @@ const websiteSchema = {
 // dark, so there is no theme to restore and no theme JS.
 const BOOT_SCRIPT = `document.documentElement.classList.add('js')`;
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const locale = await getLocale();
-
   return (
     <html
-      lang={locale}
+      lang={defaultLocale}
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
@@ -153,7 +118,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <Providers initialLocale={locale}>{children}</Providers>
+        {children}
         {GA_ID && (
           <>
             <Script

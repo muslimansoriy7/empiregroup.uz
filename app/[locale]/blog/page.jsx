@@ -6,22 +6,31 @@ import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
 import { Reveal } from '@/components/Reveal';
 import { getPublishedPosts, L } from '@/lib/posts';
+import { localePath, localeAlternates, canonicalFor, postLocales } from '@/lib/locale-path';
+import { isLocale, dictionaries, defaultLocale } from '@/content';
 
 export const revalidate = 60;
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
 
-export const metadata = {
-  title: { absolute: 'Blog — IT, SEO, AI va Biznes | Empire Group' },
-  description: "IT, SEO/GEO, AI avtomatlashtirish, mobil ilova va veb-sayt yaratish bo'yicha maqolalar. O'zbekiston IT sohasida bilim bazasi.",
-  alternates: { canonical: `${SITE}/blog` },
-  openGraph: {
-    title: 'Blog — Empire Group',
-    description: "IT, SEO/GEO, AI va biznesni avtomatlashtirish bo'yicha foydali maqolalar.",
-    url: `${SITE}/blog`,
-    type: 'website',
-    images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
-  },
-};
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
+  return {
+    title: { absolute: 'Blog — IT, SEO, AI va Biznes | Empire Group' },
+    description: "IT, SEO/GEO, AI avtomatlashtirish, mobil ilova va veb-sayt yaratish bo'yicha maqolalar. O'zbekiston IT sohasida bilim bazasi.",
+    alternates: {
+      canonical: canonicalFor(lang, '/blog', postLocales),
+      languages: { ...localeAlternates('/blog', postLocales), 'x-default': '/blog' },
+    },
+    openGraph: {
+      title: 'Blog — Empire Group',
+      description: "IT, SEO/GEO, AI va biznesni avtomatlashtirish bo'yicha foydali maqolalar.",
+      url: `${SITE}${localePath(lang, '/blog')}`,
+      type: 'website',
+      images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
+    },
+  };
+}
 
 function fmt(d) {
   if (!d) return '';
@@ -53,7 +62,9 @@ const STATIC_POSTS = [
   },
 ];
 
-export default async function BlogPage() {
+export default async function BlogPage({ params }) {
+  const { locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
   const dbPosts = await getPublishedPosts();
   const dbSlugs = new Set(dbPosts.map(p => p.slug));
   const posts = [
@@ -67,8 +78,8 @@ export default async function BlogPage() {
     itemListElement: posts.slice(0, 20).map((p, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${SITE}/blog/${p.slug}`,
-      name: L(p, 'title', 'uz'),
+      url: `${SITE}${localePath(lang, `/blog/${p.slug}`)}`,
+      name: L(p, 'title', lang),
     })),
   };
 
@@ -112,7 +123,7 @@ export default async function BlogPage() {
               {posts.map((p, i) => (
                 <Reveal key={p.id} delay={Math.min(i, 5) * 0.05} className="h-full">
                   <Link
-                    href={`/blog/${p.slug}`}
+                    href={localePath(lang, `/blog/${p.slug}`)}
                     className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-float)]"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden border-b border-hairline bg-hairline-soft">
@@ -120,7 +131,7 @@ export default async function BlogPage() {
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                           src={p.cover_url}
-                          alt={L(p, 'title', 'uz')}
+                          alt={L(p, 'title', lang)}
                           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -134,10 +145,10 @@ export default async function BlogPage() {
                         <span className="eyebrow">{p.category}</span>
                       )}
                       <h2 className="text-h3 font-semibold text-ink">
-                        {L(p, 'title', 'uz')}
+                        {L(p, 'title', lang)}
                       </h2>
                       <p className="flex-1 text-sm text-body">
-                        {L(p, 'excerpt', 'uz')}
+                        {L(p, 'excerpt', lang)}
                       </p>
                       <div className="mt-2 flex items-center justify-between border-t border-hairline pt-3 text-xs">
                         <span className="font-mono text-faint">{fmt(p.published_at)}</span>

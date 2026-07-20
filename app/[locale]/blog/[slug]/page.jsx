@@ -7,29 +7,32 @@ import { MobileDock } from '@/components/MobileDock';
 import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
 import { getPostBySlug, getAdjacentPosts, L } from '@/lib/posts';
+import { localePath, localeAlternates, canonicalFor, postLocales } from '@/lib/locale-path';
+import { isLocale, defaultLocale } from '@/content';
 
-// Rendered per request: the article body comes from Supabase (so admin edits
-// show up immediately) and `?lang=ru` switches the language — both of which
-// rule out prerendering this route.
-export const dynamic = 'force-dynamic';
+// The language now comes from the URL rather than a query string, so the page
+// can be cached and revalidated instead of rendered on every request.
+export const revalidate = 60;
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
 
-export async function generateMetadata({ params, searchParams }) {
-  const { slug } = await params;
-  const sp = await searchParams;
+export async function generateMetadata({ params }) {
+  const { slug, locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
   const post = await getPostBySlug(slug);
   if (!post) return { title: 'Topilmadi' };
-  const lang = sp?.lang === 'ru' ? 'ru' : 'uz';
   const title = L(post, 'seo_title', lang) || L(post, 'title', lang);
   const desc = L(post, 'seo_desc', lang) || L(post, 'excerpt', lang);
-  const url = `${SITE}/blog/${post.slug}`;
+  const path = `/blog/${post.slug}`;
+  const url = `${SITE}${localePath(lang, path)}`;
   return {
     title,
     description: desc,
     alternates: {
-      canonical: `/blog/${post.slug}`,
-      languages: { uz: `/blog/${post.slug}`, ru: `/blog/${post.slug}?lang=ru` },
+      // English has no translation of the posts, so /en/blog/... defers to the
+      // Uzbek URL instead of presenting itself as a separate document.
+      canonical: canonicalFor(lang, path, postLocales),
+      languages: { ...localeAlternates(path, postLocales), 'x-default': path },
     },
     openGraph: {
       type: 'article',
@@ -53,13 +56,12 @@ function fmt(d, lang) {
   } catch { return ''; }
 }
 
-export default async function PostPage({ params, searchParams }) {
-  const { slug } = await params;
-  const sp = await searchParams;
+export default async function PostPage({ params }) {
+  const { slug, locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const lang = sp?.lang === 'ru' ? 'ru' : 'uz';
   const title = L(post, 'title', lang);
   const body = L(post, 'body', lang);
   const html = marked.parse(body || '');
@@ -76,7 +78,7 @@ export default async function PostPage({ params, searchParams }) {
     dateModified: post.updated_at,
     author: { '@type': 'Organization', name: post.author || 'Empire Group' },
     publisher: { '@type': 'Organization', name: 'Empire Group' },
-    mainEntityOfPage: `${SITE}/blog/${post.slug}`,
+    mainEntityOfPage: `${SITE}${localePath(lang, `/blog/${post.slug}`)}`,
     inLanguage: lang,
   };
 
@@ -84,9 +86,9 @@ export default async function PostPage({ params, searchParams }) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Bosh sahifa', item: SITE },
-      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE}/blog` },
-      { '@type': 'ListItem', position: 3, name: title, item: `${SITE}/blog/${post.slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Bosh sahifa', item: `${SITE}${localePath(lang, '/')}` },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE}${localePath(lang, '/blog')}` },
+      { '@type': 'ListItem', position: 3, name: title, item: `${SITE}${localePath(lang, `/blog/${post.slug}`)}` },
     ],
   };
 
@@ -108,7 +110,7 @@ export default async function PostPage({ params, searchParams }) {
           <Container className="relative py-12 md:py-16">
             <div className="mx-auto max-w-3xl">
               <Link
-                href="/blog"
+                href={localePath(lang, "/blog")}
                 className="inline-flex items-center gap-1.5 text-sm text-mute transition-colors hover:text-ink"
               >
                 ← Blog
@@ -119,22 +121,18 @@ export default async function PostPage({ params, searchParams }) {
                   {fmt(post.published_at, lang)}
                 </span>
                 <span className="ml-auto inline-flex overflow-hidden rounded-[var(--radius-btn)] border border-hairline">
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className={`px-2.5 py-1 font-mono text-xs transition-colors ${
-                      lang === 'uz' ? 'bg-ink text-elevated' : 'text-mute hover:text-ink'
-                    }`}
-                  >
-                    UZ
-                  </Link>
-                  <Link
-                    href={`/blog/${post.slug}?lang=ru`}
-                    className={`px-2.5 py-1 font-mono text-xs transition-colors ${
-                      lang === 'ru' ? 'bg-ink text-elevated' : 'text-mute hover:text-ink'
-                    }`}
-                  >
-                    RU
-                  </Link>
+                  {['uz', 'ru'].map((l) => (
+                    <Link
+                      key={l}
+                      href={localePath(l, `/blog/${post.slug}`)}
+                      hrefLang={l}
+                      className={`px-2.5 py-1 font-mono text-xs uppercase transition-colors ${
+                        lang === l ? 'bg-ink text-elevated' : 'text-mute hover:text-ink'
+                      }`}
+                    >
+                      {l}
+                    </Link>
+                  ))}
                 </span>
               </div>
               <h1 className="mt-4 text-h2 font-semibold">{title}</h1>
@@ -164,7 +162,7 @@ export default async function PostPage({ params, searchParams }) {
               <nav className="mt-14 grid gap-3 border-t border-hairline pt-8 sm:grid-cols-2">
                 {prev ? (
                   <Link
-                    href={`/blog/${prev.slug}`}
+                    href={localePath(lang, `/blog/${prev.slug}`)}
                     className="group flex flex-col gap-1.5 rounded-[var(--radius-card)] border border-hairline bg-elevated p-4 transition-colors hover:border-ink"
                   >
                     <span className="eyebrow">← Oldingi</span>
@@ -173,7 +171,7 @@ export default async function PostPage({ params, searchParams }) {
                 ) : <span />}
                 {next ? (
                   <Link
-                    href={`/blog/${next.slug}`}
+                    href={localePath(lang, `/blog/${next.slug}`)}
                     className="group flex flex-col gap-1.5 rounded-[var(--radius-card)] border border-hairline bg-elevated p-4 text-right transition-colors hover:border-ink sm:items-end"
                   >
                     <span className="eyebrow">Keyingi →</span>
@@ -191,7 +189,7 @@ export default async function PostPage({ params, searchParams }) {
                   {related.map((r) => (
                     <Link
                       key={r.slug}
-                      href={`/blog/${r.slug}`}
+                      href={localePath(lang, `/blog/${r.slug}`)}
                       className="flex flex-col gap-1.5 rounded-[var(--radius-card)] border border-hairline bg-elevated p-4 transition-colors hover:border-ink"
                     >
                       {r.category && <span className="eyebrow">{r.category}</span>}
@@ -204,7 +202,7 @@ export default async function PostPage({ params, searchParams }) {
 
             <div className="mt-12 border-t border-hairline pt-8">
               <Link
-                href="/blog"
+                href={localePath(lang, "/blog")}
                 className="inline-flex h-10 items-center rounded-[var(--radius-btn)] border border-hairline bg-elevated px-4 text-sm font-medium text-ink transition-colors hover:border-ink"
               >
                 ← Blogga qaytish

@@ -4,6 +4,8 @@ import ScrollReveal from '@/components/ScrollReveal'
 import './tz.css'
 
 export const metadata = {
+  // Written in Uzbek only — every locale points at the same document.
+  alternates: { canonical: '/blog/transformatsiya-zanjiri' },
   title: { absolute: "Biznes transformatsiyasining 5 bosqichli zanjiri — Empire Group" },
   description: "Tizimlashtirish, Standartlashtirish, Raqamlashtirish, Integratsiya va Avtomatlashtirish — beshta bosqich, beshta mutlaqo boshqa daraja. ERP va AI joriy etish uchun qo'llanma.",
   openGraph: {

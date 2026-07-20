@@ -1,21 +1,21 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState } from "react";
-import {
-  dictionaries,
-  defaultLocale,
-  type Dict,
-  type Locale,
-} from "@/content";
+import { createContext, useContext, useEffect } from "react";
+import { dictionaries, defaultLocale, type Dict, type Locale } from "@/content";
 
 type I18nValue = {
   locale: Locale;
   t: Dict;
-  setLocale: (l: Locale) => void;
 };
 
 const I18nContext = createContext<I18nValue | null>(null);
 
+/**
+ * The locale is decided by the URL and handed down by app/[locale]/layout.tsx,
+ * so there is nothing to switch at runtime — changing language is a navigation.
+ * This carries the dictionary down the tree and keeps `<html lang>` honest,
+ * since the root layout renders before the locale segment is known.
+ */
 export function I18nProvider({
   initialLocale = defaultLocale,
   children,
@@ -23,16 +23,14 @@ export function I18nProvider({
   initialLocale?: Locale;
   children: React.ReactNode;
 }) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale);
-
-  const setLocale = useCallback((l: Locale) => {
-    setLocaleState(l);
-    document.cookie = `locale=${l}; path=/; max-age=31536000; samesite=lax`;
-    document.documentElement.lang = l;
-  }, []);
+  useEffect(() => {
+    document.documentElement.lang = initialLocale;
+  }, [initialLocale]);
 
   return (
-    <I18nContext.Provider value={{ locale, t: dictionaries[locale], setLocale }}>
+    <I18nContext.Provider
+      value={{ locale: initialLocale, t: dictionaries[initialLocale] }}
+    >
       {children}
     </I18nContext.Provider>
   );

@@ -9,10 +9,12 @@ import { serviceVisuals } from "../service-visuals";
 import { accentGradient } from "@/lib/accents";
 import { useI18n } from "@/lib/i18n";
 import { useConsult } from "../ConsultModal";
+import { useSectionHref } from "@/lib/section-href";
 
 export function Services() {
   const { t } = useI18n();
   const { open: openConsult } = useConsult();
+  const sectionHref = useSectionHref();
   const services = t.services;
 
   return (
@@ -152,7 +154,7 @@ export function Services() {
 
                     {item.geoSlug && (
                       <Link
-                        href={`/xizmatlar/${item.geoSlug}`}
+                        href={sectionHref(`/xizmatlar/${item.geoSlug}`)}
                         className="font-mono text-[13px] text-mute transition-colors hover:text-ink lg:pb-2 lg:text-right"
                       >
                         {item.detailsLabel.replace("{name}", item.title)}
