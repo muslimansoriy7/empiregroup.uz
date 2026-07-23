@@ -7,10 +7,12 @@ import { Showcase } from "@/components/sections/Showcase";
 import { ProofBar } from "@/components/sections/ProofBar";
 import { Services } from "@/components/sections/Services";
 import { Process } from "@/components/sections/Process";
+import { Stack } from "@/components/sections/Stack";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Credentials } from "@/components/sections/Credentials";
 import { WhyUs } from "@/components/sections/WhyUs";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { Brands } from "@/components/sections/Brands";
 import { Faq } from "@/components/sections/Faq";
 import { CtaBand } from "@/components/sections/CtaBand";
 
@@ -120,9 +122,11 @@ export default function Home() {
         <ProofBar />
         <Services />
         <Process />
+        <Stack />
         <Portfolio />
         <WhyUs />
         <Testimonials />
+        <Brands />
         <Credentials />
         <Faq />
         <CtaBand />
