@@ -217,6 +217,18 @@ export type Dict = {
       imageBleed?: boolean;
     }[];
   };
+  /** technology logo wall — the "our stack" band */
+  stack: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+  };
+  /** brand/standards logo wall — the "global standard" band */
+  brands: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+  };
   faq: {
     eyebrow: string;
     title: string;

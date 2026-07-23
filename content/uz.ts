@@ -349,6 +349,18 @@ export const uz: Dict = {
       },
     ],
   },
+  stack: {
+    eyebrow: "Bizning stack",
+    title: "Ishonchli, sanoat standarti bo'lgan texnologiyalar.",
+    subtitle:
+      "Har bir loyihada millionlab foydalanuvchida sinovdan o'tgan, zamonaviy va barqaror asboblardan foydalanamiz.",
+  },
+  brands: {
+    eyebrow: "Global standart",
+    title: "Dunyo yetakchilari darajasida ishlaymiz.",
+    subtitle:
+      "Eng yirik kompaniyalar ishonadigan texnologiyalar, platformalar va standartlar — sizning loyihangizda ham.",
+  },
   faq: {
     eyebrow: "Savol-javob",
     title: "Ko'p so'raladigan savollar.",

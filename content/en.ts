@@ -349,6 +349,18 @@ export const en: Dict = {
       },
     ],
   },
+  stack: {
+    eyebrow: "Our stack",
+    title: "Reliable, industry-standard technologies.",
+    subtitle:
+      "Every project runs on modern, stable tools proven across millions of users.",
+  },
+  brands: {
+    eyebrow: "Global standard",
+    title: "We work to a world-class standard.",
+    subtitle:
+      "The technologies, platforms and standards the biggest companies trust — now in your project too.",
+  },
   faq: {
     eyebrow: "Q&A",
     title: "Frequently asked questions.",
