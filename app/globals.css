@@ -207,6 +207,23 @@
     text-decoration: none;
   }
 
+  /* Interactive controls always show the hand cursor on hover. Tailwind's
+     preflight resets <button> to the default arrow, and anchors used as
+     buttons (no href) don't get a pointer either — so name them all here. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  summary,
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-link);
     outline-offset: 2px;
