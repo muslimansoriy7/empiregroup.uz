@@ -35,6 +35,14 @@ export async function generateMetadata({
       url: `${SITE}${localePath(lang, PATH)}`,
       images: [{ url: "/og.png", width: 1200, height: 630 }],
     },
+    // Next.js does not deep-merge metadata, so without this the page would
+    // inherit the root layout's twitter card (the home page's title/desc).
+    twitter: {
+      card: "summary_large_image",
+      title: p.metaTitle,
+      description: p.metaDescription,
+      images: ["/og.png"],
+    },
   };
 }
 

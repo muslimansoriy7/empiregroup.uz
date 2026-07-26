@@ -181,7 +181,7 @@ export function ConsultForm({
             href={tgHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-ink px-5 text-sm font-medium text-elevated transition-colors hover:bg-[#383838]"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-ink px-5 text-sm font-medium text-elevated transition-colors hover:bg-ink-hover"
           >
             <Telegram className="size-4" /> Telegram
           </a>

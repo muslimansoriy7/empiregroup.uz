@@ -33,6 +33,19 @@ export function Reveal({
     if (!el) return;
     if (el.classList.contains("is-visible")) return;
 
+    // Elements already in the viewport at mount must reveal on load — not wait
+    // for a scroll. With Lenis smooth-scroll the IntersectionObserver does not
+    // reliably fire for initially-visible elements (its transformed scroller
+    // throws off the first intersection calc), which left above-the-fold
+    // headings/cards stuck hidden until the user scrolled. Reveal them now, on
+    // the next frame so the entrance transition still plays.
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inView) {
+      requestAnimationFrame(() => el.classList.add("is-visible"));
+      return;
+    }
+
     const io = new IntersectionObserver(
       (entries, obs) => {
         for (const entry of entries) {

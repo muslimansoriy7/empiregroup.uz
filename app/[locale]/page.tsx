@@ -3,75 +3,20 @@ import { Footer } from "@/components/Footer";
 import { MobileDock } from "@/components/MobileDock";
 import { TelegramFab } from "@/components/TelegramFab";
 import { Hero } from "@/components/sections/Hero";
-import { Showcase } from "@/components/sections/Showcase";
 import { ProofBar } from "@/components/sections/ProofBar";
 import { Services } from "@/components/sections/Services";
 import { Process } from "@/components/sections/Process";
-import { Stack } from "@/components/sections/Stack";
 import { Portfolio } from "@/components/sections/Portfolio";
-import { Credentials } from "@/components/sections/Credentials";
-import { WhyUs } from "@/components/sections/WhyUs";
-import { Testimonials } from "@/components/sections/Testimonials";
+import { Stack } from "@/components/sections/Stack";
 import { Brands } from "@/components/sections/Brands";
+import { Team } from "@/components/sections/Team";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { Pricing } from "@/components/sections/Pricing";
 import { Faq } from "@/components/sections/Faq";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { dictionaries, isLocale, defaultLocale } from "@/content";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Loyiha qancha vaqt oladi?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Ko'lamiga qarab odatda 2–12 oy. MVP (boshlang'ich versiya) 2–3 oyda tayyor bo'ladi.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Narx qanday hisoblanadi?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Biz fixed-scope tizimida ishlaymiz — soatbay emas. Loyiha boshida aniq narx belgilanadi. Yashirin to'lovlar yo'q.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Minimal byudjet qancha?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Standart paketlar $7,500 dan boshlanadi.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "To'lov qanday amalga oshiriladi?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "To'lov bosqichma-bosqich: boshlang'ich avans, so'ngra har bosqich yakunida belgilangan ulushlar.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Kod va mahsulot kimga tegishli bo'ladi?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Loyiha yakunida barcha kod, dizayn va intellektual mulk to'liq sizga o'tadi.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Ishga tushgandan keyin yordam beriladimi?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Ha. Har paketda 4 hafta bepul qo'llab-quvvatlash bor.",
-      },
-    },
-  ],
-};
 
 const localBizSchema = {
   "@context": "https://schema.org",
@@ -101,33 +46,54 @@ const localBizSchema = {
       closes: "18:00",
     },
   ],
-  sameAs: ["https://t.me/empiregroup_uz", "https://instagram.com/empiregroup.uz"],
+  sameAs: ["https://t.me/muslimansoriy", "https://instagram.com/empiregroup.uz"],
 };
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const lang = isLocale(locale) ? locale : defaultLocale;
+  const t = dictionaries[lang];
+
+  // Built from the same dictionary the visible <Faq> renders, so the rich
+  // result always matches on-page content (Google requires this) and stays in
+  // the visitor's language — no hardcoded, drifting copy.
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.faq.items.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, "\\u003c") }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBizSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBizSchema).replace(/</g, "\\u003c") }}
       />
       <Nav />
       <main>
+        {/* 10-blok struktura (Vercel + premium hero) */}
         <Hero />
-        <Showcase />
         <ProofBar />
-        <Services />
-        <Process />
-        <Stack />
         <Portfolio />
-        <WhyUs />
-        <Testimonials />
+        <Services />
+        <Stack />
         <Brands />
-        <Credentials />
+        <Process />
+        <Team />
+        <Testimonials />
+        <Pricing />
         <Faq />
         <CtaBand />
       </main>

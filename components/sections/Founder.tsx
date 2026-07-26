@@ -20,7 +20,7 @@ export function Founder() {
   return (
     <section
       id="asoschi"
-      className="scroll-mt-10 border-t border-hairline bg-canvas py-[clamp(72px,9vw,128px)]"
+      className="scroll-mt-10 border-t border-hairline bg-canvas py-[var(--section-py)]"
     >
       <Container>
         <div className="grid items-center gap-10 lg:grid-cols-[5fr_7fr] lg:gap-16">

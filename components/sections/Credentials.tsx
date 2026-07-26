@@ -28,7 +28,7 @@ export function Credentials() {
   return (
     <section
       id="sertifikatlar"
-      className="scroll-mt-10 border-t border-hairline py-[clamp(72px,9vw,128px)]"
+      className="scroll-mt-10 border-t border-hairline py-[var(--section-py)]"
     >
       <Container>
         <div className="max-w-2xl">

@@ -4,27 +4,22 @@ import { Container } from "../Container";
 import { Reveal } from "../Reveal";
 import { Button } from "../Button";
 import { ArrowRight } from "../Icons";
-import { GlowCard } from "../ui/spotlight-card";
-import { accentGradient, type Accent } from "@/lib/accents";
 import { useI18n } from "@/lib/i18n";
 
-const ACCENTS: Accent[] = ["develop", "preview", "ship", "develop"];
-
-const GLOW: Record<Accent, "blue" | "purple" | "orange"> = {
-  develop: "blue",
-  preview: "purple",
-  ship: "orange",
-};
-
+/**
+ * Qanday ishlaymiz — minimal numbered list. Clean hairline-separated steps with
+ * a mono index, no glow cards or oversized ghost numbers. The restraint is the
+ * point: the process reads as calm and engineered.
+ */
 export function Process() {
   const { t } = useI18n();
   const process = t.process;
-  const total = process.steps.length;
+  const total = String(process.steps.length).padStart(2, "0");
 
   return (
     <section
       id="jarayon"
-      className="scroll-mt-10 border-t border-hairline bg-canvas py-[clamp(72px,9vw,128px)]"
+      className="scroll-mt-10 border-t border-hairline bg-canvas py-[var(--section-py)]"
     >
       <Container>
         <div className="max-w-2xl">
@@ -32,59 +27,36 @@ export function Process() {
           <h2 className="mt-4 text-h2 text-ink">{process.title}</h2>
         </div>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2">
-          {process.steps.map((s, i) => {
-            const accent = ACCENTS[i % ACCENTS.length];
-            return (
-              <Reveal as="div" key={s.no} delay={(i % 2) * 0.08}>
-                <GlowCard
-                  customSize
-                  glowColor={GLOW[accent]}
-                  className="group !block h-full !gap-0 !rounded-[16px] !p-0 !shadow-none cursor-pointer transition-transform duration-300 ease-out hover:-translate-y-1"
-                >
-                  <div className="relative h-full overflow-hidden rounded-[15px] bg-elevated p-7 transition-shadow duration-300 group-hover:shadow-[0_22px_48px_-30px_rgba(0,0,0,0.35)] sm:p-9">
-                    {/* step colour bar */}
-                    <span
-                      aria-hidden
-                      className="absolute inset-x-0 top-0 h-[3px]"
-                      style={{ background: accentGradient(accent) }}
-                    />
-                    {/* oversized ghost number */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute -right-1 -top-7 select-none text-[120px] font-semibold leading-none tracking-tighter text-ink/[0.045] transition-transform duration-500 group-hover:-translate-y-1"
-                    >
-                      {s.no}
-                    </span>
-
-                    <div className="relative">
-                      <span className="inline-flex h-7 items-center gap-2 rounded-full border border-hairline bg-canvas px-3 font-mono text-[11px] font-medium text-mute">
+        <div className="mt-14 border-t border-hairline">
+          {process.steps.map((s, i) => (
+            <Reveal as="div" key={s.no} delay={i * 0.05}>
+              <div className="grid gap-3 border-b border-hairline py-8 sm:grid-cols-[90px_1fr] sm:gap-12">
+                <div className="font-sans text-[13px] text-mute">
+                  {s.no} <span className="text-faint">/ {total}</span>
+                </div>
+                <div className="max-w-2xl">
+                  <h3 className="text-[20px] font-semibold tracking-tight text-ink sm:text-[23px]">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2.5 text-[15px] leading-relaxed text-body">
+                    {s.body}
+                  </p>
+                  {s.tags.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {s.tags.map((tag) => (
                         <span
-                          className="size-1.5 rounded-full"
-                          style={{ background: accentGradient(accent) }}
-                        />
-                        {s.no} / {String(total).padStart(2, "0")}
-                      </span>
-                      <h3 className="mt-6 text-[22px] font-semibold tracking-tight text-ink sm:text-[26px]">
-                        {s.title}
-                      </h3>
-                      <p className="mt-3 max-w-md text-lead text-body">{s.body}</p>
-                      <div className="mt-5 flex flex-wrap gap-2">
-                        {s.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full border border-hairline bg-canvas px-3 py-1 text-[12px] font-medium text-mute"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                          key={tag}
+                          className="rounded-full border border-hairline px-2.5 py-1 font-sans text-[11px] text-mute"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                  </div>
-                </GlowCard>
-              </Reveal>
-            );
-          })}
+                  )}
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
 
         <Reveal as="div" delay={0.1} className="mt-10">

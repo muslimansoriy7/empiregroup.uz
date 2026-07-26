@@ -20,7 +20,7 @@ export function CtaBand() {
   return (
     <section
       id="aloqa"
-      className="relative scroll-mt-10 overflow-hidden border-t border-hairline py-[clamp(80px,10vw,140px)]"
+      className="relative scroll-mt-10 overflow-hidden border-t border-hairline py-[var(--section-py)]"
     >
       {/* faint gradient echo of the hero — restrained */}
       <div
@@ -63,7 +63,7 @@ export function CtaBand() {
                         <Icon className="size-4" />
                       </span>
                       <span className="font-medium text-ink">{s.label}</span>
-                      <span className="font-mono text-[12px] text-mute">
+                      <span className="font-sans text-[12px] text-mute">
                         {s.value}
                       </span>
                     </a>

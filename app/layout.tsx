@@ -27,8 +27,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // one colour: the site does not follow the device scheme
-  themeColor: "#0a0a0a",
+  // browser chrome follows the active theme (approximated via the device
+  // scheme for the very first paint; the toggle takes over after that)
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -83,9 +87,11 @@ const websiteSchema = {
   publisher: { "@type": "Organization", name: "Empire Group", url: SITE },
 };
 
-// Arms the scroll-reveal `.js` flag before paint. The site is permanently
-// dark, so there is no theme to restore and no theme JS.
-const BOOT_SCRIPT = `document.documentElement.classList.add('js')`;
+// Runs before paint: restores the saved theme and arms the scroll-reveal
+// `.js` flag. First visit defaults to dark (the brand's established look);
+// once the header toggle is used the choice is persisted to localStorage and
+// wins here. Setting data-theme synchronously avoids a flash of the wrong theme.
+const BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){}document.documentElement.classList.add('js');})()`;
 
 export default function RootLayout({
   children,
@@ -93,11 +99,20 @@ export default function RootLayout({
   return (
     <html
       lang={defaultLocale}
+      data-theme="light"
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
+        {/* Nimbus Sans — the Questly-direction grotesque. Loads as the primary
+            face; if the CDN is slow/unavailable the Helvetica/Arial fallback in
+            --font-sans is visually near-identical, so the look holds either way. */}
+        <link rel="preconnect" href="https://db.onlinewebfonts.com" crossOrigin="" />
+        <link
+          rel="stylesheet"
+          href="https://db.onlinewebfonts.com/c/bb5de19d87c09a95216dc6ccd96e37c6?family=Nimbus+Sans+TW01"
+        />
         <link
           rel="alternate"
           type="application/rss+xml"

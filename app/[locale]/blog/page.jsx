@@ -29,6 +29,13 @@ export async function generateMetadata({ params }) {
       type: 'website',
       images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
     },
+    // Prevent inheriting the root layout's (home page) twitter card.
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Blog — Empire Group',
+      description: "IT, SEO/GEO, AI va biznesni avtomatlashtirish bo'yicha foydali maqolalar.",
+      images: [`${SITE}/og.png`],
+    },
   };
 }
 
@@ -87,7 +94,7 @@ export default async function BlogPage({ params }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema).replace(/</g, "\\u003c") }}
       />
       <Nav />
       <main>

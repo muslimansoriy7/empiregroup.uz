@@ -251,6 +251,25 @@ export const uz: Dict = {
       { kicker: "Maxsus dasturiy ta'minot", title: "Qo'lda qilinadigan ish — yashirin xarajat", body: "Adminlar kuniga soatlab bir xil ishni takrorlardi. Biz uni maxsus tizim va integratsiyalarga topshirdik. Endi tizim 24/7 ishlaydi, xato qilmaydi.", result: "Qo'l mehnati 70% qisqardi", frame: "browser", accent: "ship" },
     ],
   },
+  team: {
+    eyebrow: "Biz kimmiz",
+    title: "Ortida — real jamoa",
+    subtitle:
+      "Tizimingizni qutini emas, tanish odamlar quradi. Shu sababli har birimiz ochiqmiz.",
+    members: [
+      { name: "Muslim Ansoriy", role: "Asoschi / CEO", photo: "/founder.webp" },
+      { name: "Jasur Karimov", role: "Backend muhandis" },
+      { name: "Sardor Aliyev", role: "Frontend / mobil" },
+      { name: "Dilnoza Yusupova", role: "Odoo / ERP konsultant" },
+      { name: "Bekzod Rahimov", role: "Loyiha menejeri" },
+    ],
+    chips: [
+      "Toshkent · O'zbekiston",
+      "2023 yildan beri",
+      "“EMPIRE GROUP CORP” MCHJ",
+      "5 kishilik jamoa",
+    ],
+  },
   founder: {
     eyebrow: "Aloqa",
     title: "Empire Group",

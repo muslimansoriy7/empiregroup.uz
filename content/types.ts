@@ -170,6 +170,13 @@ export type Dict = {
     quote: string;
     socials: { label: string; value: string; href: string }[];
   };
+  team: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    members: { name: string; role: string; photo?: string }[];
+    chips: string[];
+  };
   process: {
     eyebrow: string;
     title: string;

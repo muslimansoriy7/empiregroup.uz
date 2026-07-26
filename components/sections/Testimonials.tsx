@@ -133,7 +133,7 @@ export function Testimonials() {
   return (
     <section
       id="sharhlar"
-      className="scroll-mt-10 border-t border-hairline bg-canvas py-[clamp(72px,9vw,128px)]"
+      className="scroll-mt-10 border-t border-hairline bg-canvas py-[var(--section-py)]"
     >
       <Container>
         <div className="max-w-2xl">
@@ -154,7 +154,7 @@ export function Testimonials() {
                   <div className="text-[15px] font-semibold text-ink">
                     {item.name}
                   </div>
-                  <div className="mt-0.5 font-mono text-[12px] text-mute">
+                  <div className="mt-0.5 font-sans text-[12px] text-mute">
                     {item.role}
                   </div>
                 </figcaption>

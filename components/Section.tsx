@@ -18,7 +18,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "scroll-mt-10 py-[clamp(72px,9vw,128px)]",
+        "scroll-mt-10 py-[var(--section-py)]",
         topHairline && "border-t border-hairline",
         className
       )}

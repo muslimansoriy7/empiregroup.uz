@@ -10,10 +10,10 @@ export function ProofBar() {
   const proof = t.proof;
 
   return (
-    <section className="border-y border-hairline bg-canvas py-[clamp(56px,7vw,96px)]">
+    <section className="border-y border-hairline bg-canvas py-[var(--section-py)]">
       <Container>
         <Reveal as="div">
-          <p className="mb-8 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
+          <p className="mb-8 text-center font-sans text-[11px] uppercase tracking-[0.16em] text-faint">
             {proof.clientsLabel}
           </p>
           <LogoMarquee />

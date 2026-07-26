@@ -37,7 +37,7 @@ export function Showcase() {
 
   return (
     <section
-      className="relative z-10 pb-[clamp(24px,4vw,48px)] pt-[clamp(48px,7vw,96px)]"
+      className="relative z-10 pb-[var(--section-py)] pt-[var(--section-py)]"
       aria-label="Mahsulot namunalari"
     >
       <Container>

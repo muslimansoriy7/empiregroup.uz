@@ -27,7 +27,7 @@ export function Portfolio() {
   const portfolio = t.portfolio;
 
   return (
-    <section id="loyihalar" className="scroll-mt-10 py-[clamp(72px,9vw,128px)]">
+    <section id="loyihalar" className="scroll-mt-10 py-[var(--section-py)]">
       <Container>
         <div className="max-w-2xl">
           <span className="eyebrow">{portfolio.eyebrow}</span>
@@ -89,7 +89,7 @@ export function Portfolio() {
                 {/* meta */}
                 <div className="mt-9 flex items-start justify-between gap-4 pr-[18%]">
                   <div>
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-faint">
+                    <span className="font-sans text-[11px] uppercase tracking-wider text-faint">
                       {c.segment}
                     </span>
                     <h3 className="mt-1.5 text-h3 text-ink">{c.title}</h3>
@@ -102,7 +102,7 @@ export function Portfolio() {
                       style={{ background: accentGradient(c.accent) }}
                     />
                     <span className="text-[13px] text-body">
-                      <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+                      <span className="font-sans text-[10px] uppercase tracking-wide text-faint">
                         {portfolio.resultLabel}:{" "}
                       </span>
                       {c.result}
@@ -111,7 +111,7 @@ export function Portfolio() {
                   {c.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-hairline bg-canvas px-3 py-1 font-mono text-[11px] uppercase tracking-wide text-mute"
+                      className="rounded-full border border-hairline bg-canvas px-3 py-1 font-sans text-[11px] uppercase tracking-wide text-mute"
                     >
                       {tag}
                     </span>
@@ -121,7 +121,7 @@ export function Portfolio() {
                       href={liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-ink py-1.5 pl-4 pr-3.5 text-[13px] font-medium text-elevated transition-colors hover:bg-[#383838]"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-ink py-1.5 pl-4 pr-3.5 text-[13px] font-medium text-elevated transition-colors hover:bg-ink-hover"
                     >
                       {portfolio.liveLabel}
                       <ArrowUpRight className="size-3.5" />

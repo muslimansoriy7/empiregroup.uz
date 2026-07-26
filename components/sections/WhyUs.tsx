@@ -13,7 +13,7 @@ export function WhyUs() {
   const whyUs = t.whyUs;
 
   return (
-    <section className="scroll-mt-10 border-t border-hairline py-[clamp(72px,9vw,128px)]">
+    <section className="scroll-mt-10 border-t border-hairline py-[var(--section-py)]">
       <Container>
         <div className="max-w-2xl">
           <span className="eyebrow">{whyUs.eyebrow}</span>

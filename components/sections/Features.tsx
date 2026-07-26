@@ -30,7 +30,7 @@ export function Features() {
   const { t } = useI18n();
 
   return (
-    <section className="scroll-mt-10 border-t border-hairline py-[clamp(72px,9vw,128px)]">
+    <section className="scroll-mt-10 border-t border-hairline py-[var(--section-py)]">
       <Container>
         <div className="flex flex-col gap-[clamp(64px,8vw,112px)]">
           {t.features.blocks.map((b, i) => {

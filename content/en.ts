@@ -251,6 +251,25 @@ export const en: Dict = {
       { kicker: "Custom software", title: "Manual work — a hidden cost", body: "Admins spent hours a day repeating the same task. We handed it to a custom system and integrations. Now the system runs 24/7 and doesn't make mistakes.", result: "Manual labor cut by 70%", frame: "browser", accent: "ship" },
     ],
   },
+  team: {
+    eyebrow: "Who we are",
+    title: "Behind it — a real team",
+    subtitle:
+      "Your system is built by people you know, not a black box. That's why we're open.",
+    members: [
+      { name: "Muslim Ansoriy", role: "Founder / CEO", photo: "/founder.webp" },
+      { name: "Jasur Karimov", role: "Backend engineer" },
+      { name: "Sardor Aliyev", role: "Frontend / mobile" },
+      { name: "Dilnoza Yusupova", role: "Odoo / ERP consultant" },
+      { name: "Bekzod Rahimov", role: "Project manager" },
+    ],
+    chips: [
+      "Tashkent · Uzbekistan",
+      "since 2023",
+      "“EMPIRE GROUP CORP” LLC",
+      "team of 5",
+    ],
+  },
   founder: {
     eyebrow: "Contact",
     title: "Empire Group",

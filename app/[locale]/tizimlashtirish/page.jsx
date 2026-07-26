@@ -1,15 +1,41 @@
 import Link from 'next/link'
 import './fonts.css'
-import { localePath } from '@/lib/locale-path'
+import { localePath, localeAlternates, canonicalFor } from '@/lib/locale-path'
 import { isLocale, defaultLocale } from '@/content'
 
-export const metadata = {
-  title: 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group',
-  description: "Empire Group — korxonalarni tizimlashtirish va AI yordamida aqlli avtomatlashtirish. ERP joriy etish, AI avtomatlashtirish, maxsus dasturiy yechimlar.",
-  openGraph: {
-    title: 'Raqamli Transformatsiya — Empire Group',
-    description: "Tizimlashtirish + AI avtomatlashtirish. Tarqoq jarayonlarni yagona tizimga birlashtiramiz.",
-  },
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz'
+const PATH = '/tizimlashtirish'
+// Uzbek-only content across every locale, so it canonicalizes to uz (no false
+// ru/en hreflang / duplicate content — same policy as the geo service pages).
+const TZ_LOCALES = ['uz']
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params
+  const lang = isLocale(locale) ? locale : defaultLocale
+  const title = 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group'
+  const description =
+    "Empire Group — korxonalarni tizimlashtirish va AI yordamida aqlli avtomatlashtirish. ERP joriy etish, AI avtomatlashtirish, maxsus dasturiy yechimlar."
+  return {
+    title: { absolute: title },
+    description,
+    alternates: {
+      canonical: canonicalFor(lang, PATH, TZ_LOCALES),
+      languages: { ...localeAlternates(PATH, TZ_LOCALES), 'x-default': PATH },
+    },
+    openGraph: {
+      type: 'website',
+      title: 'Raqamli Transformatsiya — Empire Group',
+      description: "Tizimlashtirish + AI avtomatlashtirish. Tarqoq jarayonlarni yagona tizimga birlashtiramiz.",
+      url: `${SITE}${canonicalFor(lang, PATH, TZ_LOCALES)}`,
+      images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Raqamli Transformatsiya — Empire Group',
+      description: "Tizimlashtirish + AI avtomatlashtirish. Tarqoq jarayonlarni yagona tizimga birlashtiramiz.",
+      images: [`${SITE}/og.png`],
+    },
+  }
 }
 
 const gold = '#D4B85F'
