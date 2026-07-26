@@ -13,8 +13,6 @@ import { useConsult } from "../ConsultModal";
  * card that rises from a grass strip at the fold. Entrance is CSS fade-up
  * (reliable across SSR); all copy stays in the dictionary (uz/ru/en).
  */
-const GRASS =
-  "https://res.cloudinary.com/dy5er7kv5/image/upload/q_auto/f_auto/v1781191264/grass_eam204.png";
 
 function Icon({ d }: { d: string }) {
   return (
@@ -80,13 +78,11 @@ export function Hero() {
           </Button>
         </div>
 
-        {/* product preview — Motor Lux CRM (real project), floating on grass */}
+        {/* product preview — Motor Lux CRM (real project) floating in a frosted card */}
         <div className="u relative mt-12 w-full max-w-5xl sm:mt-16" style={{ animationDelay: ".5s" }}>
           <div className="relative z-10 overflow-hidden rounded-2xl p-2.5 md:p-3.5" style={{ background: "rgba(255,255,255,0.45)", border: "1px solid rgba(255,255,255,0.6)", boxShadow: "0 30px 90px -18px rgba(15,20,35,0.18), 0 0 0 1px rgba(0,0,0,0.04)" }}>
             <Dashboard />
           </div>
-          {/* grass strip — the Questly signature, tucked at the fold */}
-          <img src={GRASS} alt="" className="pointer-events-none absolute -bottom-6 left-1/2 z-20 w-[130%] max-w-none -translate-x-1/2 select-none opacity-90 sm:-bottom-10" />
         </div>
       </div>
     </section>
