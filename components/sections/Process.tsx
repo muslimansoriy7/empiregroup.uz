@@ -7,14 +7,15 @@ import { ArrowRight } from "../Icons";
 import { useI18n } from "@/lib/i18n";
 
 /**
- * Qanday ishlaymiz — minimal numbered list. Clean hairline-separated steps with
- * a mono index, no glow cards or oversized ghost numbers. The restraint is the
- * point: the process reads as calm and engineered.
+ * Qanday ishlaymiz — a connected four-step rail (Explore → Plan → Build →
+ * Commit). Each step is a numbered ink node linked by a hairline on desktop, so
+ * the sequence reads as one flow rather than four detached blocks. Clean,
+ * monochrome, Questly.
  */
 export function Process() {
   const { t } = useI18n();
   const process = t.process;
-  const total = String(process.steps.length).padStart(2, "0");
+  const steps = process.steps;
 
   return (
     <section
@@ -27,39 +28,57 @@ export function Process() {
           <h2 className="mt-4 text-h2 text-ink">{process.title}</h2>
         </div>
 
-        <div className="mt-14 border-t border-hairline">
-          {process.steps.map((s, i) => (
-            <Reveal as="div" key={s.no} delay={i * 0.05}>
-              <div className="grid gap-3 border-b border-hairline py-8 sm:grid-cols-[90px_1fr] sm:gap-12">
-                <div className="font-sans text-[13px] text-mute">
-                  {s.no} <span className="text-faint">/ {total}</span>
-                </div>
-                <div className="max-w-2xl">
-                  <h3 className="text-[20px] font-semibold tracking-tight text-ink sm:text-[23px]">
-                    {s.title}
-                  </h3>
-                  <p className="mt-2.5 text-[15px] leading-relaxed text-body">
-                    {s.body}
-                  </p>
-                  {s.tags.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {s.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="rounded-full border border-hairline px-2.5 py-1 font-sans text-[11px] text-mute"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+        {/* the flow chips — Explore → Plan → Build → Commit */}
+        <Reveal as="div" className="mt-8">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-[13px] font-medium">
+            {steps.map((s, i) => (
+              <span key={s.no} className="inline-flex items-center gap-2">
+                <span className="rounded-full border border-hairline bg-elevated px-3.5 py-1.5 text-ink shadow-[var(--shadow-whisper)]">
+                  {s.title}
+                </span>
+                {i < steps.length - 1 && (
+                  <ArrowRight className="size-3.5 text-faint" />
+                )}
+              </span>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* the connected step rail */}
+        <div className="mt-12 grid gap-x-7 gap-y-11 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((s, i) => (
+            <Reveal as="div" key={s.no} delay={i * 0.08} className="relative">
+              <div className="flex items-center gap-3">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-[15px] font-semibold text-elevated">
+                  {s.no}
+                </span>
+                {i < steps.length - 1 && (
+                  <span className="hidden h-px flex-1 bg-gradient-to-r from-hairline to-transparent lg:block" />
+                )}
               </div>
+              <h3 className="mt-5 text-[19px] font-semibold tracking-tight text-ink">
+                {s.title}
+              </h3>
+              <p className="mt-2 text-[14.5px] leading-relaxed text-body">
+                {s.body}
+              </p>
+              {s.tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {s.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-hairline bg-elevated px-2.5 py-1 text-[11px] text-mute"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </Reveal>
           ))}
         </div>
 
-        <Reveal as="div" delay={0.1} className="mt-10">
+        <Reveal as="div" delay={0.1} className="mt-12">
           <Button href={process.ctaHref} variant="primary" size="lg">
             {process.ctaLabel}
             <ArrowRight className="size-4" />

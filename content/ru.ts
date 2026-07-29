@@ -88,6 +88,8 @@ export const ru: Dict = {
       "Заказная разработка ПО",
       "Внедрение Odoo ERP и AI",
     ],
+    fieldOtherLabel: "Другое",
+    fieldOtherPlaceholder: "Опишите направление сами…",
     phoneLabel: "Телефон",
     phonePlaceholder: "+998 90 123 45 67",
     emailLabel: "Email",
@@ -289,7 +291,7 @@ export const ru: Dict = {
   },
   process: {
     eyebrow: "Как мы работаем",
-    title: "Explore → Plan → Build → Commit",
+    title: "От идеи до работающего продукта",
     ctaLabel: "Начать проект",
     ctaHref: "#aloqa",
     steps: [

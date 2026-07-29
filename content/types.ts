@@ -59,6 +59,8 @@ export type Dict = {
     fieldLabel: string;
     fieldPlaceholder: string;
     fieldOptions: string[];
+    fieldOtherLabel: string;
+    fieldOtherPlaceholder: string;
     phoneLabel: string;
     phonePlaceholder: string;
     emailLabel: string;

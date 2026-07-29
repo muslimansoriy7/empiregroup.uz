@@ -88,6 +88,8 @@ export const uz: Dict = {
       "Maxsus dasturiy ta'minot",
       "Odoo ERP & AI Joriy qilish",
     ],
+    fieldOtherLabel: "Boshqa",
+    fieldOtherPlaceholder: "Yo'nalishni o'zingiz yozing…",
     phoneLabel: "Telefon",
     phonePlaceholder: "+998 90 123 45 67",
     emailLabel: "Email",
@@ -289,7 +291,7 @@ export const uz: Dict = {
   },
   process: {
     eyebrow: "Qanday ishlaymiz",
-    title: "Explore → Plan → Build → Commit",
+    title: "G'oyadan ishga tushgan mahsulotgacha",
     ctaLabel: "Loyihani boshlash",
     ctaHref: "#aloqa",
     steps: [
