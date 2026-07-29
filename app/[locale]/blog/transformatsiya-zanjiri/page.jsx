@@ -104,8 +104,8 @@ export default function TransformatsiyaZanjiriPage() {
                   </defs>
                   <line x1="18" y1="278" x2="18" y2="60" stroke="var(--color-mute)" strokeWidth="1.4" markerEnd="url(#axU)" />
                   <line x1="18" y1="278" x2="646" y2="278" stroke="var(--color-mute)" strokeWidth="1.4" markerEnd="url(#axR)" />
-                  <text x="24" y="52" fill="var(--color-mute)" fontFamily="JetBrains Mono,monospace" fontSize="10.5" letterSpacing="1">QIYMAT · NAZORAT ↑</text>
-                  <text x="646" y="296" textAnchor="end" fill="var(--color-mute)" fontFamily="JetBrains Mono,monospace" fontSize="10.5" letterSpacing="1">YETUKLIK · VAQT →</text>
+                  <text x="24" y="52" fill="var(--color-mute)" fontFamily="var(--font-geist-mono),monospace" fontSize="10.5" letterSpacing="1">QIYMAT · NAZORAT ↑</text>
+                  <text x="646" y="296" textAnchor="end" fill="var(--color-mute)" fontFamily="var(--font-geist-mono),monospace" fontSize="10.5" letterSpacing="1">YETUKLIK · VAQT →</text>
 
                   <g>
                     <rect x="26" y="250" width="112" height="28" rx="4" fill="#101010" />
@@ -120,16 +120,16 @@ export default function TransformatsiyaZanjiriPage() {
                     <circle cx="82" cy="250" r="3" /><circle cx="202" cy="212" r="3" /><circle cx="322" cy="174" r="3" /><circle cx="442" cy="136" r="3" /><circle cx="562" cy="98" r="3.5" />
                   </g>
 
-                  <g fontFamily="Outfit,sans-serif" textAnchor="middle">
-                    <g><text x="82" y="234" fill="#52aeff" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="700">01</text><text x="82" y="248" fill="#101010" fontSize="10.5" fontWeight="600">Tizim</text></g>
-                    <g><text x="202" y="196" fill="#52aeff" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="700">02</text><text x="202" y="210" fill="#101010" fontSize="10.5" fontWeight="600">Standart</text></g>
-                    <g><text x="322" y="158" fill="var(--color-link)" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="700">03</text><text x="322" y="172" fill="#101010" fontSize="10.5" fontWeight="600">Raqamli</text></g>
-                    <g><text x="442" y="120" fill="var(--color-link)" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="700">04</text><text x="442" y="134" fill="#101010" fontSize="10.5" fontWeight="600">Integratsiya</text></g>
-                    <g><text x="562" y="82" fill="var(--color-link)" fontFamily="JetBrains Mono,monospace" fontSize="13" fontWeight="700">05</text><text x="562" y="96" fill="#101010" fontSize="10.5" fontWeight="600">Avtomat</text></g>
+                  <g fontFamily="var(--font-geist-sans),sans-serif" textAnchor="middle">
+                    <g><text x="82" y="234" fill="#52aeff" fontFamily="var(--font-geist-mono),monospace" fontSize="13" fontWeight="700">01</text><text x="82" y="248" fill="#101010" fontSize="10.5" fontWeight="600">Tizim</text></g>
+                    <g><text x="202" y="196" fill="#52aeff" fontFamily="var(--font-geist-mono),monospace" fontSize="13" fontWeight="700">02</text><text x="202" y="210" fill="#101010" fontSize="10.5" fontWeight="600">Standart</text></g>
+                    <g><text x="322" y="158" fill="var(--color-link)" fontFamily="var(--font-geist-mono),monospace" fontSize="13" fontWeight="700">03</text><text x="322" y="172" fill="#101010" fontSize="10.5" fontWeight="600">Raqamli</text></g>
+                    <g><text x="442" y="120" fill="var(--color-link)" fontFamily="var(--font-geist-mono),monospace" fontSize="13" fontWeight="700">04</text><text x="442" y="134" fill="#101010" fontSize="10.5" fontWeight="600">Integratsiya</text></g>
+                    <g><text x="562" y="82" fill="var(--color-link)" fontFamily="var(--font-geist-mono),monospace" fontSize="13" fontWeight="700">05</text><text x="562" y="96" fill="#101010" fontSize="10.5" fontWeight="600">Avtomat</text></g>
                   </g>
 
-                  <text x="30" y="272" fill="#a0a0a0" fontFamily="Outfit,sans-serif" fontSize="10" fontWeight="600">Tartibsizlik</text>
-                  <text x="562" y="292" textAnchor="middle" fill="#1e4f86" fontFamily="Outfit,sans-serif" fontSize="10" fontWeight="700">Avtonom</text>
+                  <text x="30" y="272" fill="#a0a0a0" fontFamily="var(--font-geist-sans),sans-serif" fontSize="10" fontWeight="600">Tartibsizlik</text>
+                  <text x="562" y="292" textAnchor="middle" fill="#1e4f86" fontFamily="var(--font-geist-sans),sans-serif" fontSize="10" fontWeight="700">Avtonom</text>
                 </svg>
               </div>
             </div>
@@ -169,7 +169,7 @@ export default function TransformatsiyaZanjiriPage() {
                       <div className="diagram-cap">SOP ZANJIRI — har qadamda aniq mas&apos;ul</div>
                       <svg viewBox="0 0 540 116" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tovar qabuli jarayoni: Qabul, Tekshiruv, Imzo va To'lov qadamlari">
                         <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--color-link)" /></marker></defs>
-                        <g fontFamily="Outfit,sans-serif" textAnchor="middle">
+                        <g fontFamily="var(--font-geist-sans),sans-serif" textAnchor="middle">
                           <g><rect x="8" y="34" width="112" height="44" rx="9" fill="var(--color-ink)" /><text x="64" y="54" fill="#52aeff" fontSize="12" fontWeight="700">QABUL</text><text x="64" y="70" fill="var(--color-mute)" fontSize="9.5">Omborchi</text></g>
                           <line x1="122" y1="56" x2="152" y2="56" stroke="var(--color-link)" strokeWidth="1.8" markerEnd="url(#a1)" />
                           <g><rect x="154" y="34" width="112" height="44" rx="9" fill="#fff" stroke="var(--color-hairline)" /><text x="210" y="54" fill="#101010" fontSize="12" fontWeight="700">TEKSHIRUV</text><text x="210" y="70" fill="var(--color-body)" fontSize="9.5">Sifat</text></g>
@@ -222,7 +222,7 @@ export default function TransformatsiyaZanjiriPage() {
                       <div className="diagram-cap">KONVERGENSIYA — har xil formatlar &rarr; yagona andoza</div>
                       <svg viewBox="0 0 540 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Uchta turli filial formati bitta yagona tasdiqlangan shablonga birlashadi">
                         <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--color-link)" /></marker></defs>
-                        <g fontFamily="Outfit,sans-serif">
+                        <g fontFamily="var(--font-geist-sans),sans-serif">
                           <g><rect x="8" y="12" width="132" height="34" rx="7" fill="#fff" stroke="var(--color-hairline)" /><line x1="20" y1="24" x2="70" y2="24" stroke="#B4453C" strokeWidth="2" /><line x1="20" y1="33" x2="95" y2="33" stroke="var(--color-mute)" strokeWidth="2" /><text x="128" y="30" textAnchor="end" fill="var(--color-body)" fontSize="10" fontWeight="600">Filial A</text></g>
                           <g><rect x="8" y="58" width="132" height="34" rx="7" fill="#fff" stroke="var(--color-hairline)" /><rect x="20" y="66" width="30" height="18" fill="var(--color-hairline-soft)" /><line x1="56" y1="70" x2="100" y2="70" stroke="var(--color-mute)" strokeWidth="2" /><text x="128" y="80" textAnchor="end" fill="var(--color-body)" fontSize="10" fontWeight="600">Filial B</text></g>
                           <g><rect x="8" y="104" width="132" height="34" rx="7" fill="#fff" stroke="var(--color-hairline)" /><line x1="20" y1="115" x2="105" y2="115" stroke="var(--color-mute)" strokeWidth="2" /><line x1="20" y1="124" x2="60" y2="124" stroke="var(--color-mute)" strokeWidth="2" /><text x="128" y="122" textAnchor="end" fill="var(--color-body)" fontSize="10" fontWeight="600">Filial C</text></g>
@@ -279,7 +279,7 @@ export default function TransformatsiyaZanjiriPage() {
                       <div className="diagram-cap">JISMONIY &rarr; RAQAMLI — daftar va &quot;kalla&quot; o&apos;rniga baza</div>
                       <svg viewBox="0 0 540 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Qog'oz daftar va inson xotirasidagi ma'lumot raqamli ERP bazasiga ko'chadi">
                         <defs><marker id="a3" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--color-link)" /></marker></defs>
-                        <g fontFamily="Outfit,sans-serif" textAnchor="middle">
+                        <g fontFamily="var(--font-geist-sans),sans-serif" textAnchor="middle">
                           <g>
                             <rect x="26" y="30" width="80" height="66" rx="5" fill="#fff" stroke="var(--color-mute)" transform="rotate(-4 66 63)" />
                             <g stroke="var(--color-hairline)" strokeWidth="2">
@@ -289,7 +289,7 @@ export default function TransformatsiyaZanjiriPage() {
                           </g>
                           <g>
                             <line x1="150" y1="63" x2="240" y2="63" stroke="var(--color-link)" strokeWidth="2" markerEnd="url(#a3)" />
-                            <text x="196" y="52" fill="var(--color-link)" fontFamily="JetBrains Mono,monospace" fontSize="9.5" letterSpacing="1">KO&apos;CHIRISH</text>
+                            <text x="196" y="52" fill="var(--color-link)" fontFamily="var(--font-geist-mono),monospace" fontSize="9.5" letterSpacing="1">KO&apos;CHIRISH</text>
                           </g>
                           <g>
                             <rect x="270" y="24" width="150" height="86" rx="9" fill="var(--color-ink)" />
@@ -299,9 +299,9 @@ export default function TransformatsiyaZanjiriPage() {
                             <rect x="284" y="84" width="96" height="8" rx="2" fill="var(--color-hairline)" />
                             <text x="345" y="126" fill="#101010" fontSize="10.5" fontWeight="700">ERP &middot; CRM &middot; baza</text>
                           </g>
-                          <text x="470" y="52" textAnchor="start" fill="var(--color-body)" fontFamily="JetBrains Mono,monospace" fontSize="9">real-time</text>
-                          <text x="470" y="70" textAnchor="start" fill="var(--color-body)" fontFamily="JetBrains Mono,monospace" fontSize="9">qidiriladi</text>
-                          <text x="470" y="88" textAnchor="start" fill="var(--color-body)" fontFamily="JetBrains Mono,monospace" fontSize="9">nusxalanmas</text>
+                          <text x="470" y="52" textAnchor="start" fill="var(--color-body)" fontFamily="var(--font-geist-mono),monospace" fontSize="9">real-time</text>
+                          <text x="470" y="70" textAnchor="start" fill="var(--color-body)" fontFamily="var(--font-geist-mono),monospace" fontSize="9">qidiriladi</text>
+                          <text x="470" y="88" textAnchor="start" fill="var(--color-body)" fontFamily="var(--font-geist-mono),monospace" fontSize="9">nusxalanmas</text>
                         </g>
                       </svg>
                     </div>
@@ -359,8 +359,8 @@ export default function TransformatsiyaZanjiriPage() {
                           <line x1="260" y1="110" x2="260" y2="195" />
                         </g>
                         <rect x="212" y="86" width="96" height="48" rx="11" fill="var(--color-ink)" />
-                        <text x="260" y="115" textAnchor="middle" fill="#52aeff" fontFamily="JetBrains Mono,monospace" fontSize="17" fontWeight="700">ERP</text>
-                        <g fontFamily="Outfit,sans-serif" fontSize="12" fontWeight="600" fill="#101010">
+                        <text x="260" y="115" textAnchor="middle" fill="#52aeff" fontFamily="var(--font-geist-mono),monospace" fontSize="17" fontWeight="700">ERP</text>
+                        <g fontFamily="var(--font-geist-sans),sans-serif" fontSize="12" fontWeight="600" fill="#101010">
                           <g><rect x="34" y="26" width="96" height="34" rx="8" fill="#fff" stroke="var(--color-hairline)" /><text x="82" y="47" textAnchor="middle">Bank / To&apos;lov</text></g>
                           <g><rect x="390" y="26" width="96" height="34" rx="8" fill="#fff" stroke="var(--color-hairline)" /><text x="438" y="47" textAnchor="middle">Soliq &middot; e-faktura</text></g>
                           <g><rect x="18" y="132" width="96" height="34" rx="8" fill="#fff" stroke="var(--color-hairline)" /><text x="66" y="153" textAnchor="middle">MES / Stanok</text></g>
@@ -415,7 +415,7 @@ export default function TransformatsiyaZanjiriPage() {
                             <path d="M0,0 L6,3 L0,6 Z" fill="var(--color-link)" />
                           </marker>
                         </defs>
-                        <g fontFamily="Outfit,sans-serif">
+                        <g fontFamily="var(--font-geist-sans),sans-serif">
                           <g><rect x="8" y="40" width="118" height="50" rx="10" fill="var(--color-ink)" />
                             <text x="67" y="62" textAnchor="middle" fill="#52aeff" fontSize="12" fontWeight="700">HODISA</text>
                             <text x="67" y="79" textAnchor="middle" fill="var(--color-mute)" fontSize="10">Qoldiq &lt; min</text></g>
@@ -556,31 +556,31 @@ export default function TransformatsiyaZanjiriPage() {
               <div style={{ margin: '10px auto 34px', maxWidth: 560 }}>
                 <svg viewBox="0 0 560 268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Beshta qatlamli piramida: poydevorda tizimlashtirish, cho'qqida avtomatlashtirish">
                   <defs><marker id="gU" markerWidth="9" markerHeight="9" refX="4" refY="7" orient="auto"><path d="M4,0 L8,7 L0,7 Z" fill="#52aeff" /></marker></defs>
-                  <g fontFamily="Outfit,sans-serif" textAnchor="middle">
+                  <g fontFamily="var(--font-geist-sans),sans-serif" textAnchor="middle">
                     <g>
                       <rect x="60" y="200" width="440" height="40" rx="5" fill="#161616" stroke="rgba(255,255,255,.14)" />
-                      <text x="280" y="225" fill="#ededed" fontSize="13" fontWeight="600"><tspan fill="#52aeff" fontFamily="JetBrains Mono,monospace">01</tspan>  Tizimlashtirish</text>
+                      <text x="280" y="225" fill="#ededed" fontSize="13" fontWeight="600"><tspan fill="#52aeff" fontFamily="var(--font-geist-mono),monospace">01</tspan>  Tizimlashtirish</text>
                     </g>
                     <g>
                       <rect x="100" y="154" width="360" height="40" rx="5" fill="#2a2a2a" stroke="rgba(255,255,255,.14)" />
-                      <text x="280" y="179" fill="#ededed" fontSize="13" fontWeight="600"><tspan fill="#52aeff" fontFamily="JetBrains Mono,monospace">02</tspan>  Standartlashtirish</text>
+                      <text x="280" y="179" fill="#ededed" fontSize="13" fontWeight="600"><tspan fill="#52aeff" fontFamily="var(--font-geist-mono),monospace">02</tspan>  Standartlashtirish</text>
                     </g>
                     <g>
                       <rect x="140" y="108" width="280" height="40" rx="5" fill="#37619b" stroke="rgba(255,255,255,.14)" />
-                      <text x="280" y="133" fill="#ededed" fontSize="13" fontWeight="600"><tspan fill="var(--color-hairline)" fontFamily="JetBrains Mono,monospace">03</tspan>  Raqamlashtirish</text>
+                      <text x="280" y="133" fill="#ededed" fontSize="13" fontWeight="600"><tspan fill="var(--color-hairline)" fontFamily="var(--font-geist-mono),monospace">03</tspan>  Raqamlashtirish</text>
                     </g>
                     <g>
                       <rect x="180" y="62" width="200" height="40" rx="5" fill="#3b82c9" stroke="rgba(255,255,255,.16)" />
-                      <text x="280" y="87" fill="#04121f" fontSize="12.5" fontWeight="700"><tspan fontFamily="JetBrains Mono,monospace">04</tspan>  Integratsiya</text>
+                      <text x="280" y="87" fill="#04121f" fontSize="12.5" fontWeight="700"><tspan fontFamily="var(--font-geist-mono),monospace">04</tspan>  Integratsiya</text>
                     </g>
                     <g>
                       <rect x="212" y="16" width="136" height="40" rx="5" fill="#52aeff" stroke="rgba(255,255,255,.2)" />
-                      <text x="280" y="41" fill="#04121f" fontSize="12" fontWeight="700"><tspan fontFamily="JetBrains Mono,monospace">05</tspan>  Avtomat</text>
+                      <text x="280" y="41" fill="#04121f" fontSize="12" fontWeight="700"><tspan fontFamily="var(--font-geist-mono),monospace">05</tspan>  Avtomat</text>
                     </g>
                   </g>
                   <line x1="524" y1="240" x2="524" y2="26" stroke="#52aeff" strokeWidth="1.4" strokeDasharray="5 4" markerEnd="url(#gU)" opacity="0.8" />
-                  <text x="516" y="140" fill="#52aeff" fontFamily="JetBrains Mono,monospace" fontSize="10" letterSpacing="1" transform="rotate(90 516 140)" textAnchor="middle">QURILADI ↑</text>
-                  <text x="36" y="264" fill="#8f8f8f" fontFamily="Outfit,sans-serif" fontSize="11">Poydevorsiz cho&apos;qqi qulaydi — yuqori qatlam faqat pastkilar ustida turadi.</text>
+                  <text x="516" y="140" fill="#52aeff" fontFamily="var(--font-geist-mono),monospace" fontSize="10" letterSpacing="1" transform="rotate(90 516 140)" textAnchor="middle">QURILADI ↑</text>
+                  <text x="36" y="264" fill="#8f8f8f" fontFamily="var(--font-geist-sans),sans-serif" fontSize="11">Poydevorsiz cho&apos;qqi qulaydi — yuqori qatlam faqat pastkilar ustida turadi.</text>
                 </svg>
               </div>
 

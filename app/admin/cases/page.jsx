@@ -53,7 +53,7 @@ export default async function CasesPage() {
                 <div style={{ fontSize: 14, color: 'var(--color-mute)' }}>
                   {c.service && <span>🎯 {c.service}</span>}
                   {c.duration && <span style={{ marginLeft: 16 }}>⏱ {c.duration}</span>}
-                  {c.slug && <span style={{ marginLeft: 16, fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 12 }}>/{c.slug}</span>}
+                  {c.slug && <span style={{ marginLeft: 16, fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 12 }}>/{c.slug}</span>}
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 8 }}>

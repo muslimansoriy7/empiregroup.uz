@@ -8,7 +8,7 @@ import { useConsult } from "../ConsultModal";
 
 /**
  * Hero — Questly design direction. A cool light ground with soft atmospheric
- * blooms, a clean Nimbus (grotesque) headline from the i18n dictionary, pill
+ * blooms, a clean Geist headline from the i18n dictionary, pill
  * CTAs, and a real Empire product preview (Motor Lux CRM) floating in a frosted
  * card that rises from a grass strip at the fold. Entrance is CSS fade-up
  * (reliable across SSR); all copy stays in the dictionary (uz/ru/en).

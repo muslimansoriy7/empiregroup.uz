@@ -95,7 +95,7 @@ export default async function FaqsPage() {
           <div key={faq.id} style={{ background: 'var(--color-hairline-soft)', border: '1px solid var(--color-hairline)', borderRadius: 10, padding: 16, display: 'grid', gridTemplateColumns: '1fr auto', gap: 12 }}>
             <div>
               <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-                <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 20, background: 'var(--color-hairline-soft)', color: 'var(--color-ink)', fontFamily: "var(--mono, 'JetBrains Mono',monospace)" }}>{faq.category}</span>
+                <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 20, background: 'var(--color-hairline-soft)', color: 'var(--color-ink)', fontFamily: "var(--mono, var(--font-geist-mono),monospace)" }}>{faq.category}</span>
                 <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 20, background: faq.status === 'published' ? 'rgba(22,163,106,.15)' : 'var(--color-hairline-soft)', color: faq.status === 'published' ? '#15803d' : 'var(--color-mute)' }}>
                   {faq.status === 'published' ? 'Joylangan' : 'Draft'}
                 </span>

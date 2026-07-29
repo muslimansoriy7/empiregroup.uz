@@ -41,7 +41,7 @@ export default function OdooJoriyQilishPage() {
 
     <div className="oj-figure" style={{marginTop:36}}>
       <svg viewBox="0 0 1000 152" role="img" aria-label="Odoo joriy etish — besh fazali zanjir">
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <line x1="100" y1="62" x2="900" y2="62" stroke="var(--color-hairline)" strokeWidth="2.5" />
           <g>
             <circle cx="100" cy="62" r="26" fill="var(--color-elevated)" stroke="var(--color-link)" strokeWidth="2" />
@@ -73,7 +73,7 @@ export default function OdooJoriyQilishPage() {
             <text x="930" y="112" textAnchor="middle" fill="var(--color-ink)" fontSize="15" fontWeight="600">Support</text>
             <text x="930" y="130" textAnchor="middle" fill="var(--color-mute)" fontSize="11">Barqarorlik</text>
           </g>
-          <text x="500" y="20" textAnchor="middle" fill="var(--color-mute)" fontFamily="'Outfit',sans-serif" fontSize="11" letterSpacing="3">ZANJIR &middot; HAR DARVOZA YOPILGACH KEYINGISIGA O&rsquo;TILADI &rarr;</text>
+          <text x="500" y="20" textAnchor="middle" fill="var(--color-mute)" fontFamily="var(--font-geist-sans),sans-serif" fontSize="11" letterSpacing="3">ZANJIR &middot; HAR DARVOZA YOPILGACH KEYINGISIGA O&rsquo;TILADI &rarr;</text>
         </g>
       </svg>
       <div className="oj-figcap"><b>1-rasm.</b> Odoo joriy etishning besh fazasi. Texnik ishlarning katta qismi — server, modullar, custom kod — Build fazasiga to&rsquo;g&rsquo;ri keladi.</div>
@@ -135,7 +135,7 @@ export default function OdooJoriyQilishPage() {
     <div className="oj-figure">
       {/* CHEVRON: Klassik loyiha yo'li */}
       <svg viewBox="0 0 1000 168" role="img" aria-label="Klassik loyiha yo'li — chevron bosqichlar">
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <text x="0" y="20" fill="var(--color-mute)" fontSize="12" letterSpacing="2">KLASSIK LOYIHA YO&rsquo;LI</text>
           <path d="M20,42 L206,42 L236,82 L206,122 L20,122 Z" fill="var(--color-body)" opacity=".42" />
           <path d="M206,42 L392,42 L422,82 L392,122 L206,122 L236,82 Z" fill="var(--color-body)" opacity=".62" />
@@ -161,7 +161,7 @@ export default function OdooJoriyQilishPage() {
 
       {/* PROPORTIONAL BAR */}
       <svg viewBox="0 0 1000 210" role="img" aria-label="Umumiy kuch taqsimoti bari" style={{marginTop:8}}>
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <text x="0" y="24" fill="var(--color-mute)" fontSize="12" letterSpacing="2">UMUMIY KUCH TAQSIMOTI — nisbiy og&rsquo;irlik</text>
           <rect x="0" y="56" width="94" height="56" rx="4" fill="var(--color-link)" opacity=".45" />
           <rect x="98" y="56" width="42" height="56" rx="4" fill="var(--color-link)" opacity=".62" />
@@ -218,7 +218,7 @@ export default function OdooJoriyQilishPage() {
 
         <div className="oj-figure">
           <svg viewBox="0 0 1000 300" role="img" aria-label="GAP tahlili va MoSCoW matritsasi">
-            <g fontFamily="'Outfit',sans-serif">
+            <g fontFamily="var(--font-geist-sans),sans-serif">
               <text x="0" y="22" fill="var(--color-mute)" fontSize="12" letterSpacing="2">GAP = EHTIYOJ − STANDART</text>
               <rect x="0" y="42" width="250" height="40" rx="6" fill="var(--color-link)" opacity=".9" />
               <text x="125" y="67" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="700">Odoo standart (Fit)</text>
@@ -228,23 +228,23 @@ export default function OdooJoriyQilishPage() {
               <text x="305" y="119" textAnchor="middle" fill="var(--color-ink)" fontSize="12" fontWeight="700">GAP</text>
               <text x="0" y="160" fill="var(--color-mute)" fontSize="12">GAP — standart qoplamagan qism. Uni MoSCoW bo&rsquo;yicha saralaymiz →</text>
             </g>
-            <g fontFamily="'Outfit',sans-serif" transform="translate(430,30)">
+            <g fontFamily="var(--font-geist-sans),sans-serif" transform="translate(430,30)">
               <rect x="0" y="0" width="270" height="115" rx="10" fill="rgba(0,112,243,.14)" stroke="var(--color-link-deep)" strokeWidth="1.5" />
               <text x="16" y="30" fill="var(--color-link)" fontSize="15" fontWeight="700">MUST &middot; Majburiy</text>
-              <text x="16" y="54" fill="var(--color-ink)" fontSize="12.5" fontFamily="'Outfit',sans-serif">Usiz biznes yurmaydi.</text>
-              <text x="16" y="76" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">&rarr; Tasdiqlanadi, ishlab chiqiladi</text>
+              <text x="16" y="54" fill="var(--color-ink)" fontSize="12.5" fontFamily="var(--font-geist-sans),sans-serif">Usiz biznes yurmaydi.</text>
+              <text x="16" y="76" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">&rarr; Tasdiqlanadi, ishlab chiqiladi</text>
               <rect x="290" y="0" width="270" height="115" rx="10" fill="rgba(0,112,243,.08)" stroke="rgba(0,112,243,.4)" strokeWidth="1.5" />
               <text x="306" y="30" fill="var(--color-link)" fontSize="15" fontWeight="700">SHOULD &middot; Muhim</text>
-              <text x="306" y="54" fill="var(--color-ink)" fontSize="12.5" fontFamily="'Outfit',sans-serif">Vaqtincha workaround mumkin.</text>
-              <text x="306" y="76" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">&rarr; 2-bosqichga suriladi</text>
+              <text x="306" y="54" fill="var(--color-ink)" fontSize="12.5" fontFamily="var(--font-geist-sans),sans-serif">Vaqtincha workaround mumkin.</text>
+              <text x="306" y="76" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">&rarr; 2-bosqichga suriladi</text>
               <rect x="0" y="130" width="270" height="115" rx="10" fill="rgba(128,128,128,.10)" stroke="rgba(128,128,128,.4)" strokeWidth="1.5" />
               <text x="16" y="160" fill="var(--color-mute)" fontSize="15" fontWeight="700">COULD &middot; Yaxshi bo&rsquo;lardi</text>
-              <text x="16" y="184" fill="var(--color-ink)" fontSize="12.5" fontFamily="'Outfit',sans-serif">Qulaylik, ta&rsquo;siri kam.</text>
-              <text x="16" y="206" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">&rarr; Rad etiladi</text>
+              <text x="16" y="184" fill="var(--color-ink)" fontSize="12.5" fontFamily="var(--font-geist-sans),sans-serif">Qulaylik, ta&rsquo;siri kam.</text>
+              <text x="16" y="206" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">&rarr; Rad etiladi</text>
               <rect x="290" y="130" width="270" height="115" rx="10" fill="rgba(128,128,128,.16)" stroke="var(--color-body)" strokeWidth="1.5" />
               <text x="306" y="160" fill="var(--color-mute)" fontSize="15" fontWeight="700">WON&rsquo;T &middot; Qilinmaydi</text>
-              <text x="306" y="184" fill="var(--color-ink)" fontSize="12.5" fontFamily="'Outfit',sans-serif">Byudjet/muddatga sig&rsquo;maydi.</text>
-              <text x="306" y="206" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">&rarr; Qat&rsquo;iy rad</text>
+              <text x="306" y="184" fill="var(--color-ink)" fontSize="12.5" fontFamily="var(--font-geist-sans),sans-serif">Byudjet/muddatga sig&rsquo;maydi.</text>
+              <text x="306" y="206" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">&rarr; Qat&rsquo;iy rad</text>
             </g>
           </svg>
           <div className="oj-figcap"><b>3-rasm.</b> GAP tahlili standart va ehtiyoj orasidagi farqni ko&rsquo;rsatadi; MoSCoW esa har bir GAP bo&rsquo;yicha aniq qaror beradi. Funksiya &ldquo;zarur&rdquo;mi yoki &ldquo;ixtiyoriy&rdquo;mi — buni mijoz emas, Loyiha yetakchisi hal qiladi.</div>
@@ -320,27 +320,27 @@ export default function OdooJoriyQilishPage() {
 
         <div className="oj-figure">
           <svg viewBox="0 0 1000 300" role="img" aria-label="Bir haftalik sprint sikli">
-            <g fontFamily="'Outfit',sans-serif">
+            <g fontFamily="var(--font-geist-sans),sans-serif">
               <text x="500" y="24" textAnchor="middle" fill="var(--color-mute)" fontSize="12" letterSpacing="3">BIR HAFTALIK SPRINT SIKLI</text>
               <circle cx="500" cy="165" r="96" fill="none" stroke="var(--color-link-deep)" strokeWidth="1.5" strokeDasharray="4 6" opacity=".6" />
               <text x="500" y="160" textAnchor="middle" fill="var(--color-ink)" fontSize="16" fontWeight="700">1 HAFTA</text>
-              <text x="500" y="182" textAnchor="middle" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">sprint</text>
+              <text x="500" y="182" textAnchor="middle" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">sprint</text>
               {/* top: Qo'ng'iroq */}
               <rect x="410" y="42" width="180" height="52" rx="10" fill="var(--color-elevated)" stroke="var(--color-link)" strokeWidth="1.5" />
               <text x="500" y="66" textAnchor="middle" fill="var(--color-link)" fontSize="14" fontWeight="700">Qo&rsquo;ng&rsquo;iroq</text>
-              <text x="500" y="84" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">SPoC bilan haftalik</text>
+              <text x="500" y="84" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">SPoC bilan haftalik</text>
               {/* right: Sozlash */}
               <rect x="720" y="139" width="180" height="52" rx="10" fill="var(--color-elevated)" stroke="var(--color-link)" strokeWidth="1.5" />
               <text x="810" y="163" textAnchor="middle" fill="var(--color-link)" fontSize="14" fontWeight="700">Sozlash</text>
-              <text x="810" y="181" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">jonli tizimda birga</text>
+              <text x="810" y="181" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">jonli tizimda birga</text>
               {/* bottom: Uyga vazifa */}
               <rect x="410" y="236" width="180" height="52" rx="10" fill="var(--color-elevated)" stroke="var(--color-body)" strokeWidth="1.5" />
               <text x="500" y="260" textAnchor="middle" fill="var(--color-mute)" fontSize="14" fontWeight="700">Uyga vazifa</text>
-              <text x="500" y="278" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">SPoC mustaqil bajaradi</text>
+              <text x="500" y="278" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">SPoC mustaqil bajaradi</text>
               {/* left: Tekshirish */}
               <rect x="100" y="139" width="180" height="52" rx="10" fill="var(--color-elevated)" stroke="var(--color-body)" strokeWidth="1.5" />
               <text x="190" y="163" textAnchor="middle" fill="var(--color-mute)" fontSize="14" fontWeight="700">Tekshirish</text>
-              <text x="190" y="181" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">SPoC o&rsquo;zi ko&rsquo;rsatadi</text>
+              <text x="190" y="181" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">SPoC o&rsquo;zi ko&rsquo;rsatadi</text>
               {/* arrows */}
               <g fill="var(--color-link-deep)">
                 <path d="M604,86 q70,20 108,60 l-6,-14 14,4 -2,14 -6,-14 q-38,-38 -108,-56z" />
@@ -387,36 +387,36 @@ export default function OdooJoriyQilishPage() {
 
         <div className="oj-figure">
           <svg viewBox="0 0 1000 210" role="img" aria-label="Go-Live cutover jadvali">
-            <g fontFamily="'Outfit',sans-serif">
+            <g fontFamily="var(--font-geist-sans),sans-serif">
               <text x="0" y="22" fill="var(--color-mute)" fontSize="12" letterSpacing="2">CUTOVER — ESKI TIZIMDAN YANGISIGA O&rsquo;TISH</text>
               <line x1="60" y1="90" x2="940" y2="90" stroke="var(--color-hairline)" strokeWidth="2" />
               <g>
                 <circle cx="120" cy="90" r="9" fill="var(--color-body)" />
                 <text x="120" y="60" textAnchor="middle" fill="var(--color-ink)" fontSize="12.5" fontWeight="600">Blackout</text>
-                <text x="120" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">Juma 18:00 —</text>
-                <text x="120" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">eski tizim yopiladi</text>
+                <text x="120" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">Juma 18:00 —</text>
+                <text x="120" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">eski tizim yopiladi</text>
 
                 <circle cx="330" cy="90" r="9" fill="var(--color-link)" />
                 <text x="330" y="60" textAnchor="middle" fill="var(--color-ink)" fontSize="12.5" fontWeight="600">Yakuniy qoldiq</text>
-                <text x="330" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">Ombor + bank/kassa</text>
-                <text x="330" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">Excelga olinadi</text>
+                <text x="330" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">Ombor + bank/kassa</text>
+                <text x="330" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">Excelga olinadi</text>
 
                 <circle cx="540" cy="90" r="9" fill="var(--color-link)" />
                 <text x="540" y="60" textAnchor="middle" fill="var(--color-ink)" fontSize="12.5" fontWeight="600">Load</text>
-                <text x="540" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">Qoldiqlar Live</text>
-                <text x="540" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">bazaga import</text>
+                <text x="540" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">Qoldiqlar Live</text>
+                <text x="540" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">bazaga import</text>
 
                 <circle cx="720" cy="90" r="9" fill="var(--color-link-deep)" />
                 <text x="720" y="60" textAnchor="middle" fill="var(--color-ink)" fontSize="12.5" fontWeight="600">Smoke test</text>
-                <text x="720" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">1 sotuv &middot; 1 xarid</text>
-                <text x="720" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">&middot; 1 to&rsquo;lov</text>
+                <text x="720" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">1 sotuv &middot; 1 xarid</text>
+                <text x="720" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">&middot; 1 to&rsquo;lov</text>
 
                 <circle cx="900" cy="90" r="12" fill="var(--color-link)" stroke="var(--color-canvas)" strokeWidth="3" />
                 <text x="900" y="58" textAnchor="middle" fill="var(--color-link)" fontSize="13" fontWeight="700">Hypercare</text>
-                <text x="900" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">Dush. — 1–2 hafta</text>
-                <text x="900" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">yonida turish</text>
+                <text x="900" y="118" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">Dush. — 1–2 hafta</text>
+                <text x="900" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">yonida turish</text>
               </g>
-              <text x="500" y="180" textAnchor="middle" fill="var(--color-ink)" fontSize="12.5" fontFamily="'Outfit',sans-serif">Xato bo&rsquo;lishi — 100% normal. Asosiysi xatoning o&rsquo;zi emas, unga qanchalik <tspan fill="var(--color-link)" fontWeight="600">tez reaksiya</tspan> bildirishdir.</text>
+              <text x="500" y="180" textAnchor="middle" fill="var(--color-ink)" fontSize="12.5" fontFamily="var(--font-geist-sans),sans-serif">Xato bo&rsquo;lishi — 100% normal. Asosiysi xatoning o&rsquo;zi emas, unga qanchalik <tspan fill="var(--color-link)" fontWeight="600">tez reaksiya</tspan> bildirishdir.</text>
             </g>
           </svg>
           <div className="oj-figcap"><b>5-rasm.</b> Cutover — aniq marshrut bo&rsquo;yicha o&rsquo;tish. Dushanba ertalab xodimlar birinchi marta real rejimda ishlay boshlaydi; shu davrda Loyiha yetakchisi va texnik jamoa yonida (yoki 24/7 onlayn) bo&rsquo;ladi.</div>
@@ -484,7 +484,7 @@ export default function OdooJoriyQilishPage() {
 
     <div className="oj-figure">
       <svg viewBox="0 0 1000 138" role="img" aria-label="Yakuniy to'rt bosqich davomiyligi">
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <text x="0" y="18" fill="var(--color-mute)" fontSize="12" letterSpacing="1.5">ERP LOYIHALARINING ~70–75% i AYNAN SHU BOSQICHLARDA QULAYDI</text>
           <rect x="20" y="34" width="90" height="60" rx="7" fill="var(--color-link)" />
           <rect x="116" y="34" width="360" height="60" rx="7" fill="var(--color-body)" />
@@ -493,16 +493,16 @@ export default function OdooJoriyQilishPage() {
           <text x="65" y="70" textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="700" transform="rotate(-90 65 64)">TRENING</text>
           <g textAnchor="middle" fill="var(--color-ink)">
             <text x="296" y="62" fontSize="15" fontWeight="700">2. TEST (UAT)</text>
-            <text x="296" y="82" fontSize="12" opacity=".85" fontFamily="'Outfit',sans-serif">2–4 hafta</text>
+            <text x="296" y="82" fontSize="12" opacity=".85" fontFamily="var(--font-geist-sans),sans-serif">2–4 hafta</text>
           </g>
           <text x="517" y="70" textAnchor="middle" fill="var(--color-ink)" fontSize="11.5" fontWeight="700" transform="rotate(-90 517 64)">GO-LIVE</text>
           <g textAnchor="middle" fill="#ffffff">
             <text x="769" y="62" fontSize="15" fontWeight="700">4. SUPPORT</text>
-            <text x="769" y="82" fontSize="12" fontFamily="'Outfit',sans-serif">doimiy &middot; 3 oy zich</text>
+            <text x="769" y="82" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">doimiy &middot; 3 oy zich</text>
           </g>
-          <text x="65" y="112" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">3–5 kun</text>
-          <text x="517" y="112" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="'Outfit',sans-serif">1 kun</text>
-          <text x="500" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">Ma&#x2BB;lumot kiritish → Trening → Parallel test → Go-Live → Support</text>
+          <text x="65" y="112" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">3–5 kun</text>
+          <text x="517" y="112" textAnchor="middle" fill="var(--color-mute)" fontSize="11" fontFamily="var(--font-geist-sans),sans-serif">1 kun</text>
+          <text x="500" y="132" textAnchor="middle" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">Ma&#x2BB;lumot kiritish → Trening → Parallel test → Go-Live → Support</text>
         </g>
       </svg>
       <div className="oj-figcap"><b>6-rasm.</b> To&rsquo;rt bosqichning nisbiy davomiyligi va ketma-ketligi. Ketma-ketlikni buzmang — har bosqich oldingisining natijasiga tayanadi.</div>
@@ -590,7 +590,7 @@ export default function OdooJoriyQilishPage() {
 
     <div className="oj-figure">
       <svg viewBox="0 0 1000 340" role="img" aria-label="Mijoz qoniqishi egri chizig'i">
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <line x1="80" y1="40" x2="80" y2="270" stroke="var(--color-hairline)" strokeWidth="1.5" />
           <line x1="80" y1="270" x2="950" y2="270" stroke="var(--color-hairline)" strokeWidth="1.5" />
           <text x="80" y="26" textAnchor="middle" fill="var(--color-mute)" fontSize="11">QONIQISH ↑</text>
@@ -608,7 +608,7 @@ export default function OdooJoriyQilishPage() {
             <circle cx="930" cy="72" r="6" fill="var(--color-link)" />
             <text x="930" y="322" textAnchor="middle" fill="var(--color-ink)" fontSize="12">Natija</text>
           </g>
-          <text x="485" y="252" textAnchor="middle" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">vaqtinchalik norozilik</text>
+          <text x="485" y="252" textAnchor="middle" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">vaqtinchalik norozilik</text>
         </g>
       </svg>
       <div className="oj-figcap"><b>7-rasm.</b> Biz mijozning vaqtinchalik norozi bo&rsquo;lishini (chunki murakkab qaror yuzasidan qattiq muhokama bo&rsquo;ldi) joriy etish muddatini o&rsquo;tkazib yuborishdan afzal ko&rsquo;ramiz. Qisqa muddatli qoniqishdan ko&rsquo;ra loyiha muvaffaqiyatini ustun qo&rsquo;yish uzoq muddatda mijozni haqiqatan baxtli qiladi.</div>
@@ -627,7 +627,7 @@ export default function OdooJoriyQilishPage() {
 
     <div className="oj-figure">
       <svg viewBox="0 0 1000 420" role="img" aria-label="Raqamli imkoniyatlar matritsasi">
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <text x="40" y="210" fill="var(--color-mute)" fontSize="12" transform="rotate(-90 40 210)" textAnchor="middle">POTENSIAL TA&rsquo;SIR ↑</text>
           <text x="530" y="410" fill="var(--color-mute)" fontSize="12" textAnchor="middle">O&rsquo;ZGARTIRISH OSONLIGI →</text>
           <rect x="80" y="40" width="440" height="160" rx="12" fill="rgba(128,128,128,.10)" stroke="rgba(128,128,128,.35)" />
@@ -635,13 +635,13 @@ export default function OdooJoriyQilishPage() {
           <rect x="80" y="210" width="440" height="160" rx="12" fill="rgba(128,128,128,.06)" stroke="rgba(128,128,128,.25)" />
           <rect x="530" y="210" width="440" height="160" rx="12" fill="rgba(0,112,243,.08)" stroke="rgba(0,112,243,.35)" />
           <text x="100" y="72" fill="var(--color-mute)" fontSize="15" fontWeight="700">Game changers</text>
-          <text x="100" y="92" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">Yuqori ta&rsquo;sir &middot; yuqori murakkablik → rejalashtiring</text>
+          <text x="100" y="92" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">Yuqori ta&rsquo;sir &middot; yuqori murakkablik → rejalashtiring</text>
           <text x="550" y="72" fill="var(--color-link)" fontSize="15" fontWeight="700">Quick wins &middot; 1-ustuvorlik</text>
-          <text x="550" y="92" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">Yuqori ta&rsquo;sir &middot; past murakkablik → darhol qiling</text>
+          <text x="550" y="92" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">Yuqori ta&rsquo;sir &middot; past murakkablik → darhol qiling</text>
           <text x="100" y="242" fill="var(--color-mute)" fontSize="15" fontWeight="700">To avoid</text>
-          <text x="100" y="262" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">Past ta&rsquo;sir &middot; yuqori murakkablik → rad eting</text>
+          <text x="100" y="262" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">Past ta&rsquo;sir &middot; yuqori murakkablik → rad eting</text>
           <text x="550" y="242" fill="var(--color-link)" fontSize="15" fontWeight="700">Fine tuning</text>
-          <text x="550" y="262" fill="var(--color-mute)" fontSize="12" fontFamily="'Outfit',sans-serif">Past ta&rsquo;sir &middot; past murakkablik → vaqt topilsa</text>
+          <text x="550" y="262" fill="var(--color-mute)" fontSize="12" fontFamily="var(--font-geist-sans),sans-serif">Past ta&rsquo;sir &middot; past murakkablik → vaqt topilsa</text>
           <g opacity=".92">
             <circle cx="640" cy="140" r="34" fill="var(--color-link)" opacity=".85" /><text x="640" y="146" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="700">1</text>
             <circle cx="760" cy="120" r="22" fill="var(--color-link)" opacity=".7" /><text x="760" y="125" textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="700">2</text>
@@ -667,27 +667,27 @@ export default function OdooJoriyQilishPage() {
 
     <div className="oj-figure">
       <svg viewBox="0 0 1000 170" role="img" aria-label="Faza darvozalari">
-        <g fontFamily="'Outfit',sans-serif">
+        <g fontFamily="var(--font-geist-sans),sans-serif">
           <g>
             <rect x="20" y="55" width="150" height="60" rx="10" fill="var(--color-elevated)" stroke="var(--color-link)" strokeWidth="1.5" />
             <text x="95" y="80" textAnchor="middle" fill="var(--color-ink)" fontSize="14" fontWeight="600">Discovery</text>
-            <text x="95" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="'Outfit',sans-serif">Talablar tasdiq</text>
+            <text x="95" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="var(--font-geist-sans),sans-serif">Talablar tasdiq</text>
 
             <rect x="228" y="55" width="150" height="60" rx="10" fill="var(--color-elevated)" stroke="var(--color-link)" strokeWidth="1.5" />
             <text x="303" y="80" textAnchor="middle" fill="var(--color-ink)" fontSize="14" fontWeight="600">Design</text>
-            <text x="303" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="'Outfit',sans-serif">Dizayn + hajm</text>
+            <text x="303" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="var(--font-geist-sans),sans-serif">Dizayn + hajm</text>
 
             <rect x="436" y="55" width="150" height="60" rx="10" fill="var(--color-elevated)" stroke="var(--color-link-deep)" strokeWidth="2" />
             <text x="511" y="80" textAnchor="middle" fill="var(--color-ink)" fontSize="14" fontWeight="600">Build</text>
-            <text x="511" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="'Outfit',sans-serif">Test sikl ishlaydi</text>
+            <text x="511" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="var(--font-geist-sans),sans-serif">Test sikl ishlaydi</text>
 
             <rect x="644" y="55" width="150" height="60" rx="10" fill="var(--color-elevated)" stroke="var(--color-body)" strokeWidth="1.5" />
             <text x="719" y="80" textAnchor="middle" fill="var(--color-ink)" fontSize="14" fontWeight="600">Deploy</text>
-            <text x="719" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="'Outfit',sans-serif">UAT + Go-Live</text>
+            <text x="719" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="var(--font-geist-sans),sans-serif">UAT + Go-Live</text>
 
             <rect x="852" y="55" width="150" height="60" rx="10" fill="var(--color-elevated)" stroke="var(--color-body)" strokeWidth="1.5" />
             <text x="927" y="80" textAnchor="middle" fill="var(--color-ink)" fontSize="14" fontWeight="600">Support</text>
-            <text x="927" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="'Outfit',sans-serif">Barqarorlik</text>
+            <text x="927" y="100" textAnchor="middle" fill="var(--color-mute)" fontSize="10.5" fontFamily="var(--font-geist-sans),sans-serif">Barqarorlik</text>
           </g>
           <g fill="var(--color-canvas)" stroke="var(--color-link)" strokeWidth="1.5">
             <path d="M203,85 l12,-12 12,12 -12,12 z" />

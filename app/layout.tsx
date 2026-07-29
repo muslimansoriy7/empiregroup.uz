@@ -105,14 +105,6 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT_SCRIPT }} />
-        {/* Nimbus Sans — the Questly-direction grotesque. Loads as the primary
-            face; if the CDN is slow/unavailable the Helvetica/Arial fallback in
-            --font-sans is visually near-identical, so the look holds either way. */}
-        <link rel="preconnect" href="https://db.onlinewebfonts.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://db.onlinewebfonts.com/c/bb5de19d87c09a95216dc6ccd96e37c6?family=Nimbus+Sans+TW01"
-        />
         <link
           rel="alternate"
           type="application/rss+xml"

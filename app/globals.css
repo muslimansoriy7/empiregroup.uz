@@ -15,12 +15,11 @@
    Source of truth: theme.css + DESIGN-vercel.md
    ============================================================ */
 @theme {
-  /* ---- Fonts — Questly direction: Nimbus Sans (a Helvetica-family grotesque)
-         is the primary face; Helvetica Neue / Arial fall back near-identically
-         if the webfont is slow, and Geist stays last as a final safety net.
-         Mono keeps Geist Mono for the few code/table contexts. ---- */
-  --font-sans: "Nimbus Sans TW01", "Helvetica Neue", Helvetica, Arial,
-    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* ---- Fonts — Geist only. Geist Sans is the single UI typeface across the
+         whole site; Geist Mono is used for the few code/table contexts. No
+         third-party webfonts. (geist package sets --font-geist-sans/-mono.) ---- */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, monospace;
 
