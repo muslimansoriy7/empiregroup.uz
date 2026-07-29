@@ -62,6 +62,10 @@ const CSS = `
 }
 .aqd ul, .aqd ol { list-style: none; }
 .aqd a { color: inherit; text-decoration: none; }
+/* generic anchor reset (class+element) outranks single-class button rules —
+   re-assert button-anchor text colours at higher specificity so they show. */
+.aqd a.aqd-btn--primary { color: #050606; }
+.aqd a.aqd-btn--ghost { color: var(--quartz); }
 .aqd button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 .aqd img, .aqd svg { display: block; max-width: 100%; }
 

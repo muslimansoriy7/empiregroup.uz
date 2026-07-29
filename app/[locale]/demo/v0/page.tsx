@@ -136,6 +136,13 @@ export default function V0DemoPage() {
 }
 .v0d *,.v0d *::before,.v0d *::after{box-sizing:border-box;}
 .v0d a{color:inherit;text-decoration:none;}
+/* the generic anchor reset above (class+element) outranks the single-class
+   button rules, so button-anchors inherited the scope ink and went invisible.
+   Re-assert button text colours at higher specificity. */
+.v0d a.v0d-btn--primary{color:var(--paper);}
+.v0d a.v0d-btn--ghost{color:var(--ink);}
+.v0d .v0d-cta a.v0d-btn--primary{color:var(--ink);}
+.v0d .v0d-cta a.v0d-btn--ghost{color:var(--paper);}
 .v0d button{font-family:inherit;cursor:pointer;}
 .v0d ::selection{background:var(--ink);color:var(--paper);}
 .v0d :focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px;}

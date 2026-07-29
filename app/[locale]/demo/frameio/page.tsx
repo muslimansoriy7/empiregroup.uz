@@ -652,6 +652,10 @@ const CSS = `
 }
 .fio *{box-sizing:border-box;}
 .fio a{color:inherit;text-decoration:none;}
+/* generic anchor reset (class+element) outranks single-class pill rules —
+   re-assert pill-anchor text colours at higher specificity so they show. */
+.fio a.fio-pill--solid{color:var(--obsidian);}
+.fio a.fio-pill--ghost{color:var(--cv);}
 .fio h1,.fio h2,.fio h3,.fio p{margin:0;}
 .fio ul{margin:0;padding:0;list-style:none;}
 .fio button{font-family:inherit;cursor:pointer;}
