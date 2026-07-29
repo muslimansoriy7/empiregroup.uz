@@ -259,17 +259,20 @@ export const en: Dict = {
     subtitle:
       "Your system is built by people you know, not a black box. That's why we're open.",
     members: [
-      { name: "Muslim Ansoriy", role: "Founder / CEO", photo: "/founder.webp" },
-      { name: "Jasur Karimov", role: "Backend engineer" },
-      { name: "Sardor Aliyev", role: "Frontend / mobile" },
-      { name: "Dilnoza Yusupova", role: "Odoo / ERP consultant" },
-      { name: "Bekzod Rahimov", role: "Project manager" },
+      { name: "Muslim Ansoriy", role: "Founder & CEO · Technical Product Manager", bio: "7+ years in IT and business automation. Partner Manager for Odoo ERP implementation across Central Asia and the Caucasus. Has led 20+ ERP projects in textile, automotive and retail. Specializes in business-process digitization and product strategy." },
+      { name: "Abbos Jo'rayev", role: "Co-founder & COO", bio: "6+ years managing IT projects. Leads client relationships, project budgets and team coordination. Strong background in business analysis and requirements (TZ) at manufacturing companies." },
+      { name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 years of Python/Odoo development. Built 30+ custom modules, works with Odoo 14–18. Specializes in integration with MES and external systems (REST API, XML-RPC)." },
+      { name: "Dilnoza Yusupova", role: "Business Analyst · ERP Consultant", bio: "4 years analyzing and documenting business processes. Turns client needs into technical requirements, does AS-IS / TO-BE modeling and user training." },
+      { name: "Jasurbek Toshmatov", role: "Full-stack Developer", bio: "5 years building web and mobile apps. React, Next.js, TypeScript, Node.js, PostgreSQL. Works on corporate sites, B2B portals and PWA solutions." },
+      { name: "Nilufar Karimova", role: "Digital Marketing Lead", bio: "6 years in marketing. SEO, paid search, content strategy and lead generation. Specializes in building B2B marketing funnels and wiring them to CRM." },
+      { name: "Bekzod Ergashev", role: "DevOps · System Administrator", bio: "4 years with server infrastructure. Linux, Docker, CI/CD, database backups and security. Handles deployment and optimization of Odoo servers." },
+      { name: "Malika Sobirova", role: "UI/UX Designer", bio: "4 years of interface design. Figma, design systems, user research. Works on designing ERP interfaces and corporate websites." },
     ],
     chips: [
       "Tashkent · Uzbekistan",
       "since 2023",
       "“EMPIRE GROUP CORP” LLC",
-      "team of 5",
+      "team of 8",
     ],
   },
   founder: {

@@ -47,7 +47,7 @@ function TgProofPhone({
           className="h-auto w-full"
         />
       ) : (
-        <div className="flex h-[460px] flex-col bg-canvas">
+        <div className="flex aspect-[9/16] flex-col bg-canvas">
           {/* telegram chat header */}
           <div className="flex items-center gap-2.5 border-b border-hairline bg-elevated px-3 pb-2.5 pt-8">
             <span

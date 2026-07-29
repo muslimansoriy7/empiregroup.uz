@@ -3,22 +3,24 @@
 import type { BrandLogo } from "@/content/logos";
 
 /**
- * LogoWall — a prestige grid of brand / tool logos.
+ * LogoWall — a prestige grid of brand / tool logos, each in its own card with
+ * the name written beneath the mark.
  *
- * Each tile is muted grayscale at rest and smoothly reveals the official brand
- * colour + a 10% scale-up on hover. Colour is driven by `currentColor`
- * (single-colour marks) so it transitions cleanly; near-black marks carry a
- * light `darkHex` fallback so they stay visible when revealed in dark mode.
- * Amazon (smile) and Microsoft (four-square) are hand-drawn.
+ * The logo is muted grayscale at rest and smoothly reveals the official brand
+ * colour + a gentle scale on hover, while the whole card lifts on a single
+ * transition (no native `title` tooltip — the name is always visible, so hover
+ * reads as one smooth motion rather than a jump). Colour is driven by
+ * `currentColor` (single-colour marks) so it transitions cleanly; near-black
+ * marks carry a light `darkHex` fallback for dark mode. Amazon (smile) and
+ * Microsoft (four-square) are hand-drawn.
  */
 export function LogoWall({ logos }: { logos: BrandLogo[] }) {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-5">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
       {logos.map((logo) => (
         <li key={logo.title}>
           <div
-            title={logo.title}
-            className="group/logo grid aspect-[3/2] place-items-center rounded-[var(--radius-card)] border border-hairline bg-elevated transition-colors duration-300 hover:border-ink/15 hover:bg-canvas"
+            className="group/logo flex flex-col items-center justify-center gap-3 rounded-[var(--radius-card)] border border-hairline bg-elevated px-4 py-6 transition-[transform,border-color,background-color,box-shadow] duration-300 ease-out will-change-transform hover:-translate-y-0.5 hover:border-ink/15 hover:bg-canvas hover:shadow-[var(--shadow-whisper)]"
             style={
               {
                 "--brand": logo.hex ?? "var(--color-ink)",
@@ -26,12 +28,17 @@ export function LogoWall({ logos }: { logos: BrandLogo[] }) {
               } as React.CSSProperties
             }
           >
+            {/* logo ~30% larger than before (28→36px); mark colours + scales on hover */}
             <span
               aria-label={logo.title}
               role="img"
-              className="block h-7 w-7 text-mute transition-[color,transform] duration-300 group-hover/logo:[color:var(--brand)] motion-safe:group-hover/logo:scale-110 dark:group-hover/logo:[color:var(--brand-dark)] sm:h-8 sm:w-8"
+              className="block h-9 w-9 text-mute transition-[color,transform] duration-300 ease-out group-hover/logo:[color:var(--brand)] motion-safe:group-hover/logo:scale-110 dark:group-hover/logo:[color:var(--brand-dark)] sm:h-10 sm:w-10"
             >
               <LogoMark logo={logo} />
+            </span>
+            {/* the name, always visible (replaces the native title tooltip) */}
+            <span className="text-center text-[12.5px] font-medium leading-tight text-mute transition-colors duration-300 group-hover/logo:text-ink">
+              {logo.title}
             </span>
           </div>
         </li>

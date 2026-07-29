@@ -44,36 +44,33 @@ export function Process() {
           </div>
         </Reveal>
 
-        {/* the connected step rail */}
-        <div className="mt-12 grid gap-x-7 gap-y-11 sm:grid-cols-2 lg:grid-cols-4">
+        {/* each step is its own card, lifting on hover */}
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (
-            <Reveal as="div" key={s.no} delay={i * 0.08} className="relative">
-              <div className="flex items-center gap-3">
-                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-[15px] font-semibold text-elevated">
+            <Reveal as="div" key={s.no} delay={i * 0.08}>
+              <div className="group/step flex h-full flex-col rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-[15px] font-semibold text-elevated transition-transform duration-300 group-hover/step:scale-105">
                   {s.no}
                 </span>
-                {i < steps.length - 1 && (
-                  <span className="hidden h-px flex-1 bg-gradient-to-r from-hairline to-transparent lg:block" />
+                <h3 className="mt-5 text-[19px] font-semibold tracking-tight text-ink">
+                  {s.title}
+                </h3>
+                <p className="mt-2 flex-1 text-[14.5px] leading-relaxed text-body">
+                  {s.body}
+                </p>
+                {s.tags.length > 0 && (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {s.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-hairline bg-canvas px-2.5 py-1 text-[11px] text-mute"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
-              <h3 className="mt-5 text-[19px] font-semibold tracking-tight text-ink">
-                {s.title}
-              </h3>
-              <p className="mt-2 text-[14.5px] leading-relaxed text-body">
-                {s.body}
-              </p>
-              {s.tags.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {s.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-hairline bg-elevated px-2.5 py-1 text-[11px] text-mute"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
             </Reveal>
           ))}
         </div>

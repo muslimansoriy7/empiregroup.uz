@@ -3,14 +3,17 @@ import { Footer } from "@/components/Footer";
 import { MobileDock } from "@/components/MobileDock";
 import { TelegramFab } from "@/components/TelegramFab";
 import { Hero } from "@/components/sections/Hero";
+import { StatBand } from "@/components/sections/StatBand";
 import { ProofBar } from "@/components/sections/ProofBar";
 import { Services } from "@/components/sections/Services";
 import { Process } from "@/components/sections/Process";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Stack } from "@/components/sections/Stack";
 import { Brands } from "@/components/sections/Brands";
+import { WhyUs } from "@/components/sections/WhyUs";
 import { Team } from "@/components/sections/Team";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { Credentials } from "@/components/sections/Credentials";
 import { Pricing } from "@/components/sections/Pricing";
 import { Faq } from "@/components/sections/Faq";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -83,16 +86,18 @@ export default async function Home({
       />
       <Nav />
       <main>
-        {/* 10-blok struktura (Vercel + premium hero) */}
         <Hero />
+        <StatBand />
         <ProofBar />
         <Portfolio />
         <Services />
         <Stack />
         <Brands />
         <Process />
+        <WhyUs />
         <Team />
         <Testimonials />
+        <Credentials />
         <Pricing />
         <Faq />
         <CtaBand />

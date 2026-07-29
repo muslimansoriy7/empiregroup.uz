@@ -35,13 +35,15 @@ export function LogoMarquee() {
     >
       <div
         ref={trackRef}
-        className="marquee-track flex w-max items-center gap-x-10 motion-reduce:animate-none sm:gap-x-14"
+        className="marquee-track flex w-max items-center gap-x-4 motion-reduce:animate-none sm:gap-x-6"
       >
         {track.map((logo, i) => (
-          // uniform-WIDTH slot — every logo occupies the same footprint
+          // uniform, fixed-size slot — every logo is centred in the same box so
+          // the gap between marks stays even regardless of how much whitespace a
+          // given logo file carries inside it.
           <div
             key={i}
-            className="flex h-9 w-[124px] shrink-0 items-center justify-center sm:w-[150px]"
+            className="flex h-16 w-[150px] shrink-0 items-center justify-center px-4 sm:w-[176px]"
           >
             <img
               src={logo.src}
@@ -51,7 +53,7 @@ export function LogoMarquee() {
               loading="lazy"
               decoding="async"
               style={{ "--s": logo.scale } as React.CSSProperties}
-              className="logo-scale max-h-full max-w-full select-none object-contain opacity-50 grayscale hover:opacity-100 hover:grayscale-0 dark:opacity-45 dark:invert"
+              className="logo-scale max-h-8 max-w-full select-none object-contain opacity-50 grayscale transition hover:opacity-100 hover:grayscale-0 dark:opacity-45 dark:invert"
             />
           </div>
         ))}

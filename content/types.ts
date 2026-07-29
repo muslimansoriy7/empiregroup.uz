@@ -176,7 +176,7 @@ export type Dict = {
     eyebrow: string;
     title: string;
     subtitle: string;
-    members: { name: string; role: string; photo?: string }[];
+    members: { name: string; role: string; bio: string }[];
     chips: string[];
   };
   process: {

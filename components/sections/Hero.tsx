@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button } from "../Button";
 import { ArrowRight } from "../Icons";
+import { RotatingWord } from "../RotatingWord";
 import { useI18n } from "@/lib/i18n";
 import { useConsult } from "../ConsultModal";
 
@@ -27,7 +28,6 @@ export function Hero() {
   const { open: openConsult } = useConsult();
   const hero = t.hero;
   const [before, after = ""] = hero.title.split("{word}");
-  const word = hero.rotatingWords?.[0] ?? "";
 
   return (
     <section id="top" className="hero-q relative overflow-hidden">
@@ -60,7 +60,7 @@ export function Hero() {
 
         <h1 className="u max-w-3xl text-balance text-4xl font-semibold leading-[1.03] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[64px]" style={{ animationDelay: ".1s" }}>
           {before}
-          <span className="text-ink/55">{word}</span>
+          <RotatingWord words={hero.rotatingWords ?? []} />
           {after}
         </h1>
 

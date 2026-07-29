@@ -259,17 +259,20 @@ export const uz: Dict = {
     subtitle:
       "Tizimingizni qutini emas, tanish odamlar quradi. Shu sababli har birimiz ochiqmiz.",
     members: [
-      { name: "Muslim Ansoriy", role: "Asoschi / CEO", photo: "/founder.webp" },
-      { name: "Jasur Karimov", role: "Backend muhandis" },
-      { name: "Sardor Aliyev", role: "Frontend / mobil" },
-      { name: "Dilnoza Yusupova", role: "Odoo / ERP konsultant" },
-      { name: "Bekzod Rahimov", role: "Loyiha menejeri" },
+      { name: "Muslim Ansoriy", role: "Ta'sischi va CEO · Technical Product Manager", bio: "7+ yil IT va biznes-avtomatlashtirish sohasida. Odoo ERP joriy qilish bo'yicha Markaziy Osiyo va Kavkaz mintaqasi Partner Manager. To'qimachilik, avtomobil va savdo sohalarida 20+ ERP loyihasini boshqargan. Biznes-jarayonlarni raqamlashtirish va mahsulot strategiyasi bo'yicha ixtisoslashgan." },
+      { name: "Abbos Jo'rayev", role: "Hammuassis va Operatsion direktor", bio: "6+ yil IT loyihalarni boshqarish tajribasi. Mijozlar bilan ishlash, loyiha byudjeti va jamoa koordinatsiyasi yo'nalishini olib boradi. Ishlab chiqarish korxonalarida biznes-tahlil va TZ tayyorlash bo'yicha kuchli tajribaga ega." },
+      { name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 yil Python/Odoo development. 30+ custom modul ishlab chiqqan, Odoo 14–18 versiyalari bilan ishlaydi. MES va tashqi tizimlar bilan integratsiya (REST API, XML-RPC) yo'nalishida ixtisoslashgan." },
+      { name: "Dilnoza Yusupova", role: "Biznes-analitik · ERP Consultant", bio: "4 yil biznes-jarayonlarni tahlil qilish va hujjatlashtirish tajribasi. Mijoz ehtiyojlarini texnik talablarga aylantirish, AS-IS / TO-BE modellashtirish va foydalanuvchilarni o'qitish bilan shug'ullanadi." },
+      { name: "Jasurbek Toshmatov", role: "Full-stack Developer", bio: "5 yil web va mobil ilovalar ishlab chiqish tajribasi. React, Next.js, TypeScript, Node.js, PostgreSQL. Korporativ saytlar, B2B portallar va PWA yechimlar ustida ishlaydi." },
+      { name: "Nilufar Karimova", role: "Digital Marketing Lead", bio: "6 yil marketing tajribasi. SEO, kontekst reklama, kontent-strategiya va lead generation. B2B sohasida marketing voronkalarini qurish va CRM bilan bog'lash bo'yicha ixtisoslashgan." },
+      { name: "Bekzod Ergashev", role: "DevOps · System Administrator", bio: "4 yil server infratuzilmasi bilan ishlash tajribasi. Linux, Docker, CI/CD, ma'lumotlar bazasi zaxiralash va xavfsizlik. Odoo serverlarini deploy qilish va optimallashtirish bilan shug'ullanadi." },
+      { name: "Malika Sobirova", role: "UI/UX Designer", bio: "4 yil interfeys dizayni tajribasi. Figma, dizayn tizimlari, foydalanuvchi tadqiqoti. ERP interfeyslari va korporativ web-saytlarni loyihalash yo'nalishida ishlaydi." },
     ],
     chips: [
       "Toshkent · O'zbekiston",
       "2023 yildan beri",
       "“EMPIRE GROUP CORP” MCHJ",
-      "5 kishilik jamoa",
+      "8 kishilik jamoa",
     ],
   },
   founder: {

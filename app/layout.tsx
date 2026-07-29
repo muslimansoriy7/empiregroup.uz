@@ -1,9 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Geist, Geist_Mono } from "next/font/google";
 import { defaultLocale } from "@/content";
 import "./globals.css";
+
+// The real Geist from Google Fonts (self-hosted by next/font at build time),
+// not the geist npm package — this is the exact face vercel.com/font ships.
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+  display: "swap",
+});
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -100,7 +112,7 @@ export default function RootLayout({
     <html
       lang={defaultLocale}
       data-theme="light"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>

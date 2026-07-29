@@ -188,7 +188,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "cv11", "ss01";
+    /* No stylistic-set overrides — render Geist exactly as Google Fonts ships it. */
   }
 
   ::selection {

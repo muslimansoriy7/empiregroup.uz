@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Container } from "../Container";
 import { Reveal } from "../Reveal";
 import { useI18n } from "@/lib/i18n";
@@ -16,10 +15,9 @@ function initials(name: string) {
 }
 
 /**
- * Biz kimmiz — the human-trust block. Larger portrait cards (grayscale at rest,
- * colour + a gentle zoom on hover via the shared `.founder-photo` treatment)
- * plus a strip of legitimacy chips. Real photos drop into /public; members
- * without one show a monogram plate that reveals the same way.
+ * Biz kimmiz — the human-trust block. Each member is a card: a monogram plate
+ * (no stock photos), name, role and a short professional bio. Cards lift on
+ * hover. A strip of legitimacy chips closes the section.
  */
 export function Team() {
   const { t } = useI18n();
@@ -43,33 +41,30 @@ export function Team() {
           </Reveal>
         </div>
 
-        <div className="mx-auto mt-14 grid max-w-4xl grid-cols-2 gap-5 sm:grid-cols-3">
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {team.members.map((m, i) => (
-            <Reveal as="div" key={i} delay={(i % 3) * 0.06}>
-              <div className="group overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated">
-                <div className="relative aspect-[4/5] overflow-hidden bg-canvas">
-                  {m.photo ? (
-                    <Image
-                      src={m.photo}
-                      alt={`${m.name} — ${m.role}`}
-                      fill
-                      sizes="(max-width: 640px) 45vw, 260px"
-                      className="founder-photo object-cover"
-                    />
-                  ) : (
-                    <div className="founder-photo grid h-full w-full place-items-center bg-[radial-gradient(120%_120%_at_30%_20%,var(--color-hairline-soft),var(--color-canvas))] text-[32px] font-semibold tracking-tight text-mute">
-                      {initials(m.name)}
-                    </div>
-                  )}
-                </div>
-                <div className="px-5 py-4">
-                  <b className="block text-[15px] font-semibold text-ink">
-                    {m.name}
-                  </b>
-                  <span className="mt-0.5 block text-[13px] text-mute">
-                    {m.role}
+            <Reveal as="div" key={i} delay={(i % 4) * 0.05}>
+              <div className="group flex h-full flex-col rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-5 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
+                <div className="flex items-center gap-3">
+                  <span
+                    aria-hidden
+                    className="grid size-11 shrink-0 place-items-center rounded-full text-[14px] font-semibold text-white transition-transform duration-300 group-hover:scale-105"
+                    style={{ background: "linear-gradient(135deg,#007cf0,#7928ca)" }}
+                  >
+                    {initials(m.name)}
                   </span>
+                  <div className="min-w-0">
+                    <b className="block truncate text-[15px] font-semibold text-ink">
+                      {m.name}
+                    </b>
+                    <span className="mt-0.5 block text-[12px] leading-snug text-mute">
+                      {m.role}
+                    </span>
+                  </div>
                 </div>
+                <p className="mt-4 text-[13.5px] leading-relaxed text-body">
+                  {m.bio}
+                </p>
               </div>
             </Reveal>
           ))}
