@@ -305,15 +305,22 @@ export const uz: Dict = {
     ],
   },
   whyUs: {
-    eyebrow: "Nega Empire Group",
-    title: "Ishonchli hamkor — boshidan oxirigacha.",
-    items: [
-      { title: "Fixed-scope narx", body: "Kelishilgan narx — yashirin xarajatlarsiz. Nimaga pul to'layotganingizni aniq bilasiz." },
-      { title: "Senior muhandislar", body: "Tajribali jamoa: real ishga tushirilgan tizimlar tajribasi bilan." },
-      { title: "Shaffof muddat", body: "Har sprint natijasi ko'rinadi, jarayonni real vaqtda kuzatasiz." },
-      { title: "To'liq egalik", body: "Kod, dizayn va ma'lumotlar — hammasi sizniki. Hech qanday vendor lock-in yo'q." },
-      { title: "Keyingi yordam", body: "Ishga tushirgandan keyin ham qo'llab-quvvatlash va rivojlantirish." },
-      { title: "Zamonaviy stack", body: "Flutter, React, Next.js, Odoo, AI — zamonaviy va barqaror texnologiyalar." },
+    badge: "Nega Empire Group",
+    titleLead: "Tartibsizlikni o'zingizga yutmang.",
+    titleAccent: "Ishonch bilan quring.",
+    negatives: [
+      "Asosiy muammolar kech chiqadi — doimiy “yong'in o'chirish” rejimi",
+      "Ortiqcha koordinatsiya asosiy jamoaning kuchini yeydi",
+      "Ma'lumotlarga ishonib bo'lmaydi — doimiy qayta tekshirish",
+      "Tarqoq ijrochilar mos kelmaydigan natijalar beradi",
+      "Spec va qarorlar turli tizimlarda ko'milib qoladi",
+    ],
+    positives: [
+      "Bosqichma-bosqich bog'liqlik xaritasi — kutilmagan xarajatlarsiz",
+      "Silliq jamoa uzatmalari — tez va ishga tayyor natijalar",
+      "Jonli validatsiya talablarni barcha bosqichlarda qat'iy ushlaydi",
+      "Barcha ishlar yagona javobgar kontakt orqali boshqariladi",
+      "Markazlashgan kontekst va aniq yozuvlar har qarorni tezlashtiradi",
     ],
   },
   testimonials: {

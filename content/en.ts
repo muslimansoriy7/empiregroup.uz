@@ -305,15 +305,22 @@ export const en: Dict = {
     ],
   },
   whyUs: {
-    eyebrow: "Why Empire Group",
-    title: "A reliable partner — from start to finish.",
-    items: [
-      { title: "Fixed-scope pricing", body: "An agreed price — no hidden costs. You know exactly what you're paying for." },
-      { title: "Senior engineers", body: "An experienced team: with a track record of systems shipped to production." },
-      { title: "Transparent timeline", body: "Every sprint's result is visible; you follow the process in real time." },
-      { title: "Full ownership", body: "Code, design and data — all yours. No vendor lock-in whatsoever." },
-      { title: "Post-launch support", body: "Support and further development even after launch." },
-      { title: "Modern stack", body: "Flutter, React, Next.js, Odoo, AI — modern and stable technologies." },
+    badge: "Why Empire Group",
+    titleLead: "Stop absorbing the chaos.",
+    titleAccent: "Run with confidence.",
+    negatives: [
+      "Reactive firefighting when foundational issues surface too late",
+      "Bloated coordination overhead drains your core team",
+      "Constant re-verification because the data can't be trusted",
+      "Fragmented vendors produce mismatched deliverables",
+      "Scattered specs and decisions buried across siloed systems",
+    ],
+    positives: [
+      "Layered dependency maps eliminate costly surprises at every phase",
+      "Streamlined handoffs deliver production-ready outcomes fast",
+      "Live validation loops keep requirements locked across all stages",
+      "One accountable contact runs the entire engagement",
+      "Centralized context and clear records accelerate every decision",
     ],
   },
   testimonials: {

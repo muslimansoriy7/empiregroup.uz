@@ -187,9 +187,11 @@ export type Dict = {
     steps: { no: string; title: string; body: string; tags: string[] }[];
   };
   whyUs: {
-    eyebrow: string;
-    title: string;
-    items: { title: string; body: string }[];
+    badge: string;
+    titleLead: string;
+    titleAccent: string;
+    negatives: string[];
+    positives: string[];
   };
   testimonials: {
     eyebrow: string;
