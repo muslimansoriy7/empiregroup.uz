@@ -1,17 +1,16 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useSectionHref } from "@/lib/section-href";
 
 /**
  * Footer — the "Kresna"-style video/watermark footer, adapted to Empire Group.
- * A self-contained light block (its own colours, so it reads the same in either
- * site theme). Primary type is Geist (--font-geist-sans); the handwritten
- * accents use Caveat (--font-caveat, self-hosted). The left card plays the
- * supplied video with a rich gradient fallback if the clip is unavailable; the
- * giant "Empire" watermark is fitted to the wrapper width via getBBox().
+ * Geist throughout (no accent face). The left card plays the supplied video
+ * with a rich gradient fallback; the giant "Empire" watermark is fitted to the
+ * wrapper width via getBBox(). Theme-aware: the light card + watermark invert
+ * for dark mode.
  */
 const VIDEO_SRC =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260503_104800_bc43ae09-f494-43e3-97d7-2f8c1692cfd7.mp4";
@@ -44,9 +43,6 @@ export function Footer() {
   const sectionHref = useSectionHref();
   const cols = t.footer.columns.slice(0, 2);
 
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
   const svgRef = useRef<SVGSVGElement>(null);
   const textRef = useRef<SVGTextElement>(null);
 
@@ -75,66 +71,50 @@ export function Footer() {
     };
   }, []);
 
-  const onSubscribe = () => {
-    if (/.+@.+\..+/.test(email.trim())) setSubscribed(true);
-  };
-
   return (
     <section className="egf">
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          .egf{background:#ffffff;padding:48px 24px 40px;color:#2d3148;font-family:var(--font-geist-sans),sans-serif}
+          .egf{background:var(--color-canvas);padding:48px 24px 40px;color:#2d3148;font-family:var(--font-geist-sans),sans-serif}
           .egf *{box-sizing:border-box}
-          .egf .cav{font-family:var(--font-caveat),cursive}
           .egf .footer-wrapper{max-width:1150px;margin:0 auto;display:grid;grid-template-columns:350px 1fr;gap:16px;align-items:stretch}
 
           .egf .footer-left{position:relative;min-height:340px;border-radius:28px;padding:32px;overflow:hidden;box-shadow:0 12px 40px rgba(21,76,189,.25);background:linear-gradient(140deg,#1e4fc0 0%,#153a8f 55%,#0a1020 100%);display:flex;flex-direction:column;justify-content:space-between}
           .egf .footer-left-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
-          .egf .footer-logo{display:flex;gap:10px;align-items:center;position:relative;z-index:1}
-          .egf .footer-logo-mark{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.85);display:grid;place-items:center;font-size:16px;font-weight:700;color:#fff;letter-spacing:-.02em}
-          .egf .footer-logo-name{font-size:22px;font-weight:700;color:#fff;letter-spacing:-.02em}
+          .egf .footer-logo{position:relative;z-index:1}
+          .egf .footer-logo-img{display:block;height:26px;width:calc(26px * 2186 / 429);background-color:#fff;-webkit-mask:url(/logo/logotype-black.svg) left center/contain no-repeat;mask:url(/logo/logotype-black.svg) left center/contain no-repeat}
           .egf .footer-tagline-container{margin-top:auto;margin-bottom:28px;position:relative;z-index:1}
           .egf .footer-tagline{font-size:19px;font-weight:400;color:#fff;line-height:1.45}
           .egf .footer-tagline span{color:rgba(255,255,255,.65)}
           .egf .footer-social-row{display:flex;justify-content:space-between;align-items:center;gap:12px;position:relative;z-index:1}
-          .egf .footer-social-label{font-size:18px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.3px}
+          .egf .footer-social-label{font-size:15px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.2px}
           .egf .footer-social-icons{display:flex;gap:7px}
           .egf .social-icon{width:36px;height:36px;border-radius:9px;background:#0e1014;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.2);transition:background .2s,transform .15s,box-shadow .2s}
           .egf .social-icon svg{width:15px;height:15px;fill:#fff}
           .egf .social-icon:hover{background:#000;transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.45),0 3px 8px rgba(0,0,0,.3)}
 
-          .egf .footer-right{background:#f0f1f5;border-radius:28px;padding:40px;overflow:visible;box-shadow:0 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;justify-content:space-between;position:relative}
-          .egf .footer-lucky-graphic{position:absolute;top:-36px;right:40px;z-index:10;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-          .egf .lucky-cube{width:96px;height:96px;border-radius:22px;transform:rotate(-10deg);background:linear-gradient(135deg,#5b9ffb 0%,#1e5dd7 55%,#1448be 100%);box-shadow:inset 3px 3px 8px rgba(255,255,255,.35),inset -3px -3px 12px rgba(0,0,0,.18),8px 14px 28px rgba(20,72,200,.35);display:grid;place-items:center}
-          .egf .lucky-cube-mark{font-size:42px;font-weight:700;color:#fff;letter-spacing:-.04em;transform:rotate(10deg);text-shadow:0 3px 6px rgba(0,0,0,.25);line-height:1}
-          .egf .lucky-text-row{display:flex;gap:6px;align-items:center;transform:rotate(-4deg);margin-top:4px}
-          .egf .lucky-arrow{width:22px;height:22px;color:#9ca3af}
-          .egf .lucky-arrow svg{width:100%;height:100%}
-          .egf .lucky-arrow path{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-          .egf .lucky-text{font-size:21px;font-weight:600;color:#9ca3af;white-space:nowrap}
-
-          .egf .footer-right-top{padding-top:8px}
+          .egf .footer-right{background:#f0f1f5;border-radius:28px;padding:40px;box-shadow:0 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;justify-content:space-between;position:relative}
+          .egf .footer-right-top{padding-top:4px}
           .egf .footer-nav-cols{display:flex;gap:72px}
-          .egf .footer-col-title{font-size:24px;font-weight:600;font-style:italic;color:#9ca3af;margin-bottom:18px}
+          .egf .footer-col-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#9ca3af;margin-bottom:18px}
           .egf .footer-col a{display:block;font-size:14px;font-weight:600;color:#111827;margin-bottom:14px;text-decoration:none;transition:color .2s}
           .egf .footer-col a:hover{color:#1f65d6}
 
-          .egf .footer-bottom{display:flex;align-items:flex-end;justify-content:space-between;margin-top:48px;gap:24px;flex-wrap:wrap}
+          .egf .footer-bottom{margin-top:48px}
           .egf .footer-copyright{font-size:12.5px;font-weight:500;color:#9ca3af}
-          .egf .footer-cta-mini{display:flex;flex-direction:column;gap:14px}
-          .egf .footer-cta-mini h4{font-size:15px;font-weight:400;color:#6b7280;line-height:1.45}
-          .egf .footer-cta-mini h4 strong{display:block;font-size:19px;font-weight:700;color:#111827}
-          .egf .footer-subscribe-row{display:flex;width:310px;max-width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:5px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-          .egf .footer-subscribe-row input{flex:1;min-width:0;padding:11px 14px;background:transparent;border:0;outline:none;font-family:var(--font-geist-sans),sans-serif;font-size:13.5px;color:#111827}
-          .egf .footer-subscribe-row input::placeholder{color:#9ca3af}
-          .egf .footer-subscribe-row button{padding:11px 22px;background:#111214;color:#fff;font-family:var(--font-geist-sans),sans-serif;font-size:13.5px;font-weight:600;border:0;border-radius:8px;cursor:pointer;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.28),0 2px 8px rgba(0,0,0,.15);transition:background .2s,box-shadow .2s,transform .15s}
-          .egf .footer-subscribe-row button:hover{background:#000;transform:translateY(-1px);box-shadow:0 10px 26px rgba(0,0,0,.4),0 3px 10px rgba(0,0,0,.2)}
-          .egf .footer-subscribed{font-size:13.5px;font-weight:600;color:#1f65d6;padding:6px 2px}
 
           .egf .footer-watermark{max-width:1150px;margin:-60px auto 0;pointer-events:none;user-select:none;position:relative;z-index:0;line-height:0}
           .egf .footer-watermark svg{display:block;width:100%;height:auto;overflow:visible}
           .egf .footer-watermark text{font-family:var(--font-geist-sans),sans-serif;font-weight:700;letter-spacing:-.03em;fill:rgba(0,0,0,.04)}
+
+          /* dark mode */
+          [data-theme="dark"] .egf .footer-right{background:#141619;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+          [data-theme="dark"] .egf .footer-col a{color:#e8eaed}
+          [data-theme="dark"] .egf .footer-col a:hover{color:#5b9ffb}
+          [data-theme="dark"] .egf .footer-col-title{color:#7d818c}
+          [data-theme="dark"] .egf .footer-copyright{color:#7d818c}
+          [data-theme="dark"] .egf .footer-watermark text{fill:rgba(255,255,255,.05)}
 
           @media(max-width:860px){
             .egf{padding-bottom:104px}
@@ -144,11 +124,6 @@ export function Footer() {
           @media(max-width:560px){
             .egf .footer-right{padding:24px}
             .egf .footer-nav-cols{gap:40px}
-            .egf .footer-bottom{flex-direction:column;align-items:flex-start;gap:24px}
-            .egf .footer-subscribe-row{width:100%}
-            .egf .footer-lucky-graphic{right:12px;top:-28px}
-            .egf .lucky-cube{width:72px;height:72px}
-            .egf .lucky-cube-mark{font-size:32px}
           }`,
         }}
       />
@@ -170,10 +145,9 @@ export function Footer() {
             <source src={VIDEO_SRC} type="video/mp4" />
           </video>
 
-          <div className="footer-logo">
-            <span className="footer-logo-mark">E</span>
-            <span className="footer-logo-name">Empire Group</span>
-          </div>
+          <a href="#top" className="footer-logo" aria-label="Empire Group">
+            <span className="footer-logo-img" role="img" aria-label="Empire Group" />
+          </a>
 
           <div className="footer-tagline-container">
             <p className="footer-tagline">
@@ -184,7 +158,7 @@ export function Footer() {
           </div>
 
           <div className="footer-social-row">
-            <span className="footer-social-label cav">Bog&apos;lanib turing!</span>
+            <span className="footer-social-label">Bog&apos;lanib turing</span>
             <div className="footer-social-icons">
               {SOCIALS.map((s) => (
                 <a
@@ -206,28 +180,11 @@ export function Footer() {
 
         {/* RIGHT — light card */}
         <div className="footer-right">
-          {/* floating lucky badge */}
-          <div className="footer-lucky-graphic" aria-hidden>
-            <div className="lucky-cube">
-              <span className="lucky-cube-mark">E</span>
-            </div>
-            <div className="lucky-text-row">
-              <span className="lucky-arrow">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 20 C 6 14, 10 9, 18 5" />
-                  <path d="M18 5 L 12 5" />
-                  <path d="M18 5 L 18 11" />
-                </svg>
-              </span>
-              <span className="lucky-text cav">Boshlaymizmi?</span>
-            </div>
-          </div>
-
           <div className="footer-right-top">
             <div className="footer-nav-cols">
               {cols.map((col) => (
                 <div className="footer-col" key={col.title}>
-                  <div className="footer-col-title cav">{col.title}</div>
+                  <div className="footer-col-title">{col.title}</div>
                   {col.links.map((link) => (
                     <a key={link.label} href={sectionHref(link.href)}>
                       {link.label}
@@ -240,29 +197,6 @@ export function Footer() {
 
           <div className="footer-bottom">
             <div className="footer-copyright">{t.footer.copyright}</div>
-            <div className="footer-cta-mini">
-              <h4>
-                AI tez rivojlanadi.
-                <strong>Empire bilan oldinda turing.</strong>
-              </h4>
-              {subscribed ? (
-                <div className="footer-subscribed">Rahmat! Tez orada bog&apos;lanamiz. ✓</div>
-              ) : (
-                <div className="footer-subscribe-row">
-                  <input
-                    type="email"
-                    placeholder="Email manzilingiz"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && onSubscribe()}
-                    aria-label="Email manzilingiz"
-                  />
-                  <button type="button" onClick={onSubscribe}>
-                    Obuna
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
