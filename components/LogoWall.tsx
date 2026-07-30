@@ -20,7 +20,7 @@ export function LogoWall({ logos }: { logos: BrandLogo[] }) {
       {logos.map((logo) => (
         <li key={logo.title}>
           <div
-            className="group/logo flex flex-col items-center justify-center gap-3 rounded-[var(--radius-card)] border border-hairline bg-elevated px-4 py-6 transition-[transform,border-color,background-color,box-shadow] duration-500 ease-out will-change-transform hover:-translate-y-0.5 hover:border-ink/15 hover:bg-canvas hover:shadow-[var(--shadow-whisper)]"
+            className="group/logo flex flex-col items-center justify-center gap-3 rounded-[var(--radius-card)] border border-hairline bg-elevated px-4 py-6 transition-[transform,border-color,background-color,box-shadow] duration-[400ms] ease-in-out will-change-transform hover:-translate-y-0.5 hover:border-ink/15 hover:bg-canvas hover:shadow-[var(--shadow-whisper)]"
             style={
               {
                 "--brand": logo.hex ?? "var(--color-ink)",
@@ -32,12 +32,12 @@ export function LogoWall({ logos }: { logos: BrandLogo[] }) {
             <span
               aria-label={logo.title}
               role="img"
-              className="block h-9 w-9 text-mute transition-[color,transform] duration-500 ease-out group-hover/logo:[color:var(--brand)] motion-safe:group-hover/logo:scale-105 dark:group-hover/logo:[color:var(--brand-dark)] sm:h-10 sm:w-10"
+              className="block h-9 w-9 text-mute transition-[color,transform] duration-[400ms] ease-in-out group-hover/logo:[color:var(--brand)] motion-safe:group-hover/logo:scale-110 dark:group-hover/logo:[color:var(--brand-dark)] sm:h-10 sm:w-10"
             >
               <LogoMark logo={logo} />
             </span>
             {/* the name, always visible (replaces the native title tooltip) */}
-            <span className="text-center text-[12.5px] font-medium leading-tight text-mute transition-colors duration-500 group-hover/logo:text-ink">
+            <span className="text-center text-[12.5px] font-medium leading-tight text-mute transition-colors duration-[400ms] ease-in-out group-hover/logo:text-ink">
               {logo.title}
             </span>
           </div>
@@ -77,10 +77,10 @@ function AmazonMark() {
 function MicrosoftMark() {
   return (
     <svg viewBox="0 0 24 24" className="h-full w-full" aria-hidden>
-      <rect x="1" y="1" width="10" height="10" className="fill-current transition-colors duration-500 group-hover/logo:fill-[#F25022]" />
-      <rect x="13" y="1" width="10" height="10" className="fill-current transition-colors duration-500 group-hover/logo:fill-[#7FBA00]" />
-      <rect x="1" y="13" width="10" height="10" className="fill-current transition-colors duration-500 group-hover/logo:fill-[#00A4EF]" />
-      <rect x="13" y="13" width="10" height="10" className="fill-current transition-colors duration-500 group-hover/logo:fill-[#FFB900]" />
+      <rect x="1" y="1" width="10" height="10" className="fill-current transition-colors duration-[400ms] ease-in-out group-hover/logo:fill-[#F25022]" />
+      <rect x="13" y="1" width="10" height="10" className="fill-current transition-colors duration-[400ms] ease-in-out group-hover/logo:fill-[#7FBA00]" />
+      <rect x="1" y="13" width="10" height="10" className="fill-current transition-colors duration-[400ms] ease-in-out group-hover/logo:fill-[#00A4EF]" />
+      <rect x="13" y="13" width="10" height="10" className="fill-current transition-colors duration-[400ms] ease-in-out group-hover/logo:fill-[#FFB900]" />
     </svg>
   );
 }

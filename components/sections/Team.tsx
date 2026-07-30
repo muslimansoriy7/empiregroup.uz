@@ -47,7 +47,7 @@ export function Team() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {team.members.map((m, i) => (
             <Reveal as="div" key={i} delay={(i % 4) * 0.05}>
-              <div className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
+              <div className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-[transform,border-color,box-shadow] duration-[400ms] ease-in-out will-change-transform hover:-translate-y-1 hover:scale-[1.02] hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
                 {/* portrait slot — real photo when provided, monogram placeholder until then */}
                 <div className="relative aspect-[4/5] overflow-hidden bg-canvas">
                   {m.photo ? (

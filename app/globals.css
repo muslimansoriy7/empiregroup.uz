@@ -596,9 +596,11 @@ html.lenis body {
 .founder-photo {
   filter: grayscale(1);
   transform: scale(1);
+  /* colour (filter) and zoom (transform) share one timing so the reveal and the
+     scale move together, not one lagging behind the other. */
   transition:
-    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 400ms ease-in-out,
+    filter 400ms ease-in-out;
   will-change: transform, filter;
 }
 .group:hover .founder-photo {
