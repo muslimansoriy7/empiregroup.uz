@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Caveat } from "next/font/google";
 import { defaultLocale } from "@/content";
 import "./globals.css";
 
@@ -14,6 +14,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
+  display: "swap",
+});
+// Caveat — handwritten accent, used ONLY for the footer's decorative flourishes
+// (self-hosted by next/font, no external request). Everything else stays Geist.
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -112,7 +120,7 @@ export default function RootLayout({
     <html
       lang={defaultLocale}
       data-theme="light"
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable}`}
       suppressHydrationWarning
     >
       <head>
