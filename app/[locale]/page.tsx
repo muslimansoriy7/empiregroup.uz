@@ -10,7 +10,6 @@ import { Process } from "@/components/sections/Process";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Stack } from "@/components/sections/Stack";
 import { Brands } from "@/components/sections/Brands";
-import { WhyUs } from "@/components/sections/WhyUs";
 import { Team } from "@/components/sections/Team";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Credentials } from "@/components/sections/Credentials";
@@ -94,7 +93,6 @@ export default async function Home({
         <Stack />
         <Brands />
         <Process />
-        <WhyUs />
         <Team />
         <Testimonials />
         <Credentials />
