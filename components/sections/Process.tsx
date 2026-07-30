@@ -48,8 +48,8 @@ export function Process() {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (
             <Reveal as="div" key={s.no} delay={i * 0.08}>
-              <div className="group/step flex h-full flex-col rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
-                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-[15px] font-semibold text-elevated transition-transform duration-300 group-hover/step:scale-105">
+              <div className="group/step flex h-full flex-col rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6 transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-[15px] font-semibold text-elevated transition-transform duration-500 group-hover/step:scale-105">
                   {s.no}
                 </span>
                 <h3 className="mt-5 text-[19px] font-semibold tracking-tight text-ink">

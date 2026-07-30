@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Container } from "../Container";
 import { Reveal } from "../Reveal";
 import { useI18n } from "@/lib/i18n";
@@ -15,9 +16,11 @@ function initials(name: string) {
 }
 
 /**
- * Biz kimmiz — the human-trust block. Each member is a card: a monogram plate
- * (no stock photos), name, role and a short professional bio. Cards lift on
- * hover. A strip of legitimacy chips closes the section.
+ * Biz kimmiz — the human-trust block. Each card leads with a portrait slot
+ * (a real photo drops into `photo`; until then a monogram placeholder holds the
+ * space), followed by name, role and a short professional bio. Cards lift
+ * gently on hover; the portrait reveals colour + a soft zoom via the shared
+ * `.founder-photo` treatment.
  */
 export function Team() {
   const { t } = useI18n();
@@ -44,27 +47,39 @@ export function Team() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {team.members.map((m, i) => (
             <Reveal as="div" key={i} delay={(i % 4) * 0.05}>
-              <div className="group flex h-full flex-col rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-5 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
-                <div className="flex items-center gap-3">
-                  <span
-                    aria-hidden
-                    className="grid size-11 shrink-0 place-items-center rounded-full text-[14px] font-semibold text-white transition-transform duration-300 group-hover:scale-105"
-                    style={{ background: "linear-gradient(135deg,#007cf0,#7928ca)" }}
-                  >
-                    {initials(m.name)}
-                  </span>
-                  <div className="min-w-0">
-                    <b className="block truncate text-[15px] font-semibold text-ink">
-                      {m.name}
-                    </b>
-                    <span className="mt-0.5 block text-[12px] leading-snug text-mute">
-                      {m.role}
-                    </span>
-                  </div>
+              <div className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card-lg)] border border-hairline bg-elevated transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:border-ink/15 hover:shadow-[var(--shadow-float)]">
+                {/* portrait slot — real photo when provided, monogram placeholder until then */}
+                <div className="relative aspect-[4/5] overflow-hidden bg-canvas">
+                  {m.photo ? (
+                    <Image
+                      src={m.photo}
+                      alt={`${m.name} — ${m.role}`}
+                      fill
+                      sizes="(max-width: 640px) 45vw, 300px"
+                      className="founder-photo object-cover"
+                    />
+                  ) : (
+                    <div className="founder-photo grid h-full w-full place-items-center bg-[radial-gradient(120%_120%_at_30%_20%,var(--color-hairline-soft),var(--color-canvas))]">
+                      <span
+                        className="grid size-16 place-items-center rounded-full text-[22px] font-semibold text-white"
+                        style={{ background: "linear-gradient(135deg,#007cf0,#7928ca)" }}
+                      >
+                        {initials(m.name)}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <p className="mt-4 text-[13.5px] leading-relaxed text-body">
-                  {m.bio}
-                </p>
+
+                {/* details */}
+                <div className="flex flex-1 flex-col p-5">
+                  <b className="block text-[15px] font-semibold text-ink">{m.name}</b>
+                  <span className="mt-0.5 block text-[12px] leading-snug text-mute">
+                    {m.role}
+                  </span>
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-body">
+                    {m.bio}
+                  </p>
+                </div>
               </div>
             </Reveal>
           ))}
