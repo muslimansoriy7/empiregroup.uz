@@ -10,6 +10,16 @@ const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: projectRoot,
   images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
+  async redirects() {
+    // The two hand-built bespoke articles were removed in favour of the unified
+    // CMS blog template; send their old URLs to the blog index so indexed links
+    // don't 404.
+    const gone = ["transformatsiya-zanjiri", "odoo-joriy-qilish-bosqichlari"];
+    return gone.flatMap((slug) => [
+      { source: `/blog/${slug}`, destination: "/blog", permanent: true },
+      { source: `/:locale(ru|en)/blog/${slug}`, destination: "/:locale/blog", permanent: true },
+    ]);
+  },
   async headers() {
     return [
       {
