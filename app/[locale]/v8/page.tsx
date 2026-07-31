@@ -462,7 +462,7 @@ const CSS_STR = `
 .vg-code-bar em{margin-left:8px;font-style:normal;}
 .vg-code-bar .d{width:10px;height:10px;border-radius:9999px;background:var(--hair);}
 .vg-code pre{margin:0;padding:16px;font-family:var(--mono);font-size:13px;line-height:1.9;color:var(--ink);white-space:pre-wrap;}
-.vg-code pre span{display:block;}
+.vg-code pre > span{display:block;}
 .c-key{color:#7928ca;}.c-str{color:#0070f3;}.c-ok{color:#00b37e;}.c-mut{color:var(--mute);}
 
 /* logo strip */
