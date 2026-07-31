@@ -934,17 +934,17 @@ const CSS = `
   transition:transform .2s cubic-bezier(0.16,1,0.3,1),background .2s ease,box-shadow .2s ease,color .2s ease;
   white-space:nowrap;text-decoration:none;
 }
-.vx-btn-filled{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian);}
-.vx-btn-filled:hover{background:#000;transform:translateY(-2px);}
-.vx-btn-ghost{background:transparent;color:var(--charcoal);box-shadow:0 0 0 1px var(--hair);}
-.vx-btn-ghost:hover{color:var(--obsidian);box-shadow:0 0 0 1px var(--obsidian);transform:translateY(-2px);}
-.vx-btn-pill{
+.vx .vx-btn-filled{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian);}
+.vx .vx-btn-filled:hover{background:#000;transform:translateY(-2px);}
+.vx .vx-btn-ghost{background:transparent;color:var(--charcoal);box-shadow:0 0 0 1px var(--hair);}
+.vx .vx-btn-ghost:hover{color:var(--obsidian);box-shadow:0 0 0 1px var(--obsidian);transform:translateY(-2px);}
+.vx .vx-btn-pill{
   background:var(--obsidian);color:#fff;border-radius:9999px;padding:8px 16px;
   box-shadow:0 0 0 1px var(--obsidian);
 }
-.vx-btn-pill:hover{background:#000;transform:translateY(-1px);}
-.vx-btn-invert{background:var(--white);color:var(--obsidian);box-shadow:0 0 0 1px rgba(255,255,255,.2);}
-.vx-btn-invert:hover{background:var(--paper);transform:translateY(-2px);}
+.vx .vx-btn-pill:hover{background:#000;transform:translateY(-1px);}
+.vx .vx-btn-invert{background:var(--white);color:var(--obsidian);box-shadow:0 0 0 1px rgba(255,255,255,.2);}
+.vx .vx-btn-invert:hover{background:var(--paper);transform:translateY(-2px);}
 .vx-btn-block{width:100%;margin-top:auto;}
 .vx-btn-lg{padding:13px 26px;font-size:15px;}
 
