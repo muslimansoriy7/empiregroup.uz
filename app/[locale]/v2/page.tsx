@@ -1204,8 +1204,11 @@ const CSS = `
 .ghd .foot-made{font-family:var(--mono);font-size:12px;}
 
 /* ---------- scroll reveal ---------- */
-.ghd .reveal-up{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(0.16,1,0.3,1),transform .6s cubic-bezier(0.16,1,0.3,1);}
-.ghd .reveal-up.in{opacity:1 !important;transform:none !important;}
+/* Content is visible by default (opacity:1) so it can never get stuck hidden;
+   the entrance is a subtle upward slide that resolves when .in is added, and a
+   gentle fade layered on top that also starts near-visible. */
+.ghd .reveal-up{opacity:1;transform:translateY(16px);transition:opacity .6s cubic-bezier(0.16,1,0.3,1),transform .6s cubic-bezier(0.16,1,0.3,1);will-change:transform;}
+.ghd .reveal-up.in{transform:none;}
 
 /* ---------- responsive ---------- */
 @media (max-width:960px){
