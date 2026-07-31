@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import CoverUpload from '@/components/admin/CoverUpload';
+import BodyImageUpload from '@/components/admin/BodyImageUpload';
 
 const CATEGORIES = ['GEO', 'SEO', 'ERP', 'AI', 'Performance', 'Web', 'Mobile', 'Case'];
 
@@ -30,13 +32,14 @@ export default function PostForm({ post = {}, action, error }) {
 
         <div className="field"><label>Slug (URL) — bo‘sh qoldirsangiz avto</label>
           <input name="slug" defaultValue={v('slug')} placeholder="masalan: geo-nima-uchun-muhim" /></div>
-        <div className="field"><label>Muqova rasm URL (ixtiyoriy)</label>
-          <input name="cover_url" defaultValue={v('cover_url')} placeholder="https://..." /></div>
+        <CoverUpload defaultUrl={v('cover_url')} />
 
         <h3 style={{ fontFamily: 'var(--display)', margin: '20px 0 10px' }}>🇺🇿 O‘zbekcha</h3>
         <div className="field"><label>Sarlavha (UZ)</label><input name="title_uz" defaultValue={v('title_uz')} required /></div>
         <div className="field"><label>Qisqa tavsif (UZ)</label><textarea name="excerpt_uz" defaultValue={v('excerpt_uz')} style={{ minHeight: 70 }} /></div>
-        <div className="field"><label>Matn — Markdown (UZ)</label><textarea name="body_uz" defaultValue={v('body_uz')} /></div>
+        <div className="field"><label>Matn — Markdown (UZ)</label>
+          <BodyImageUpload />
+          <textarea name="body_uz" defaultValue={v('body_uz')} /></div>
         <div className="grid2">
           <div className="field"><label>SEO title (UZ)</label><input name="seo_title_uz" defaultValue={v('seo_title_uz')} /></div>
           <div className="field"><label>SEO description (UZ)</label><input name="seo_desc_uz" defaultValue={v('seo_desc_uz')} /></div>
