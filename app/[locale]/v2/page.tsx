@@ -341,7 +341,7 @@ export default function V2Page() {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const els = Array.from(root.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const els = Array.from(root.querySelectorAll<HTMLElement>(".reveal-up"));
 
     const reduce =
       typeof window !== "undefined" &&
@@ -418,20 +418,20 @@ export default function V2Page() {
           <span className="halo halo-hero" aria-hidden="true" />
           <span className="halo halo-hero2" aria-hidden="true" />
           <div className="wrap hero-inner">
-            <p className="mono-label reveal-up" data-reveal>AI &amp; CUSTOM SOFTWARE DEVELOPMENT</p>
-            <h1 className="display reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+            <p className="mono-label reveal-up">AI &amp; CUSTOM SOFTWARE DEVELOPMENT</p>
+            <h1 className="display reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
               Biznesni raqamlashtiramiz —<br />
               <span className="display-soft">g'oyadan ishga tushgan mahsulotgacha.</span>
             </h1>
-            <p className="hero-sub reveal-up" data-reveal style={{ transitionDelay: "120ms" } as CSSProperties}>
+            <p className="hero-sub reveal-up" style={{ transitionDelay: "120ms" } as CSSProperties}>
               Murakkab ichki jarayonlarni ERP, AI, Web va App yechimlari orqali raqamlashtiramiz.
               G'oyadan tayyor tizim/mahsulotgacha — atigi 2–3 oyda.
             </p>
-            <div className="hero-cta reveal-up" data-reveal style={{ transitionDelay: "180ms" } as CSSProperties}>
+            <div className="hero-cta reveal-up" style={{ transitionDelay: "180ms" } as CSSProperties}>
               <a href="#cta" className="btn-green btn-lg">Loyihani boshlash</a>
               <a href="#cases" className="btn-outline btn-lg">Ishlarni ko'rish</a>
             </div>
-            <div className="hero-mock reveal-up" data-reveal style={{ transitionDelay: "240ms" } as CSSProperties}>
+            <div className="hero-mock reveal-up" style={{ transitionDelay: "240ms" } as CSSProperties}>
               <CrmMock />
             </div>
           </div>
@@ -440,8 +440,8 @@ export default function V2Page() {
         {/* ---------------- PROOF ---------------- */}
         <section className="section proof-sec">
           <div className="wrap">
-            <p className="mono-label center reveal-up" data-reveal>ISHONCH BILAN QURAMIZ</p>
-            <div className="proof-row reveal-up" data-reveal style={{ transitionDelay: "80ms" } as CSSProperties}>
+            <p className="mono-label center reveal-up">ISHONCH BILAN QURAMIZ</p>
+            <div className="proof-row reveal-up" style={{ transitionDelay: "80ms" } as CSSProperties}>
               {PROOF.map((p) => (
                 <span key={p} className="proof-logo">{p}</span>
               ))}
@@ -454,11 +454,11 @@ export default function V2Page() {
           <span className="halo halo-soft halo-left" aria-hidden="true" />
           <div className="wrap">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>IMKONIYATLAR</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">IMKONIYATLAR</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 Bir platforma — to'liq raqamlashtirish.
               </h2>
-              <p className="sec-sub reveal-up" data-reveal style={{ transitionDelay: "120ms" } as CSSProperties}>
+              <p className="sec-sub reveal-up" style={{ transitionDelay: "120ms" } as CSSProperties}>
                 Web, mobil, ERP va AI — bitta jamoa, bitta arxitektura. Har bir yechim biznes jarayoningizga moslashtiriladi.
               </p>
             </div>
@@ -467,7 +467,7 @@ export default function V2Page() {
                 <article
                   key={c.title}
                   className="card cap-card reveal-up"
-                  data-reveal
+                 
                   style={{ transitionDelay: `${i * 70}ms` } as CSSProperties}
                 >
                   <span className="cap-icon">{c.icon}</span>
@@ -484,12 +484,12 @@ export default function V2Page() {
         <section className="section">
           <div className="wrap">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>YECHIMLAR</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">YECHIMLAR</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 Har bir yo'nalish uchun tayyor.
               </h2>
             </div>
-            <div className="tab-row reveal-up" data-reveal role="tablist" aria-label="Yechimlar">
+            <div className="tab-row reveal-up" role="tablist" aria-label="Yechimlar">
               {TABS.map((t, i) => (
                 <button
                   key={t.key}
@@ -502,7 +502,7 @@ export default function V2Page() {
                 </button>
               ))}
             </div>
-            <div className="card show-card reveal-up" data-reveal style={{ transitionDelay: "80ms" } as CSSProperties}>
+            <div className="card show-card reveal-up" style={{ transitionDelay: "80ms" } as CSSProperties}>
               <div className="show-copy">
                 <h3 className="show-title">{TABS[tab].heading}</h3>
                 <ul className="show-list">
@@ -522,7 +522,7 @@ export default function V2Page() {
         {/* ---------------- STATS ---------------- */}
         <section className="section">
           <div className="wrap">
-            <div className="stats card reveal-up" data-reveal>
+            <div className="stats card reveal-up">
               {STATS.map((s, i) => (
                 <div key={s.l} className="stat" style={{ transitionDelay: `${i * 60}ms` } as CSSProperties}>
                   <span className="stat-n">{s.n}</span>
@@ -538,8 +538,8 @@ export default function V2Page() {
           <span className="halo halo-soft halo-right" aria-hidden="true" />
           <div className="wrap">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>JARAYON</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">JARAYON</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 G'oyadan mahsulotgacha — 4 bosqich.
               </h2>
             </div>
@@ -548,7 +548,7 @@ export default function V2Page() {
                 <article
                   key={p.n}
                   className="card proc-card reveal-up"
-                  data-reveal
+                 
                   style={{ transitionDelay: `${i * 70}ms` } as CSSProperties}
                 >
                   <span className="proc-n">{p.n}</span>
@@ -569,8 +569,8 @@ export default function V2Page() {
         <section className="section" id="cases">
           <div className="wrap">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>PORTFOLIO</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">PORTFOLIO</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 Ishlarimiz.
               </h2>
             </div>
@@ -579,7 +579,7 @@ export default function V2Page() {
                 <article
                   key={c.title}
                   className="card case-card reveal-up"
-                  data-reveal
+                 
                   style={{ transitionDelay: `${(i % 2) * 80}ms` } as CSSProperties}
                 >
                   <div className="case-thumb" aria-hidden="true">
@@ -611,8 +611,8 @@ export default function V2Page() {
           <span className="halo halo-soft halo-left" aria-hidden="true" />
           <div className="wrap">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>SHARHLAR</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">SHARHLAR</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 Mijozlar nima deydi.
               </h2>
             </div>
@@ -621,7 +621,7 @@ export default function V2Page() {
                 <figure
                   key={t.name}
                   className="card quote-card reveal-up"
-                  data-reveal
+                 
                   style={{ transitionDelay: `${i * 70}ms` } as CSSProperties}
                 >
                   <div className="stars" aria-label="5 yulduz">
@@ -647,11 +647,11 @@ export default function V2Page() {
         <section className="section" id="pricing">
           <div className="wrap">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>NARXLAR</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">NARXLAR</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 Shaffof narxlar.
               </h2>
-              <p className="sec-sub reveal-up" data-reveal style={{ transitionDelay: "120ms" } as CSSProperties}>
+              <p className="sec-sub reveal-up" style={{ transitionDelay: "120ms" } as CSSProperties}>
                 Fixed-scope yondashuv: narx va hajm loyiha boshida aniq belgilanadi.
               </p>
             </div>
@@ -660,7 +660,7 @@ export default function V2Page() {
                 <article
                   key={p.name}
                   className={`card price-card ${p.featured ? "price-featured" : ""} reveal-up`}
-                  data-reveal
+                 
                   style={{ transitionDelay: `${i * 70}ms` } as CSSProperties}
                 >
                   {p.featured && <span className="mono-tag tag-violet">KO'P TANLANADI</span>}
@@ -689,12 +689,12 @@ export default function V2Page() {
         <section className="section" id="faq">
           <div className="wrap wrap-narrow">
             <div className="sec-head">
-              <p className="mono-label reveal-up" data-reveal>SAVOL-JAVOB</p>
-              <h2 className="heading reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+              <p className="mono-label reveal-up">SAVOL-JAVOB</p>
+              <h2 className="heading reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
                 Ko'p so'raladigan savollar.
               </h2>
             </div>
-            <div className="faq-list reveal-up" data-reveal>
+            <div className="faq-list reveal-up">
               {FAQ.map((f, i) => {
                 const open = faqOpen === i;
                 return (
@@ -723,16 +723,16 @@ export default function V2Page() {
         <section className="section cta-sec" id="cta">
           <span className="halo halo-hero halo-cta" aria-hidden="true" />
           <div className="wrap cta-inner">
-            <p className="mono-label center reveal-up" data-reveal>TAYYORMISIZ?</p>
-            <h2 className="display cta-head reveal-up" data-reveal style={{ transitionDelay: "60ms" } as CSSProperties}>
+            <p className="mono-label center reveal-up">TAYYORMISIZ?</p>
+            <h2 className="display cta-head reveal-up" style={{ transitionDelay: "60ms" } as CSSProperties}>
               Loyihangizni bugun boshlaymiz.
             </h2>
-            <div className="hero-cta cta-center reveal-up" data-reveal style={{ transitionDelay: "120ms" } as CSSProperties}>
+            <div className="hero-cta cta-center reveal-up" style={{ transitionDelay: "120ms" } as CSSProperties}>
               <a href="tel:+998991164658" className="btn-green btn-lg">
                 <IconSpark size={17} /> Bepul konsultatsiya
               </a>
             </div>
-            <p className="cta-line reveal-up" data-reveal style={{ transitionDelay: "180ms" } as CSSProperties}>
+            <p className="cta-line reveal-up" style={{ transitionDelay: "180ms" } as CSSProperties}>
               +998 99 116 46 58 · t.me/muslimansoriy · Toshkent
             </p>
           </div>
