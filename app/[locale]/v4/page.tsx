@@ -665,7 +665,7 @@ const CSS = `
   font-family:var(--sans);
   background:var(--paper); color:var(--ink);
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  overflow-x:hidden;
+  overflow-x:clip;
 }
 .ak *{box-sizing:border-box;}
 .ak img{display:block; max-width:100%;}
