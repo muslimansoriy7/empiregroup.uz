@@ -19,7 +19,6 @@ const NAV_LINKS: [string, string][] = [
   ["Loyihalar", "#loyihalar"],
   ["Jarayon", "#jarayon"],
   ["Sharhlar", "#sharhlar"],
-  ["Narxlar", "#narxlar"],
 ];
 
 const STATS: [string, string][] = [
@@ -29,15 +28,18 @@ const STATS: [string, string][] = [
   ["3+ yil", "Tajriba"],
 ];
 
-/* Real Empire clients — image logos from /public/logos */
-const CLIENTS: [string, string][] = [
-  ["/logos/motorlux.png", "Motor Lux"],
-  ["/logos/medflow.png", "MedFlow"],
-  ["/logos/grandosiyo.png", "Grand Osiyo"],
-  ["/logos/texnika.png", "Texnika Ijara"],
-  ["/logos/gadgetspace.png", "GadgetSpace"],
-  ["/logos/xwear.png", "X Wear"],
-  ["/logos/hilol.png", "Hilol Market"],
+/* Real Empire client logos — same set the main site trust bar uses */
+const CLIENTS: { src: string; alt: string; scale: number }[] = [
+  { src: "/clients/Group.webp", alt: "Motor Lux", scale: 0.8 },
+  { src: "/clients/Group-1.webp", alt: "MedFlow", scale: 1 },
+  { src: "/clients/Group-2.webp", alt: "Grand Osiyo Textile", scale: 1.2 },
+  { src: "/clients/Group-3.webp", alt: "Texnika Ijara", scale: 1.2 },
+  { src: "/clients/Group-5.webp", alt: "GadgetSpace", scale: 1 },
+  { src: "/clients/Group-4.webp", alt: "X Wear", scale: 0.8 },
+  { src: "/clients/Group-6.webp", alt: "Hilol Market", scale: 1 },
+  { src: "/clients/PrimeAcademy.png", alt: "Prime Academy", scale: 1 },
+  { src: "/clients/DentaLife.webp", alt: "DentaLife", scale: 0.8 },
+  { src: "/clients/Tamir24.webp", alt: "Tamir24", scale: 0.9 },
 ];
 
 const SERVICES = [
@@ -276,7 +278,6 @@ const BrandGlyph = ({ path, title }: { path?: string; title: string }) => (
 
 export default function V3Page() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [track, setTrack] = useState<"software" | "odoo">("software");
 
   const stack = STACK_TITLES
     .map((t) => toolLogos.find((x) => x.title === t))
@@ -480,13 +481,22 @@ export default function V3Page() {
 
             <div className="vx-proofwrap">
               <p className="vx-eyebrow vx-center vx-rise">BIZGA ISHONISHADI</p>
-              <div className="vx-proofbar vx-rise">
-                {CLIENTS.map(([src, name], i) => (
-                  <span className="vx-proof-logo" key={name} style={d(i % 5)}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={src} alt={`${name} logotipi`} loading="lazy" />
-                  </span>
-                ))}
+              <div className="vx-marquee vx-rise" aria-label="Mijozlar">
+                <div className="vx-marquee-track">
+                  {[...CLIENTS, ...CLIENTS].map((c, i) => (
+                    <div className="vx-marquee-slot" key={i}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={c.src}
+                        alt={i < CLIENTS.length ? `${c.alt} logotipi` : ""}
+                        aria-hidden={i >= CLIENTS.length}
+                        loading="lazy"
+                        draggable={false}
+                        style={{ ["--s" as string]: c.scale } as CSSProperties}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -523,7 +533,7 @@ export default function V3Page() {
                       </span>
                     ))}
                   </div>
-                  <a className="vx-mono-link" href="#narxlar">
+                  <a className="vx-mono-link" href="#cta">
                     batafsil <Arrow size={13} />
                   </a>
                 </article>
@@ -612,7 +622,7 @@ export default function V3Page() {
             </div>
             <div className="vx-tilegrid">
               {stack.map((t, i) => (
-                <div className="vx-card vx-tile vx-rise" key={t.title} style={d(i % 6)}>
+                <div className="vx-card vx-tile vx-rise" key={t.title} style={{ ...d(i % 6), ["--brand" as string]: t.hex } as CSSProperties}>
                   <span className="vx-tile-ic">
                     <BrandGlyph path={t.path} title={t.title} />
                   </span>
@@ -634,7 +644,7 @@ export default function V3Page() {
             </div>
             <div className="vx-tilegrid">
               {brands.map((b, i) => (
-                <div className="vx-card vx-tile vx-rise" key={b.title} style={d(i % 5)}>
+                <div className="vx-card vx-tile vx-rise" key={b.title} style={{ ...d(i % 5), ["--brand" as string]: b.hex } as CSSProperties}>
                   <span className="vx-tile-ic">
                     <BrandGlyph path={b.path} title={b.title} />
                   </span>
@@ -728,79 +738,6 @@ export default function V3Page() {
                 </figure>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* ===================== PRICING ===================== */}
-        <section className="vx-section" id="narxlar">
-          <div className="vx-container">
-            <div className="vx-sec-head vx-center-head">
-              <p className="vx-eyebrow vx-rise">NARXLAR</p>
-              <h2 className="vx-heading vx-rise" style={d(1)}>
-                Shaffof narxlar, ikki yo'nalish.
-              </h2>
-              <p className="vx-sub vx-rise" style={d(2)}>
-                Fixed-scope — loyiha boshida hajm va narx aniq belgilanadi.
-              </p>
-            </div>
-
-            <div className="vx-track-tabs vx-rise" role="tablist" aria-label="Narx yo'nalishi">
-              <button
-                className={`vx-track-tab${track === "software" ? " active" : ""}`}
-                role="tab"
-                aria-selected={track === "software"}
-                onClick={() => setTrack("software")}
-              >
-                Maxsus dasturiy ta'minot
-              </button>
-              <button
-                className={`vx-track-tab${track === "odoo" ? " active" : ""}`}
-                role="tab"
-                aria-selected={track === "odoo"}
-                onClick={() => setTrack("odoo")}
-              >
-                Odoo ERP & AI
-              </button>
-            </div>
-
-            <div className="vx-pricing-grid">
-              {PRICING[track].map((p, i) => (
-                <article
-                  className={`vx-card vx-price vx-rise${p.featured ? " vx-price-feat" : ""}`}
-                  key={p.tier}
-                  style={d(i)}
-                >
-                  {p.featured && <span className="vx-price-badge">KO'P TANLANADI</span>}
-                  <span className="vx-mono-tag">{p.tier}</span>
-                  <div className="vx-price-amt">{p.price}</div>
-                  <div className="vx-mono-label vx-price-period">{p.period}</div>
-                  <p className="vx-price-desc">{p.desc}</p>
-                  <ul className="vx-price-list">
-                    {p.items.map((it) => (
-                      <li key={it}>
-                        <span className="vx-li-check">✓</span>
-                        {it}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    className={`vx-btn ${
-                      p.ctaFilled
-                        ? p.featured
-                          ? "vx-btn-invert"
-                          : "vx-btn-filled"
-                        : "vx-btn-ghost"
-                    } vx-btn-block`}
-                    href="#cta"
-                  >
-                    {p.cta}
-                  </a>
-                </article>
-              ))}
-            </div>
-            <p className="vx-mono-label vx-price-note vx-rise">
-              Fixed-scope · yashirin to'lov yo'q · 4 hafta qo'llab-quvvatlash.
-            </p>
           </div>
         </section>
 
@@ -908,7 +845,7 @@ export default function V3Page() {
             <p className="vx-mono-label vx-footer-h">Xizmatlar</p>
             <a href="#xizmatlar">Maxsus dasturiy ta'minot</a>
             <a href="#xizmatlar">Odoo ERP &amp; AI</a>
-            <a href="#narxlar">Narxlar</a>
+            <a href="#loyihalar">Loyihalar</a>
           </div>
 
           <div className="vx-footer-col">
@@ -984,7 +921,7 @@ const CSS = `
   font-family:var(--mono);
   font-size:11px;line-height:1.5;font-weight:400;
   letter-spacing:.071em;text-transform:uppercase;color:var(--obsidian);
-  margin:0 0 16px;display:inline-flex;align-items:center;gap:8px;
+  margin:0 0 20px;display:inline-flex;align-items:center;gap:8px;
 }
 .vx-tri-eyebrow{color:var(--carbon);display:inline-flex;}
 .vx-center{display:flex;justify-content:center;text-align:center;width:100%;}
@@ -1015,14 +952,14 @@ const CSS = `
 
 /* ---------- headings ---------- */
 .vx-heading{
-  font-family:var(--sans);font-size:30px;line-height:1.1;letter-spacing:-1.5px;
+  font-family:var(--sans);font-size:36px;line-height:1.08;letter-spacing:-1.8px;
   font-weight:450;color:var(--obsidian);margin:0;
 }
 .vx-sub{
   font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--stone);
-  margin:14px 0 0;max-width:62ch;font-weight:400;
+  margin:18px 0 0;max-width:62ch;font-weight:400;
 }
-.vx-sec-head{margin-bottom:44px;max-width:660px;}
+.vx-sec-head{margin-bottom:52px;max-width:660px;}
 .vx-center-head{margin-left:auto;margin-right:auto;text-align:center;}
 .vx-center-head .vx-eyebrow{justify-content:center;}
 .vx-center-head .vx-sub{margin-left:auto;margin-right:auto;}
@@ -1151,19 +1088,29 @@ const CSS = `
 .vx-stat:last-child{border-right:0;}
 .vx-stat-num{font-family:var(--sans);font-size:34px;font-weight:450;letter-spacing:-.05em;color:var(--obsidian);margin-bottom:6px;line-height:1;}
 
-/* ---------- proof bar (real client logos) ---------- */
+/* ---------- proof marquee (real client logos, like main site) ---------- */
 .vx-proofwrap{margin-top:44px;}
-.vx-proofbar{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
-  gap:20px 44px;margin-top:20px;
+.vx-marquee{
+  margin-top:22px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
-.vx-proof-logo{display:inline-flex;align-items:center;}
-.vx-proof-logo img{
-  max-height:30px;width:auto;object-fit:contain;
-  filter:grayscale(1);opacity:.5;
-  transition:opacity .25s ease,transform .25s ease;
+.vx-marquee-track{
+  display:flex;width:max-content;align-items:center;
+  animation:vx-scroll 44s linear infinite;
 }
-.vx-proof-logo:hover img{opacity:1;transform:translateY(-1px);}
+.vx-marquee:hover .vx-marquee-track{animation-play-state:paused;}
+.vx-marquee-slot{
+  flex:0 0 auto;width:150px;height:64px;
+  display:flex;align-items:center;justify-content:center;
+}
+.vx-marquee-slot img{
+  max-height:28px;max-width:132px;width:auto;object-fit:contain;
+  filter:grayscale(1);opacity:.5;transform:scale(var(--s,1));
+  transition:filter .3s ease,opacity .3s ease;
+}
+.vx-marquee-slot img:hover{filter:grayscale(0);opacity:1;}
+@keyframes vx-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
 /* ---------- services ---------- */
 .vx-services-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -1219,7 +1166,7 @@ const CSS = `
   transition:color .22s ease,background .22s ease,box-shadow .22s ease;
 }
 .vx-tile-ic svg{width:24px;height:24px;}
-.vx-tile:hover .vx-tile-ic{color:var(--obsidian);box-shadow:0 0 0 1px var(--ash);}
+.vx-tile:hover .vx-tile-ic{color:var(--brand,var(--obsidian));box-shadow:0 0 0 1px var(--brand,var(--ash));}
 .vx-tile-name{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--stone);text-transform:uppercase;}
 
 /* ---------- process ---------- */
@@ -1376,12 +1323,11 @@ const CSS = `
   .vx-tilegrid{grid-template-columns:repeat(3,1fr);}
   .vx-process-grid,.vx-team-grid,.vx-cred-grid{grid-template-columns:1fr;}
   .vx-display{font-size:38px;}
-  .vx-heading{font-size:26px;}
+  .vx-heading{font-size:31px;}
   .vx-cta-h{font-size:30px;}
   .vx-footer-grid{grid-template-columns:1fr;}
   .vx-ctaband{padding:48px 22px;}
   .vx-container{padding:0 18px;}
-  .vx-proofbar{gap:18px 28px;}
 }
 
 /* ---------- reduced motion ---------- */
