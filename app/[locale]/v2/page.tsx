@@ -362,10 +362,26 @@ export default function V2Page() {
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0, rootMargin: "0px 0px -5% 0px" }
     );
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // Reveal anything already in view on mount — the observer's first callback
+    // can lag a paint, which would otherwise leave the hero invisible on load.
+    const raf = requestAnimationFrame(() => {
+      const vh = window.innerHeight || 800;
+      els.forEach((el) => {
+        if (el.getBoundingClientRect().top < vh * 0.92) {
+          el.classList.add("in");
+          io.unobserve(el);
+        }
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+    };
   }, []);
 
   return (
