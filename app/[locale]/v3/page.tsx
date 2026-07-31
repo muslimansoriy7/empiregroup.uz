@@ -2,24 +2,24 @@
 
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import { toolLogos, brandLogos } from "@/content/logos";
 
 /* ------------------------------------------------------------------ *
  *  Empire Group — v3 flagship homepage
  *  "Typeset terminal on white paper" — Vercel design system.
- *  Self-contained: no project imports. Light-only. Inline SVG.
- *  All CSS lives in the single <style> block, scoped under .vx.
  *  Real Geist comes from the site's global next/font vars.
+ *  All CSS lives in the single <style> block, scoped under .vx.
+ *  Only data import is content/logos (inline 24x24 SVG paths).
  * ------------------------------------------------------------------ */
 
 /* ============================== DATA ============================== */
 
-const NAV_LINKS = [
-  ["Xizmatlar", "#services"],
-  ["Jarayon", "#process"],
-  ["Loyihalar", "#partners"],
-  ["Sharhlar", "#testimonials"],
-  ["Narxlar", "#pricing"],
-  ["Blog", "#footer"],
+const NAV_LINKS: [string, string][] = [
+  ["Xizmatlar", "#xizmatlar"],
+  ["Loyihalar", "#loyihalar"],
+  ["Jarayon", "#jarayon"],
+  ["Sharhlar", "#sharhlar"],
+  ["Narxlar", "#narxlar"],
 ];
 
 const STATS: [string, string][] = [
@@ -29,9 +29,15 @@ const STATS: [string, string][] = [
   ["3+ yil", "Tajriba"],
 ];
 
-const LOGOS = [
-  "Google", "Meta", "Stripe", "Telegram", "GitHub",
-  "Cloudflare", "Vercel", "Figma", "Notion",
+/* Real Empire clients — image logos from /public/logos */
+const CLIENTS: [string, string][] = [
+  ["/logos/motorlux.png", "Motor Lux"],
+  ["/logos/medflow.png", "MedFlow"],
+  ["/logos/grandosiyo.png", "Grand Osiyo"],
+  ["/logos/texnika.png", "Texnika Ijara"],
+  ["/logos/gadgetspace.png", "GadgetSpace"],
+  ["/logos/xwear.png", "X Wear"],
+  ["/logos/hilol.png", "Hilol Market"],
 ];
 
 const SERVICES = [
@@ -49,207 +55,201 @@ const SERVICES = [
   },
 ];
 
-const STACK: [string, string][] = [
-  ["Nx", "Next.js"],
-  ["Re", "React"],
-  ["Ts", "TypeScript"],
-  ["Py", "Python"],
-  ["Fl", "Flutter"],
-  ["Pg", "PostgreSQL"],
-  ["Sb", "Supabase"],
-  ["Nd", "Node.js"],
-  ["Dk", "Docker"],
-  ["Tw", "Tailwind"],
+/* Real portfolio — desktop screenshots from /public/cases */
+const PROJECTS = [
+  {
+    seg: "AVTOMOBIL · CRM",
+    title: "Motor Lux — CRM va savdo boshqaruvi",
+    result: "Savdo va mijozlar bitta tizimda",
+    tags: ["CRM", "Web"],
+    img: "/cases/case-autoservice-desktop.webp",
+    url: "motorlux.uz",
+  },
+  {
+    seg: "TIBBIYOT · CRM (PWA)",
+    title: "MedFlow — klinika CRM va bemor qabuli",
+    result: "Qabul boshqaruvi 3× tezlashdi",
+    tags: ["PWA", "CRM"],
+    img: "/cases/case-medflow-desktop.webp",
+    url: "medflow.uz",
+  },
+  {
+    seg: "TO'QIMACHILIK · ERP",
+    title: "Grand Osiyo Textile — ERP va ombor tizimi",
+    result: "Ombor real vaqtda boshqariladi",
+    tags: ["ERP", "Ombor"],
+    img: "/cases/case-textile-desktop.webp",
+    url: "grandosiyo.uz",
+  },
+  {
+    seg: "IJARA · KATALOG",
+    title: "Texnika Ijara — ijara va katalog sayti",
+    result: "Onlayn bronlar 3× oshdi",
+    tags: ["Web", "Katalog"],
+    img: "/cases/case-texnika-desktop.webp",
+    url: "texnika-ijara.uz",
+  },
+  {
+    seg: "ELEKTRONIKA · E-COMMERCE",
+    title: "GadgetSpace — onlayn elektronika do'koni",
+    result: "Konversiya 2.1× oshdi",
+    tags: ["E-commerce"],
+    img: "/cases/case-gadgetspace-desktop.webp",
+    url: "gadgetspace.uz",
+  },
+  {
+    seg: "MODA · E-COMMERCE",
+    title: "X Wear — kiyim brendi uchun do'kon",
+    result: "O'rtacha chek 28% oshdi",
+    tags: ["E-commerce", "Web"],
+    img: "/cases/case-xwear-desktop.webp",
+    url: "xwear.uz",
+  },
+  {
+    seg: "SAVDO · POS",
+    title: "Hilol Market — savdo avtomatlashtirish",
+    result: "Hisob-kitob 2× tezlashdi",
+    tags: ["Retail", "POS"],
+    img: "/cases/case-kassa-desktop.webp",
+    url: "hilolmarket.uz",
+  },
 ];
 
-const PARTNERS: [string, string][] = [
-  ["G", "Google"],
-  ["M", "Meta"],
-  ["S", "Stripe"],
-  ["T", "Telegram"],
-  ["Gh", "GitHub"],
-  ["Cf", "Cloudflare"],
-  ["▲", "Vercel"],
-  ["Fg", "Figma"],
-  ["N", "Notion"],
+/* Which logos to surface, in order */
+const STACK_TITLES = [
+  "React", "Next.js", "TypeScript", "JavaScript", "Node.js", "Python",
+  "Flutter", "Tailwind CSS", "PostgreSQL", "Docker", "Supabase", "Git",
+];
+const BRAND_TITLES = [
+  "Google", "Meta", "Stripe", "Figma", "Cloudflare", "GitHub",
+  "Notion", "Vercel", "Apple", "Telegram",
 ];
 
 const PROCESS = [
-  {
-    n: "01",
-    title: "Explore",
-    desc: "G'oya va muammoni chuqur o'rganamiz.",
-    tags: ["Tahlil", "Audit"],
-  },
-  {
-    n: "02",
-    title: "Plan",
-    desc: "PRD, arxitektura, dizayn; muddat va byudjet aniq.",
-    tags: ["PRD", "TZ", "Dizayn"],
-  },
-  {
-    n: "03",
-    title: "Build",
-    desc: "Kod, test, integratsiya; sprintlar, demo.",
-    tags: ["Dev", "Test", "Demo"],
-  },
-  {
-    n: "04",
-    title: "Commit",
-    desc: "Ishga tushirish va uzoq muddatli qo'llab-quvvatlash.",
-    tags: ["Deploy", "Support"],
-  },
+  { n: "01", title: "Explore", desc: "G'oya va muammoni chuqur o'rganamiz.", tags: ["Tahlil", "Audit"] },
+  { n: "02", title: "Plan", desc: "PRD, arxitektura, dizayn; muddat va byudjet aniq.", tags: ["PRD", "TZ", "Dizayn"] },
+  { n: "03", title: "Build", desc: "Kod, test, integratsiya; sprintlar, demo.", tags: ["Dev", "Test", "Demo"] },
+  { n: "04", title: "Commit", desc: "Ishga tushirish va uzoq muddatli qo'llab-quvvatlash.", tags: ["Deploy", "Support"] },
 ];
 
 const TEAM = [
   {
     mono: "MA",
+    img: "/founder.webp",
     name: "Muslim Ansoriy",
     role: "Ta'sischi va CEO · Technical Product Manager",
     bio: "7+ yil IT va biznes-avtomatlashtirish; Odoo ERP Partner Manager (Markaziy Osiyo/Kavkaz); 20+ ERP loyiha.",
   },
-  {
-    mono: "AJ",
-    name: "Abbos Jo'rayev",
-    role: "Hammuassis va COO",
-    bio: "6+ yil IT loyiha boshqaruvi; mijozlar, byudjet, jamoa koordinatsiyasi.",
-  },
-  {
-    mono: "SR",
-    name: "Sardor Rahmatullayev",
-    role: "Senior Odoo Developer",
-    bio: "5 yil Python/Odoo; 30+ custom modul; REST/XML-RPC integratsiya.",
-  },
-  {
-    mono: "DY",
-    name: "Dilnoza Yusupova",
-    role: "Biznes-analitik · ERP Consultant",
-    bio: "4 yil biznes-tahlil; AS-IS/TO-BE; foydalanuvchi o'qitish.",
-  },
-  {
-    mono: "JT",
-    name: "Jasurbek Toshmatov",
-    role: "Full-stack Developer",
-    bio: "5 yil web/mobil; React, Next.js, Node.js, PostgreSQL.",
-  },
-  {
-    mono: "NK",
-    name: "Nilufar Karimova",
-    role: "Digital Marketing Lead",
-    bio: "6 yil marketing; SEO, kontekst, lead generation.",
-  },
-  {
-    mono: "BE",
-    name: "Bekzod Ergashev",
-    role: "DevOps · System Administrator",
-    bio: "4 yil server infratuzilma; Linux, Docker, CI/CD.",
-  },
-  {
-    mono: "MS",
-    name: "Malika Sobirova",
-    role: "UI/UX Designer",
-    bio: "4 yil interfeys dizayni; Figma, dizayn tizimlari.",
-  },
+  { mono: "AJ", name: "Abbos Jo'rayev", role: "Hammuassis va COO", bio: "6+ yil IT loyiha boshqaruvi; mijozlar, byudjet, jamoa koordinatsiyasi." },
+  { mono: "SR", name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 yil Python/Odoo; 30+ custom modul; REST/XML-RPC integratsiya." },
+  { mono: "DY", name: "Dilnoza Yusupova", role: "Biznes-analitik · ERP Consultant", bio: "4 yil biznes-tahlil; AS-IS/TO-BE; foydalanuvchi o'qitish." },
+  { mono: "JT", name: "Jasurbek Toshmatov", role: "Full-stack Developer", bio: "5 yil web/mobil; React, Next.js, Node.js, PostgreSQL." },
+  { mono: "NK", name: "Nilufar Karimova", role: "Digital Marketing Lead", bio: "6 yil marketing; SEO, kontekst, lead generation." },
+  { mono: "BE", name: "Bekzod Ergashev", role: "DevOps · System Administrator", bio: "4 yil server infratuzilma; Linux, Docker, CI/CD." },
+  { mono: "MS", name: "Malika Sobirova", role: "UI/UX Designer", bio: "4 yil interfeys dizayni; Figma, dizayn tizimlari." },
 ];
 
 const TESTIMONIALS = [
-  {
-    quote:
-      "Empire Group eski qog'ozdagi ishimizni to'liq tizimga o'tkazdi — vaqt ancha tejaldi.",
-    name: "Aliya M.",
-    role: "Motor Lux · CRM",
-  },
-  {
-    quote: "Empire bilan ishlash oson bo'ldi, muddat va byudjet aniq edi.",
-    name: "Jasur T.",
-    role: "GadgetSpace · E-commerce",
-  },
-  {
-    quote: "Klinika ishini AI qo'shib avtomatlashtirdi. Qabul ancha tartibli.",
-    name: "Doniyor R.",
-    role: "MedFlow · Klinika",
-  },
-  {
-    quote: "Zamonaviy dizayn, savdo hajmi ko'tarildi.",
-    name: "Laziza K.",
-    role: "X Wear · E-commerce",
-  },
+  { quote: "Empire Group eski qog'ozdagi ishimizni to'liq tizimga o'tkazdi — vaqt ancha tejaldi.", name: "Aliya M.", role: "Motor Lux · CRM" },
+  { quote: "Empire bilan ishlash oson bo'ldi, muddat va byudjet aniq edi.", name: "Jasur T.", role: "GadgetSpace · E-commerce" },
+  { quote: "Klinika ishini AI qo'shib avtomatlashtirdi. Qabul ancha tartibli.", name: "Doniyor R.", role: "MedFlow · Klinika" },
+  { quote: "Zamonaviy dizayn, savdo hajmi ko'tarildi.", name: "Laziza K.", role: "X Wear · E-commerce" },
 ];
 
-const PRICING = [
-  {
-    tier: "STANDARD",
-    price: "$5,000 dan",
-    period: "2–3 oy",
-    featured: false,
-    items: ["MVP mahsulot", "Landing + forma", "Kichik ilova", "Asosiy integratsiya"],
-    cta: "Boshlash",
-    ctaFilled: false,
-  },
-  {
-    tier: "ADVANCED",
-    price: "$15K–$40K",
-    period: "4–6 oy",
-    featured: true,
-    items: ["To'liq ilova", "CRM integratsiya", "Admin panel", "API va avtomatlashtirish"],
-    cta: "Loyihani boshlash",
-    ctaFilled: true,
-  },
-  {
-    tier: "MEGA",
-    price: "$50,000+",
-    period: "6–12 oy",
-    featured: false,
-    items: ["Yirik ekotizim", "Mikroxizmatlar", "Yuqori yuklama", "Uzoq muddatli SLA"],
-    cta: "Boshlash",
-    ctaFilled: false,
-  },
-];
+type Tier = {
+  tier: string;
+  price: string;
+  period: string;
+  featured: boolean;
+  desc: string;
+  items: string[];
+  cta: string;
+  ctaFilled: boolean;
+};
+
+const PRICING: Record<"software" | "odoo", Tier[]> = {
+  software: [
+    {
+      tier: "STANDARD",
+      price: "$5,000 dan",
+      period: "2–3 oy",
+      featured: false,
+      desc: "MVP: landing + forma yoki kichik ilova.",
+      items: ["Landing yoki MVP", "Forma va integratsiya", "Asosiy admin panel", "Responsive dizayn"],
+      cta: "Boshlash",
+      ctaFilled: false,
+    },
+    {
+      tier: "ADVANCED",
+      price: "$15K–$40K",
+      period: "4–6 oy",
+      featured: true,
+      desc: "To'liq ilova, CRM integratsiya, admin va API.",
+      items: ["To'liq web/mobil ilova", "CRM integratsiya", "Admin panel", "API va avtomatlashtirish"],
+      cta: "Loyihani boshlash",
+      ctaFilled: true,
+    },
+    {
+      tier: "MEGA",
+      price: "$50,000+",
+      period: "6–12 oy",
+      featured: false,
+      desc: "Yirik ekotizim va mikroxizmatlar.",
+      items: ["Yirik ekotizim", "Mikroxizmatlar", "Yuqori yuklama", "Uzoq muddatli SLA"],
+      cta: "Boshlash",
+      ctaFilled: false,
+    },
+  ],
+  odoo: [
+    {
+      tier: "STANDARD",
+      price: "$8,800 dan",
+      period: "2–3 oy",
+      featured: false,
+      desc: "Asosiy Odoo modullarini joriy qilish.",
+      items: ["Asosiy modullar", "Sozlash va migratsiya", "Foydalanuvchi o'qitish", "Standart hisobotlar"],
+      cta: "Boshlash",
+      ctaFilled: false,
+    },
+    {
+      tier: "ADVANCED",
+      price: "$25K–$35K",
+      period: "4–6 oy",
+      featured: true,
+      desc: "To'liq ERP, AI va tashqi integratsiyalar.",
+      items: ["To'liq ERP joriy qilish", "Custom modullar", "AI avtomatlashtirish", "Tashqi integratsiya"],
+      cta: "Loyihani boshlash",
+      ctaFilled: true,
+    },
+    {
+      tier: "MEGA",
+      price: "$85,000+",
+      period: "~1 yil",
+      featured: false,
+      desc: "Korporativ ERP ekotizimi.",
+      items: ["Korporativ ekotizim", "Ko'p filial / kompaniya", "Predictive analytics", "24/7 SLA"],
+      cta: "Boshlash",
+      ctaFilled: false,
+    },
+  ],
+};
 
 const CREDENTIALS = [
-  {
-    title: "Odoo Learning Partner",
-    org: "Odoo S.A.",
-    status: "TASDIQLANGAN",
-    ok: true,
-  },
-  {
-    title: "Davlat ro'yxatidan o'tganlik guvohnomasi",
-    org: '"EMPIRE GROUP CORP" MCHJ',
-    status: "TASDIQLANGAN",
-    ok: true,
-  },
-  {
-    title: "IT Park rezidenti",
-    org: "IT Park Uzbekistan",
-    status: "KUTILMOQDA",
-    ok: false,
-  },
-  {
-    title: "ISO/IEC 27001",
-    org: "Information Security",
-    status: "KUTILMOQDA",
-    ok: false,
-  },
+  { title: "Odoo Learning Partner", org: "Odoo S.A.", img: "/sertifikat/odoo-learning-partner.svg", status: "TASDIQLANGAN", ok: true },
+  { title: "Davlat ro'yxatidan o'tganlik guvohnomasi", org: '"EMPIRE GROUP CORP" MCHJ', img: "/sertifikat/davlat-royxat-guvohnomasi.png", status: "TASDIQLANGAN", ok: true },
+  { title: "IT Park rezidenti", org: "IT Park O'zbekiston", img: "/sertifikat/it-park.svg", status: "KUTILMOQDA", ok: false },
+  { title: "ISO/IEC 27001", org: "Axborot xavfsizligi standarti", img: "/sertifikat/iso-27001.svg", status: "KUTILMOQDA", ok: false },
 ];
 
 const FAQ = [
-  {
-    q: "Loyiha qancha vaqt oladi?",
-    a: "MVP 3–4 hafta, o'rta 2–3 oy, yirik 4–6 oy. Aniq muddat Explore bosqichida belgilanadi.",
-  },
-  {
-    q: "Narxlar qanday belgilanadi?",
-    a: "Fixed-scope: loyiha boshida hajm va narx aniq belgilanadi — kutilmagan xarajatlar bo'lmaydi.",
-  },
-  {
-    q: "Mavjud tizimni davom ettira olasizmi?",
-    a: "Ha, audit qilib ustiga quramiz yoki kerak bo'lsa qayta yozamiz.",
-  },
-  {
-    q: "Konsultatsiya bepulmi?",
-    a: "Ha. Explore bosqichida barcha savollarga javob beramiz — majburiyatsiz.",
-  },
+  { q: "Loyiha qancha vaqt oladi?", a: "Kichik MVP 3–4 hafta, o'rtacha loyiha 2–3 oy, yirik korporativ tizim 4–6 oy. Aniq muddat Explore bosqichida belgilanadi." },
+  { q: "Narx qanday hisoblanadi?", a: "Fixed-scope: loyiha hajmi aniqlangach, aniq narx beriladi. Yashirin xarajatlar yo'q. Paketlar $5,000 dan boshlanadi." },
+  { q: "Narxlar nega farq qiladi?", a: "Narx murakkablik, integratsiyalar va muddatga bog'liq. Har loyiha uchun alohida hisoblab beramiz." },
+  { q: "Ishlab bo'lingandan keyin yordam beramizmi?", a: "Ha, ishga tushirgandan keyin qo'llab-quvvatlash, xatolarni tuzatish va rivojlantirish davom etadi." },
+  { q: "To'lov qanday amalga oshiriladi?", a: "Bosqichma-bosqich: oldindan qism, keyin sprint natijalariga qarab. To'lov usullari kelishiladi." },
+  { q: "Kod va ma'lumot kimga tegishli bo'ladi?", a: "Barchasi sizga tegishli. To'liq egalik sizda — hech qanday vendor lock-in yo'q." },
+  { q: "Mavjud tizimimni davom ettira olasizmi?", a: "Ha, mavjud loyiha yoki tizimni ko'rib chiqib, davom ettirish yoki qayta qurish bo'yicha yechim beramiz." },
+  { q: "Konsultatsiya bepulmi?", a: "Ha. Explore bosqichida barcha savollarga javob beramiz va aniq reja tuzamiz — hech qanday majburiyat yo'q." },
 ];
 
 /* ============================ ICONS ============================ */
@@ -262,13 +262,13 @@ const Triangle = ({ size = 13 }: { size?: number }) => (
 
 const Arrow = ({ size = 14 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden="true" fill="none">
-    <path
-      d="M3 8h9M8.5 4l4 4-4 4"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+    <path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const BrandGlyph = ({ path, title }: { path?: string; title: string }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-label={title}>
+    <path d={path} fill="currentColor" />
   </svg>
 );
 
@@ -276,15 +276,30 @@ const Arrow = ({ size = 14 }: { size?: number }) => (
 
 export default function V3Page() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [track, setTrack] = useState<"software" | "odoo">("software");
+
+  const stack = STACK_TITLES
+    .map((t) => toolLogos.find((x) => x.title === t))
+    .filter((x): x is (typeof toolLogos)[number] => Boolean(x && x.path));
+  const brands = BRAND_TITLES
+    .map((t) => brandLogos.find((x) => x.title === t))
+    .filter((x): x is (typeof brandLogos)[number] => Boolean(x && x.path));
 
   useEffect(() => {
+    // Smooth in-page scrolling that accounts for the sticky nav.
+    const html = document.documentElement;
+    const prevBehavior = html.style.scrollBehavior;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) html.style.scrollBehavior = "smooth";
+
     const root = document.querySelector(".vx");
     if (!root) return;
     const els = Array.from(root.querySelectorAll<HTMLElement>(".vx-rise"));
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
       els.forEach((e) => e.classList.add("in"));
-      return;
+      return () => {
+        html.style.scrollBehavior = prevBehavior;
+      };
     }
     const io = new IntersectionObserver(
       (entries) => {
@@ -308,6 +323,7 @@ export default function V3Page() {
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
+      html.style.scrollBehavior = prevBehavior;
     };
   }, []);
 
@@ -316,11 +332,7 @@ export default function V3Page() {
 
   return (
     <div className="vx">
-      <style
-        dangerouslySetInnerHTML={{
-          __html: CSS,
-        }}
-      />
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* ===================== NAV ===================== */}
       <header className="vx-nav">
@@ -353,7 +365,7 @@ export default function V3Page() {
 
       <main id="top">
         {/* ===================== HERO ===================== */}
-        <section className="vx-section vx-hero" aria-labelledby="vx-hero-h">
+        <section className="vx-hero" aria-labelledby="vx-hero-h">
           <div className="vx-grid-bg" aria-hidden="true" />
           <div className="vx-container vx-hero-grid">
             <div className="vx-hero-copy">
@@ -383,7 +395,7 @@ export default function V3Page() {
                 <a className="vx-btn vx-btn-filled" href="#cta">
                   Loyihani boshlash
                 </a>
-                <a className="vx-btn vx-btn-ghost" href="#partners">
+                <a className="vx-btn vx-btn-ghost" href="#loyihalar">
                   Ishlarni ko'rish <Arrow size={14} />
                 </a>
               </div>
@@ -454,7 +466,7 @@ export default function V3Page() {
           </div>
         </section>
 
-        {/* ===================== STAT BAND ===================== */}
+        {/* =============== STAT BAND + PROOF (real clients) =============== */}
         <section className="vx-section-tight">
           <div className="vx-container">
             <div className="vx-statband vx-rise">
@@ -465,31 +477,33 @@ export default function V3Page() {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* ===================== LOGO STRIP ===================== */}
-        <section className="vx-section-tight">
-          <div className="vx-container">
-            <p className="vx-eyebrow vx-center vx-rise">ISHONCH BILAN QURAMIZ</p>
-            <div className="vx-logostrip vx-rise">
-              {LOGOS.map((name, i) => (
-                <span className="vx-logo" key={name} style={d(i % 5)}>
-                  {name}
-                </span>
-              ))}
+            <div className="vx-proofwrap">
+              <p className="vx-eyebrow vx-center vx-rise">BIZGA ISHONISHADI</p>
+              <div className="vx-proofbar vx-rise">
+                {CLIENTS.map(([src, name], i) => (
+                  <span className="vx-proof-logo" key={name} style={d(i % 5)}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={src} alt={`${name} logotipi`} loading="lazy" />
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* ===================== SERVICES ===================== */}
-        <section className="vx-section" id="services">
+        <section className="vx-section" id="xizmatlar">
           <div className="vx-container">
             <div className="vx-sec-head">
               <p className="vx-eyebrow vx-rise">XIZMATLAR</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
                 Ikki yo'nalish, bitta standart.
               </h2>
+              <p className="vx-sub vx-rise" style={d(2)}>
+                Maxsus dasturiy ta'minot yoki Odoo ERP — har biri bir xil sifat va
+                shaffof jarayon bilan quriladi.
+              </p>
             </div>
             <div className="vx-services-grid">
               {SERVICES.map((s, i) => (
@@ -509,11 +523,80 @@ export default function V3Page() {
                       </span>
                     ))}
                   </div>
-                  <a className="vx-mono-link" href="#pricing">
+                  <a className="vx-mono-link" href="#narxlar">
                     batafsil <Arrow size={13} />
                   </a>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===================== PORTFOLIO ===================== */}
+        <section className="vx-section" id="loyihalar">
+          <div className="vx-container">
+            <div className="vx-sec-head">
+              <p className="vx-eyebrow vx-rise">PORTFOLIO</p>
+              <h2 className="vx-heading vx-rise" style={d(1)}>
+                So'nggi ishlarimiz.
+              </h2>
+              <p className="vx-sub vx-rise" style={d(2)}>
+                Real, ishga tushirilgan loyihalar — har biri yechilgan muammo.
+              </p>
+            </div>
+            <div className="vx-port-grid">
+              {PROJECTS.map((p, i) => (
+                <article className="vx-card vx-portcard vx-rise" key={p.title} style={d(i % 2)}>
+                  <div className="vx-port-frame">
+                    <div className="vx-port-chrome" aria-hidden="true">
+                      <span className="vx-dot" />
+                      <span className="vx-dot" />
+                      <span className="vx-dot" />
+                      <span className="vx-port-addr">{p.url}</span>
+                    </div>
+                    <div className="vx-port-shot">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.img} alt={`${p.title} — ekran ko'rinishi`} loading="lazy" />
+                    </div>
+                  </div>
+                  <div className="vx-port-body">
+                    <span className="vx-mono-tag vx-port-seg">{p.seg}</span>
+                    <h3 className="vx-port-title">{p.title}</h3>
+                    <p className="vx-port-result">
+                      <span className="vx-li-check">✓</span> Natija: {p.result}
+                    </p>
+                    <div className="vx-chips">
+                      {p.tags.map((t) => (
+                        <span className="vx-chip" key={t}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <a
+                      className="vx-mono-link"
+                      href={`https://${p.url}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      ↗ {p.url}
+                    </a>
+                  </div>
+                </article>
+              ))}
+
+              {/* 8th — CTA tile */}
+              <a className="vx-port-cta vx-rise" href="#cta" style={d(1)}>
+                <span className="vx-port-cta-tri" aria-hidden="true">
+                  <Triangle size={16} />
+                </span>
+                <span className="vx-port-cta-title">Keyingisi — sizniki</span>
+                <span className="vx-card-desc">
+                  Loyihangizni birga rejalashtiramiz va ishga tushiramiz.
+                </span>
+                <span className="vx-mono-link">
+                  Loyihani boshlash <Arrow size={13} />
+                </span>
+              </a>
             </div>
           </div>
         </section>
@@ -528,10 +611,12 @@ export default function V3Page() {
               </h2>
             </div>
             <div className="vx-tilegrid">
-              {STACK.map(([mono, name], i) => (
-                <div className="vx-card vx-tile vx-rise" key={name} style={d(i % 5)}>
-                  <span className="vx-monogram">{mono}</span>
-                  <span className="vx-tile-name">{name}</span>
+              {stack.map((t, i) => (
+                <div className="vx-card vx-tile vx-rise" key={t.title} style={d(i % 6)}>
+                  <span className="vx-tile-ic">
+                    <BrandGlyph path={t.path} title={t.title} />
+                  </span>
+                  <span className="vx-tile-name">{t.title}</span>
                 </div>
               ))}
             </div>
@@ -548,10 +633,12 @@ export default function V3Page() {
               </h2>
             </div>
             <div className="vx-tilegrid">
-              {PARTNERS.map(([mono, name], i) => (
-                <div className="vx-card vx-tile vx-rise" key={name} style={d(i % 5)}>
-                  <span className="vx-monogram">{mono}</span>
-                  <span className="vx-tile-name">{name}</span>
+              {brands.map((b, i) => (
+                <div className="vx-card vx-tile vx-rise" key={b.title} style={d(i % 5)}>
+                  <span className="vx-tile-ic">
+                    <BrandGlyph path={b.path} title={b.title} />
+                  </span>
+                  <span className="vx-tile-name">{b.title}</span>
                 </div>
               ))}
             </div>
@@ -559,7 +646,7 @@ export default function V3Page() {
         </section>
 
         {/* ===================== PROCESS ===================== */}
-        <section className="vx-section" id="process">
+        <section className="vx-section" id="jarayon">
           <div className="vx-container">
             <div className="vx-sec-head">
               <p className="vx-eyebrow vx-rise">QANDAY ISHLAYMIZ</p>
@@ -603,7 +690,12 @@ export default function V3Page() {
             <div className="vx-team-grid">
               {TEAM.map((m, i) => (
                 <article className="vx-card vx-member vx-rise" key={m.name} style={d(i % 4)}>
-                  <div className="vx-avatar">{m.mono}</div>
+                  {m.img ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className="vx-avatar-img" src={m.img} alt={`${m.name} portreti`} loading="lazy" />
+                  ) : (
+                    <div className="vx-avatar">{m.mono}</div>
+                  )}
                   <h3 className="vx-member-name">{m.name}</h3>
                   <p className="vx-member-role">{m.role}</p>
                   <p className="vx-member-bio">{m.bio}</p>
@@ -614,7 +706,7 @@ export default function V3Page() {
         </section>
 
         {/* ===================== TESTIMONIALS ===================== */}
-        <section className="vx-section" id="testimonials">
+        <section className="vx-section" id="sharhlar">
           <div className="vx-container">
             <div className="vx-sec-head">
               <p className="vx-eyebrow vx-rise">MIJOZLAR FIKRI</p>
@@ -640,16 +732,39 @@ export default function V3Page() {
         </section>
 
         {/* ===================== PRICING ===================== */}
-        <section className="vx-section" id="pricing">
+        <section className="vx-section" id="narxlar">
           <div className="vx-container">
-            <div className="vx-sec-head">
+            <div className="vx-sec-head vx-center-head">
               <p className="vx-eyebrow vx-rise">NARXLAR</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Shaffof narxlar.
+                Shaffof narxlar, ikki yo'nalish.
               </h2>
+              <p className="vx-sub vx-rise" style={d(2)}>
+                Fixed-scope — loyiha boshida hajm va narx aniq belgilanadi.
+              </p>
             </div>
+
+            <div className="vx-track-tabs vx-rise" role="tablist" aria-label="Narx yo'nalishi">
+              <button
+                className={`vx-track-tab${track === "software" ? " active" : ""}`}
+                role="tab"
+                aria-selected={track === "software"}
+                onClick={() => setTrack("software")}
+              >
+                Maxsus dasturiy ta'minot
+              </button>
+              <button
+                className={`vx-track-tab${track === "odoo" ? " active" : ""}`}
+                role="tab"
+                aria-selected={track === "odoo"}
+                onClick={() => setTrack("odoo")}
+              >
+                Odoo ERP & AI
+              </button>
+            </div>
+
             <div className="vx-pricing-grid">
-              {PRICING.map((p, i) => (
+              {PRICING[track].map((p, i) => (
                 <article
                   className={`vx-card vx-price vx-rise${p.featured ? " vx-price-feat" : ""}`}
                   key={p.tier}
@@ -659,6 +774,7 @@ export default function V3Page() {
                   <span className="vx-mono-tag">{p.tier}</span>
                   <div className="vx-price-amt">{p.price}</div>
                   <div className="vx-mono-label vx-price-period">{p.period}</div>
+                  <p className="vx-price-desc">{p.desc}</p>
                   <ul className="vx-price-list">
                     {p.items.map((it) => (
                       <li key={it}>
@@ -682,6 +798,9 @@ export default function V3Page() {
                 </article>
               ))}
             </div>
+            <p className="vx-mono-label vx-price-note vx-rise">
+              Fixed-scope · yashirin to'lov yo'q · 4 hafta qo'llab-quvvatlash.
+            </p>
           </div>
         </section>
 
@@ -697,9 +816,11 @@ export default function V3Page() {
             <div className="vx-cred-grid">
               {CREDENTIALS.map((c, i) => (
                 <article className="vx-card vx-cred vx-rise" key={c.title} style={d(i % 4)}>
-                  <span
-                    className={`vx-cred-status ${c.ok ? "vx-cred-ok" : "vx-cred-wait"}`}
-                  >
+                  <div className="vx-cred-img">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={c.img} alt={`${c.title} sertifikati`} loading="lazy" />
+                  </div>
+                  <span className={`vx-cred-status ${c.ok ? "vx-cred-ok" : "vx-cred-wait"}`}>
                     {c.ok ? "✓" : "●"} {c.status}
                   </span>
                   <h3 className="vx-cred-title">{c.title}</h3>
@@ -726,7 +847,7 @@ export default function V3Page() {
                   <div
                     className={`vx-card vx-faq-row vx-rise${isOpen ? " open" : ""}`}
                     key={f.q}
-                    style={d(i)}
+                    style={d(i % 4)}
                   >
                     <button
                       className="vx-faq-q"
@@ -785,23 +906,22 @@ export default function V3Page() {
 
           <div className="vx-footer-col">
             <p className="vx-mono-label vx-footer-h">Xizmatlar</p>
-            <a href="#services">Maxsus dasturiy ta'minot</a>
-            <a href="#services">Odoo ERP &amp; AI</a>
-            <a href="#pricing">Narxlar</a>
+            <a href="#xizmatlar">Maxsus dasturiy ta'minot</a>
+            <a href="#xizmatlar">Odoo ERP &amp; AI</a>
+            <a href="#narxlar">Narxlar</a>
           </div>
 
           <div className="vx-footer-col">
             <p className="vx-mono-label vx-footer-h">Kompaniya</p>
-            <a href="#partners">Loyihalar</a>
-            <a href="#process">Jarayon</a>
-            <a href="#testimonials">Sharhlar</a>
-            <a href="#footer">Blog</a>
+            <a href="#loyihalar">Loyihalar</a>
+            <a href="#jarayon">Jarayon</a>
+            <a href="#sharhlar">Sharhlar</a>
+            <a href="#credentials">Sertifikatlar</a>
           </div>
 
           <div className="vx-footer-col">
             <p className="vx-mono-label vx-footer-h">Aloqa</p>
-            <a href="https://t.me/muslimansoriy">Telegram</a>
-            <a href="#footer">Instagram</a>
+            <a href="https://t.me/muslimansoriy" target="_blank" rel="noopener noreferrer">Telegram</a>
             <a href="mailto:info@empiregroup.uz">Email</a>
             <a href="tel:+998991164658">Telefon</a>
           </div>
@@ -822,7 +942,7 @@ export default function V3Page() {
 const CSS = `
 .vx{
   --paper:#fafafa; --white:#ffffff; --hair:#ebebeb; --ash:#c9c9c9;
-  --smoke:#a8a8a8; --graphite:#8f8f8f; --slate:#7d7d7d; --stone:#666666;
+  --smoke:#a8a8a8; --graphite:#8a8a8a; --slate:#7d7d7d; --stone:#666666;
   --charcoal:#4d4d4d; --obsidian:#171717; --carbon:#000000;
   --green:#297a3a;
   --spectrum:linear-gradient(90deg,rgb(0,255,149) 0%,rgb(255,208,0) 25%,rgb(255,23,68) 50%,rgb(149,0,255) 75%,rgb(0,229,255) 100%);
@@ -830,6 +950,8 @@ const CSS = `
   --mono:var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
   --ring:0 0 0 1px rgba(0,0,0,.08),0 0 0 2px var(--paper);
   --ring-hover:0 0 0 1px var(--obsidian),0 0 0 2px var(--paper);
+  --lift:translateY(-3px);
+  --ease:cubic-bezier(0.16,1,0.3,1);
   min-height:100vh;
   background:var(--paper);
   color:var(--obsidian);
@@ -840,20 +962,22 @@ const CSS = `
 }
 .vx *{box-sizing:border-box;}
 .vx a{color:inherit;text-decoration:none;}
+.vx img{display:block;max-width:100%;}
+.vx section[id]{scroll-margin-top:84px;}
 
 /* ---------- reveal ---------- */
 .vx .vx-rise{
   opacity:1;
   transform:translateY(18px);
-  transition:opacity .6s cubic-bezier(0.16,1,0.3,1),transform .6s cubic-bezier(0.16,1,0.3,1);
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
   will-change:transform,opacity;
 }
 .vx .vx-rise.in{transform:none;}
 
 /* ---------- container / section ---------- */
 .vx-container{max-width:1280px;margin:0 auto;padding:0 24px;width:100%;}
-.vx-section{padding:104px 0;}
-.vx-section-tight{padding:40px 0;}
+.vx-section{padding:96px 0;}
+.vx-section-tight{padding:44px 0;}
 
 /* ---------- eyebrow / mono labels ---------- */
 .vx-eyebrow{
@@ -884,9 +1008,9 @@ const CSS = `
 .vx-mono-link svg{transition:transform .25s ease;}
 .vx-mono-link::after{
   content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
-  background:var(--obsidian);transition:width .3s cubic-bezier(0.16,1,0.3,1);
+  background:var(--obsidian);transition:width .3s var(--ease);
 }
-.vx-mono-link:hover::after{width:calc(100% - 22px);}
+.vx-mono-link:hover::after{width:100%;}
 .vx-mono-link:hover svg{transform:translateX(3px);}
 
 /* ---------- headings ---------- */
@@ -894,7 +1018,14 @@ const CSS = `
   font-family:var(--sans);font-size:30px;line-height:1.1;letter-spacing:-1.5px;
   font-weight:450;color:var(--obsidian);margin:0;
 }
-.vx-sec-head{margin-bottom:44px;max-width:640px;}
+.vx-sub{
+  font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--stone);
+  margin:14px 0 0;max-width:62ch;font-weight:400;
+}
+.vx-sec-head{margin-bottom:44px;max-width:660px;}
+.vx-center-head{margin-left:auto;margin-right:auto;text-align:center;}
+.vx-center-head .vx-eyebrow{justify-content:center;}
+.vx-center-head .vx-sub{margin-left:auto;margin-right:auto;}
 
 /* ---------- nav ---------- */
 .vx-nav{
@@ -920,7 +1051,7 @@ const CSS = `
 }
 .vx-navlink::after{
   content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
-  background:var(--obsidian);transition:width .28s cubic-bezier(0.16,1,0.3,1);
+  background:var(--obsidian);transition:width .28s var(--ease);
 }
 .vx-navlink:hover{color:var(--obsidian);}
 .vx-navlink:hover::after{width:100%;}
@@ -931,7 +1062,7 @@ const CSS = `
   font-family:var(--sans);font-size:14px;font-weight:400;line-height:1;
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   border-radius:6px;padding:10px 16px;cursor:pointer;border:0;
-  transition:transform .2s cubic-bezier(0.16,1,0.3,1),background .2s ease,box-shadow .2s ease,color .2s ease;
+  transition:transform .2s var(--ease),background .2s ease,box-shadow .2s ease,color .2s ease;
   white-space:nowrap;text-decoration:none;
 }
 .vx .vx-btn-filled{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian);}
@@ -951,12 +1082,12 @@ const CSS = `
 /* ---------- cards ---------- */
 .vx-card{
   background:var(--white);border-radius:6px;box-shadow:var(--ring);
-  padding:20px;transition:transform .28s cubic-bezier(0.16,1,0.3,1),box-shadow .28s ease;
+  padding:20px;transition:transform .28s var(--ease),box-shadow .28s ease;
 }
-.vx-card:hover{transform:translateY(-3px);box-shadow:var(--ring-hover);}
+.vx-card:hover{transform:var(--lift);box-shadow:var(--ring-hover);}
 
 /* ---------- hero ---------- */
-.vx-hero{position:relative;padding:72px 0 96px;overflow:hidden;}
+.vx-hero{position:relative;padding:72px 0 88px;overflow:hidden;}
 .vx-grid-bg{
   position:absolute;inset:0;pointer-events:none;z-index:0;
   background-image:linear-gradient(var(--hair) 1px,transparent 1px),linear-gradient(90deg,var(--hair) 1px,transparent 1px);
@@ -990,18 +1121,10 @@ const CSS = `
 
 /* ---------- hero mock ---------- */
 .vx-hero-mock{display:flex;flex-direction:column;gap:16px;min-width:0;}
-.vx-cli{
-  background:var(--white);border-radius:6px;box-shadow:var(--ring);overflow:hidden;
-}
-.vx-cli-bar{
-  display:flex;align-items:center;gap:6px;padding:10px 14px;
-  border-bottom:1px solid var(--hair);
-}
-.vx-dot{width:9px;height:9px;border-radius:50%;background:var(--hair);box-shadow:0 0 0 1px rgba(0,0,0,.05);}
-.vx-cli-title{
-  font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--smoke);
-  margin-left:8px;text-transform:lowercase;
-}
+.vx-cli{background:var(--white);border-radius:6px;box-shadow:var(--ring);overflow:hidden;}
+.vx-cli-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--hair);}
+.vx-dot{width:9px;height:9px;border-radius:50%;background:var(--hair);box-shadow:0 0 0 1px rgba(0,0,0,.05);flex-shrink:0;}
+.vx-cli-title{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--smoke);margin-left:8px;text-transform:lowercase;}
 .vx-cli-body{padding:16px;display:flex;flex-direction:column;gap:9px;font-family:var(--mono);font-size:13px;line-height:1.4;}
 .vx-cli-cmd{margin:0;color:var(--obsidian);display:flex;align-items:center;gap:9px;}
 .vx-cli-tri{color:var(--carbon);display:inline-flex;}
@@ -1023,24 +1146,24 @@ const CSS = `
 .vx-mock-bars span:last-child{background:var(--green);}
 
 /* ---------- stat band ---------- */
-.vx-statband{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  background:var(--white);border-radius:6px;box-shadow:var(--ring);overflow:hidden;
-}
+.vx-statband{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:6px;box-shadow:var(--ring);overflow:hidden;}
 .vx-stat{padding:28px 24px;border-right:1px solid var(--hair);}
 .vx-stat:last-child{border-right:0;}
 .vx-stat-num{font-family:var(--sans);font-size:34px;font-weight:450;letter-spacing:-.05em;color:var(--obsidian);margin-bottom:6px;line-height:1;}
 
-/* ---------- logo strip ---------- */
-.vx-logostrip{
+/* ---------- proof bar (real client logos) ---------- */
+.vx-proofwrap{margin-top:44px;}
+.vx-proofbar{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
-  gap:16px 40px;margin-top:8px;
+  gap:20px 44px;margin-top:20px;
 }
-.vx-logo{
-  font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.03em;
-  color:var(--smoke);transition:color .25s ease,transform .25s ease;cursor:default;
+.vx-proof-logo{display:inline-flex;align-items:center;}
+.vx-proof-logo img{
+  max-height:30px;width:auto;object-fit:contain;
+  filter:grayscale(1);opacity:.5;
+  transition:opacity .25s ease,transform .25s ease;
 }
-.vx-logo:hover{color:var(--obsidian);transform:translateY(-1px);}
+.vx-proof-logo:hover img{opacity:1;transform:translateY(-1px);}
 
 /* ---------- services ---------- */
 .vx-services-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -1055,16 +1178,48 @@ const CSS = `
   padding:5px 10px;border-radius:6px;box-shadow:0 0 0 1px var(--hair);background:var(--paper);
 }
 
+/* ---------- portfolio ---------- */
+.vx-port-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.vx-portcard{display:flex;flex-direction:column;padding:0;overflow:hidden;}
+.vx-port-frame{border-bottom:1px solid var(--hair);background:var(--paper);overflow:hidden;}
+.vx-port-chrome{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--hair);background:var(--white);}
+.vx-port-addr{
+  font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--smoke);
+  margin-left:8px;background:var(--paper);padding:3px 10px;border-radius:9999px;
+  box-shadow:0 0 0 1px var(--hair);
+}
+.vx-port-shot{aspect-ratio:16/10;overflow:hidden;}
+.vx-port-shot img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .45s var(--ease);}
+.vx-portcard:hover .vx-port-shot img{transform:scale(1.03);}
+.vx-port-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1;}
+.vx-port-seg{margin-bottom:10px;color:var(--slate);}
+.vx-port-title{font-family:var(--sans);font-size:19px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);margin:0 0 10px;line-height:1.25;}
+.vx-port-result{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--charcoal);margin:0 0 16px;display:flex;align-items:baseline;gap:7px;line-height:1.45;}
+.vx-port-body .vx-chips{margin-bottom:16px;}
+.vx-li-check{color:var(--green);font-weight:600;flex-shrink:0;}
+.vx-port-cta{
+  display:flex;flex-direction:column;justify-content:center;gap:12px;
+  padding:28px;border-radius:6px;background:transparent;
+  border:1.5px dashed var(--ash);
+  transition:border-color .28s ease,transform .28s var(--ease),background .28s ease;
+}
+.vx-port-cta:hover{border-color:var(--obsidian);transform:var(--lift);background:var(--white);}
+.vx-port-cta-tri{color:var(--carbon);display:inline-flex;}
+.vx-port-cta-title{font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);}
+.vx-port-cta .vx-card-desc{margin:0;}
+.vx-port-cta .vx-mono-link{margin-top:0;}
+
 /* ---------- tiles (stack / partners) ---------- */
-.vx-tilegrid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.vx-tilegrid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
 .vx-tile{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 14px;text-align:center;}
-.vx-monogram{
+.vx-tile-ic{
   width:44px;height:44px;border-radius:6px;box-shadow:0 0 0 1px var(--hair);
   display:flex;align-items:center;justify-content:center;background:var(--paper);
-  font-family:var(--mono);font-size:15px;font-weight:500;color:var(--obsidian);
-  transition:background .25s ease,color .25s ease,box-shadow .25s ease;
+  color:var(--graphite);
+  transition:color .22s ease,background .22s ease,box-shadow .22s ease;
 }
-.vx-tile:hover .vx-monogram{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian);}
+.vx-tile-ic svg{width:24px;height:24px;}
+.vx-tile:hover .vx-tile-ic{color:var(--obsidian);box-shadow:0 0 0 1px var(--ash);}
 .vx-tile-name{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--stone);text-transform:uppercase;}
 
 /* ---------- process ---------- */
@@ -1080,7 +1235,11 @@ const CSS = `
 .vx-avatar{
   width:46px;height:46px;border-radius:6px;background:var(--obsidian);color:#fff;
   display:flex;align-items:center;justify-content:center;margin-bottom:16px;
-  font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:.02em;
+  font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:.02em;flex-shrink:0;
+}
+.vx-avatar-img{
+  width:46px;height:46px;border-radius:6px;object-fit:cover;object-position:center;
+  margin-bottom:16px;box-shadow:0 0 0 1px var(--hair);flex-shrink:0;
 }
 .vx-member-name{font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:-.02em;color:var(--obsidian);margin:0 0 6px;}
 .vx-member-role{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);margin:0 0 12px;line-height:1.5;}
@@ -1095,17 +1254,29 @@ const CSS = `
 .vx-quote-name{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--obsidian);}
 
 /* ---------- pricing ---------- */
+.vx-track-tabs{
+  display:flex;gap:4px;padding:4px;margin:0 auto 32px;width:max-content;max-width:100%;
+  background:var(--white);box-shadow:var(--ring);border-radius:9999px;flex-wrap:wrap;justify-content:center;
+}
+.vx-track-tab{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:9px 18px;border-radius:9999px;border:0;background:transparent;color:var(--stone);
+  cursor:pointer;transition:background .2s ease,color .2s ease;white-space:nowrap;
+}
+.vx-track-tab:hover{color:var(--obsidian);}
+.vx-track-tab.active{background:var(--obsidian);color:#fff;}
 .vx-pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}
 .vx-price{display:flex;flex-direction:column;padding:28px;position:relative;}
 .vx-price-amt{font-family:var(--sans);font-size:30px;font-weight:450;letter-spacing:-.04em;color:var(--obsidian);margin:14px 0 4px;line-height:1;}
-.vx-price-period{margin-bottom:20px;}
+.vx-price-period{margin-bottom:14px;}
+.vx-price-desc{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--stone);margin:0 0 20px;padding-bottom:18px;border-bottom:1px solid var(--hair);}
 .vx-price-list{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:11px;}
 .vx-price-list li{font-family:var(--sans);font-size:14px;color:var(--charcoal);display:flex;align-items:flex-start;gap:9px;line-height:1.4;}
-.vx-li-check{color:var(--green);font-weight:600;flex-shrink:0;}
 .vx-price-feat{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian),0 0 0 2px var(--paper);}
-.vx-price-feat:hover{transform:translateY(-3px);box-shadow:0 0 0 1px #000,0 0 0 2px var(--paper);}
+.vx-price-feat:hover{transform:var(--lift);box-shadow:0 0 0 1px #000,0 0 0 2px var(--paper);}
 .vx-price-feat .vx-price-amt{color:#fff;}
 .vx-price-feat .vx-mono-tag{color:var(--smoke);}
+.vx-price-feat .vx-price-desc{color:#a3a3a3;border-bottom-color:rgba(255,255,255,.12);}
 .vx-price-feat .vx-price-list li{color:#d4d4d4;}
 .vx-price-feat .vx-mono-label{color:var(--smoke);}
 .vx-price-badge{
@@ -1114,11 +1285,18 @@ const CSS = `
   background:var(--white);color:var(--obsidian);padding:6px 10px;border-radius:0 6px 0 6px;
   box-shadow:0 0 0 1px rgba(255,255,255,.15);
 }
+.vx-price-note{display:block;text-align:center;margin-top:28px;color:var(--stone);}
 
 /* ---------- credentials ---------- */
 .vx-cred-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-.vx-cred{display:flex;flex-direction:column;padding:22px;min-height:150px;}
-.vx-cred-status{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px;display:inline-flex;align-items:center;gap:6px;width:max-content;}
+.vx-cred{display:flex;flex-direction:column;padding:22px;min-height:220px;}
+.vx-cred-img{
+  height:76px;display:flex;align-items:center;justify-content:center;
+  background:var(--white);box-shadow:0 0 0 1px var(--hair);border-radius:6px;
+  padding:10px;margin-bottom:16px;overflow:hidden;
+}
+.vx-cred-img img{max-height:100%;max-width:100%;object-fit:contain;}
+.vx-cred-status{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;display:inline-flex;align-items:center;gap:6px;width:max-content;}
 .vx-cred-ok{color:var(--green);}
 .vx-cred-wait{color:var(--smoke);}
 .vx-cred-title{font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:-.01em;color:var(--obsidian);margin:0 0 8px;line-height:1.35;}
@@ -1134,11 +1312,11 @@ const CSS = `
   padding:20px 22px;text-align:left;
   font-family:var(--sans);font-size:16px;font-weight:450;letter-spacing:-.01em;color:var(--obsidian);
 }
-.vx-faq-tri{color:var(--carbon);display:inline-flex;transition:transform .3s cubic-bezier(0.16,1,0.3,1);flex-shrink:0;}
+.vx-faq-tri{color:var(--carbon);display:inline-flex;transition:transform .3s var(--ease);flex-shrink:0;}
 .vx-faq-row.open .vx-faq-tri{transform:rotate(180deg);}
-.vx-faq-a{max-height:0;opacity:0;transition:max-height .34s cubic-bezier(0.16,1,0.3,1),opacity .3s ease;}
-.vx-faq-row.open .vx-faq-a{max-height:200px;opacity:1;}
-.vx-faq-a p{margin:0;padding:0 22px 22px;font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--charcoal);max-width:660px;}
+.vx-faq-a{max-height:0;opacity:0;transition:max-height .34s var(--ease),opacity .3s ease;}
+.vx-faq-row.open .vx-faq-a{max-height:240px;opacity:1;}
+.vx-faq-a p{margin:0;padding:0 22px 22px;font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--charcoal);max-width:680px;}
 
 /* ---------- final cta ---------- */
 .vx-ctaband{
@@ -1146,6 +1324,7 @@ const CSS = `
   padding:72px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;
   position:relative;overflow:hidden;
 }
+.vx-ctaband:hover{transform:none;box-shadow:var(--ring);}
 .vx-ctaband::before{
   content:"";position:absolute;left:0;right:0;top:0;height:3px;
   background:var(--spectrum);background-size:200% 100%;animation:vx-sweep 5s linear infinite;
@@ -1161,7 +1340,7 @@ const CSS = `
 .vx-footer-col{display:flex;flex-direction:column;gap:12px;}
 .vx-footer-h{margin-bottom:4px;color:var(--obsidian);}
 .vx-footer-col a{font-family:var(--sans);font-size:14px;color:var(--charcoal);width:max-content;position:relative;transition:color .2s ease;}
-.vx-footer-col a::after{content:"";position:absolute;left:0;bottom:-2px;height:1px;width:0;background:var(--obsidian);transition:width .28s cubic-bezier(0.16,1,0.3,1);}
+.vx-footer-col a::after{content:"";position:absolute;left:0;bottom:-2px;height:1px;width:0;background:var(--obsidian);transition:width .28s var(--ease);}
 .vx-footer-col a:hover{color:var(--obsidian);}
 .vx-footer-col a:hover::after{width:100%;}
 .vx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:28px;border-top:1px solid var(--hair);flex-wrap:wrap;}
@@ -1173,7 +1352,7 @@ const CSS = `
 
 /* ---------- responsive ---------- */
 @media (max-width:1000px){
-  .vx-tilegrid{grid-template-columns:repeat(3,1fr);}
+  .vx-tilegrid{grid-template-columns:repeat(4,1fr);}
   .vx-process-grid{grid-template-columns:repeat(2,1fr);}
   .vx-team-grid{grid-template-columns:repeat(2,1fr);}
   .vx-cred-grid{grid-template-columns:repeat(2,1fr);}
@@ -1183,17 +1362,18 @@ const CSS = `
   .vx-hero-grid{grid-template-columns:1fr;gap:40px;}
   .vx-display{font-size:44px;}
   .vx-services-grid{grid-template-columns:1fr;}
+  .vx-port-grid{grid-template-columns:1fr;}
   .vx-quote-grid{grid-template-columns:1fr;}
   .vx-pricing-grid{grid-template-columns:1fr;}
   .vx-footer-grid{grid-template-columns:1fr 1fr;}
-  .vx-section{padding:80px 0;}
+  .vx-section{padding:64px 0;}
 }
 @media (max-width:640px){
   .vx-hide-sm{display:none;}
   .vx-statband{grid-template-columns:1fr 1fr;}
   .vx-stat:nth-child(2){border-right:0;}
   .vx-stat:nth-child(1),.vx-stat:nth-child(2){border-bottom:1px solid var(--hair);}
-  .vx-tilegrid{grid-template-columns:repeat(2,1fr);}
+  .vx-tilegrid{grid-template-columns:repeat(3,1fr);}
   .vx-process-grid,.vx-team-grid,.vx-cred-grid{grid-template-columns:1fr;}
   .vx-display{font-size:38px;}
   .vx-heading{font-size:26px;}
@@ -1201,6 +1381,7 @@ const CSS = `
   .vx-footer-grid{grid-template-columns:1fr;}
   .vx-ctaband{padding:48px 22px;}
   .vx-container{padding:0 18px;}
+  .vx-proofbar{gap:18px 28px;}
 }
 
 /* ---------- reduced motion ---------- */
@@ -1209,6 +1390,6 @@ const CSS = `
   .vx .vx-rise.in{transform:none;}
   .vx *{animation:none!important;}
   .vx-grad-underline{background:var(--spectrum);}
-  .vx-btn:hover,.vx-card:hover,.vx-logo:hover{transform:none;}
+  .vx-btn:hover,.vx-card:hover,.vx-proof-logo:hover img,.vx-portcard:hover .vx-port-shot img,.vx-port-cta:hover{transform:none;}
 }
 `;
