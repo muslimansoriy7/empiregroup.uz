@@ -1,32 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { toolLogos, brandLogos } from "@/content/logos";
+import { v3Copy } from "@/content/v3";
+import { locales, localeShort } from "@/content";
+import { localePath, stripLocale } from "@/lib/locale-path";
+import { useI18n } from "@/lib/i18n";
 
 /* ------------------------------------------------------------------ *
  *  Empire Group — v3 flagship homepage
  *  "Typeset terminal on white paper" — Vercel design system.
  *  Real Geist comes from the site's global next/font vars.
  *  All CSS lives in the single <style> block, scoped under .vx.
- *  Only data import is content/logos (inline 24x24 SVG paths).
+ *  Copy lives in content/v3 (uz/ru/en); only assets are declared here, so
+ *  a picture and its caption can never drift apart across languages.
  * ------------------------------------------------------------------ */
 
-/* ============================== DATA ============================== */
-
-const NAV_LINKS: [string, string][] = [
-  ["Xizmatlar", "#xizmatlar"],
-  ["Loyihalar", "#loyihalar"],
-  ["Jarayon", "#jarayon"],
-  ["Sharhlar", "#sharhlar"],
-];
-
-const STATS: [string, string][] = [
-  ["50+", "Yakunlangan loyiha"],
-  ["30+", "Mamnun mijoz"],
-  ["15+", "Texnologiya"],
-  ["3+ yil", "Tajriba"],
-];
+/* ============================== ASSETS ============================== */
 
 /* Real Empire client logos — same set the main site trust bar uses */
 const CLIENTS: { src: string; alt: string; scale: number }[] = [
@@ -42,79 +35,16 @@ const CLIENTS: { src: string; alt: string; scale: number }[] = [
   { src: "/clients/Tamir24.webp", alt: "Tamir24", scale: 0.9 },
 ];
 
-const SERVICES = [
-  {
-    n: "01",
-    title: "Maxsus dasturiy ta'minot",
-    desc: "Web va mobil ilovalar, ichki tizimlar va boshqaruv panellari — biznesingizga aniq mos, noldan quriladi.",
-    chips: ["React", "Node.js", "Flutter", "Docker"],
-  },
-  {
-    n: "02",
-    title: "Odoo ERP & AI joriy qilish",
-    desc: "Barcha jarayonlar yagona tizimda: sotuv, ombor, moliya, HR — AI avtomatlashtirish va bashoratli tahlil bilan.",
-    chips: ["Odoo ERP", "AI Automation", "Predictive Analytics"],
-  },
-];
-
-/* Real portfolio — desktop screenshots from /public/cases */
-const PROJECTS = [
-  {
-    seg: "AVTOMOBIL · CRM",
-    title: "Motor Lux — CRM va savdo boshqaruvi",
-    result: "Savdo va mijozlar bitta tizimda",
-    tags: ["CRM", "Web"],
-    img: "/cases/case-autoservice-desktop.webp",
-    url: "motorlux.uz",
-  },
-  {
-    seg: "TIBBIYOT · CRM (PWA)",
-    title: "MedFlow — klinika CRM va bemor qabuli",
-    result: "Qabul boshqaruvi 3× tezlashdi",
-    tags: ["PWA", "CRM"],
-    img: "/cases/case-medflow-desktop.webp",
-    url: "medflow.uz",
-  },
-  {
-    seg: "TO'QIMACHILIK · ERP",
-    title: "Grand Osiyo Textile — ERP va ombor tizimi",
-    result: "Ombor real vaqtda boshqariladi",
-    tags: ["ERP", "Ombor"],
-    img: "/cases/case-textile-desktop.webp",
-    url: "grandosiyo.uz",
-  },
-  {
-    seg: "IJARA · KATALOG",
-    title: "Texnika Ijara — ijara va katalog sayti",
-    result: "Onlayn bronlar 3× oshdi",
-    tags: ["Web", "Katalog"],
-    img: "/cases/case-texnika-desktop.webp",
-    url: "texnika-ijara.uz",
-  },
-  {
-    seg: "ELEKTRONIKA · E-COMMERCE",
-    title: "GadgetSpace — onlayn elektronika do'koni",
-    result: "Konversiya 2.1× oshdi",
-    tags: ["E-commerce"],
-    img: "/cases/case-gadgetspace-desktop.webp",
-    url: "gadgetspace.uz",
-  },
-  {
-    seg: "MODA · E-COMMERCE",
-    title: "X Wear — kiyim brendi uchun do'kon",
-    result: "O'rtacha chek 28% oshdi",
-    tags: ["E-commerce", "Web"],
-    img: "/cases/case-xwear-desktop.webp",
-    url: "xwear.uz",
-  },
-  {
-    seg: "SAVDO · POS",
-    title: "Hilol Market — savdo avtomatlashtirish",
-    result: "Hisob-kitob 2× tezlashdi",
-    tags: ["Retail", "POS"],
-    img: "/cases/case-kassa-desktop.webp",
-    url: "hilolmarket.uz",
-  },
+/* Real portfolio — desktop screenshots from /public/cases, in the same order
+   as portfolio.items in the copy deck. */
+const PROJECT_SHOTS: { img: string; url: string }[] = [
+  { img: "/cases/case-autoservice-desktop.webp", url: "motorlux.uz" },
+  { img: "/cases/case-medflow-desktop.webp", url: "medflow.uz" },
+  { img: "/cases/case-textile-desktop.webp", url: "grandosiyo.uz" },
+  { img: "/cases/case-texnika-desktop.webp", url: "texnika-ijara.uz" },
+  { img: "/cases/case-gadgetspace-desktop.webp", url: "gadgetspace.uz" },
+  { img: "/cases/case-xwear-desktop.webp", url: "xwear.uz" },
+  { img: "/cases/case-kassa-desktop.webp", url: "hilolmarket.uz" },
 ];
 
 /* Which logos to surface, in order */
@@ -127,131 +57,27 @@ const BRAND_TITLES = [
   "Notion", "Vercel", "Apple", "Telegram",
 ];
 
-const PROCESS = [
-  { n: "01", title: "Explore", desc: "G'oya va muammoni chuqur o'rganamiz.", tags: ["Tahlil", "Audit"] },
-  { n: "02", title: "Plan", desc: "PRD, arxitektura, dizayn; muddat va byudjet aniq.", tags: ["PRD", "TZ", "Dizayn"] },
-  { n: "03", title: "Build", desc: "Kod, test, integratsiya; sprintlar, demo.", tags: ["Dev", "Test", "Demo"] },
-  { n: "04", title: "Commit", desc: "Ishga tushirish va uzoq muddatli qo'llab-quvvatlash.", tags: ["Deploy", "Support"] },
+/* Names are proper nouns, so they live with the portraits rather than in the
+   translated deck; roles and bios come from content/v3. */
+const TEAM_PEOPLE: { mono: string; name: string; img?: string }[] = [
+  { mono: "MA", name: "Muslim Ansoriy", img: "/founder.webp" },
+  { mono: "AJ", name: "Abbos Jo'rayev" },
+  { mono: "SR", name: "Sardor Rahmatullayev" },
+  { mono: "DY", name: "Dilnoza Yusupova" },
+  { mono: "JT", name: "Jasurbek Toshmatov" },
+  { mono: "NK", name: "Nilufar Karimova" },
+  { mono: "BE", name: "Bekzod Ergashev" },
+  { mono: "MS", name: "Malika Sobirova" },
 ];
 
-const TEAM = [
-  {
-    mono: "MA",
-    img: "/founder.webp",
-    name: "Muslim Ansoriy",
-    role: "Ta'sischi va CEO · Technical Product Manager",
-    bio: "7+ yil IT va biznes-avtomatlashtirish; Odoo ERP Partner Manager (Markaziy Osiyo/Kavkaz); 20+ ERP loyiha.",
-  },
-  { mono: "AJ", name: "Abbos Jo'rayev", role: "Hammuassis va COO", bio: "6+ yil IT loyiha boshqaruvi; mijozlar, byudjet, jamoa koordinatsiyasi." },
-  { mono: "SR", name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 yil Python/Odoo; 30+ custom modul; REST/XML-RPC integratsiya." },
-  { mono: "DY", name: "Dilnoza Yusupova", role: "Biznes-analitik · ERP Consultant", bio: "4 yil biznes-tahlil; AS-IS/TO-BE; foydalanuvchi o'qitish." },
-  { mono: "JT", name: "Jasurbek Toshmatov", role: "Full-stack Developer", bio: "5 yil web/mobil; React, Next.js, Node.js, PostgreSQL." },
-  { mono: "NK", name: "Nilufar Karimova", role: "Digital Marketing Lead", bio: "6 yil marketing; SEO, kontekst, lead generation." },
-  { mono: "BE", name: "Bekzod Ergashev", role: "DevOps · System Administrator", bio: "4 yil server infratuzilma; Linux, Docker, CI/CD." },
-  { mono: "MS", name: "Malika Sobirova", role: "UI/UX Designer", bio: "4 yil interfeys dizayni; Figma, dizayn tizimlari." },
-];
-
-const TESTIMONIALS = [
-  { quote: "Empire Group eski qog'ozdagi ishimizni to'liq tizimga o'tkazdi — vaqt ancha tejaldi.", name: "Aliya M.", role: "Motor Lux · CRM" },
-  { quote: "Empire bilan ishlash oson bo'ldi, muddat va byudjet aniq edi.", name: "Jasur T.", role: "GadgetSpace · E-commerce" },
-  { quote: "Klinika ishini AI qo'shib avtomatlashtirdi. Qabul ancha tartibli.", name: "Doniyor R.", role: "MedFlow · Klinika" },
-  { quote: "Zamonaviy dizayn, savdo hajmi ko'tarildi.", name: "Laziza K.", role: "X Wear · E-commerce" },
-];
-
-type Tier = {
-  tier: string;
-  price: string;
-  period: string;
-  featured: boolean;
-  desc: string;
-  items: string[];
-  cta: string;
-  ctaFilled: boolean;
-};
-
-const PRICING: Record<"software" | "odoo", Tier[]> = {
-  software: [
-    {
-      tier: "STANDARD",
-      price: "$5,000 dan",
-      period: "2–3 oy",
-      featured: false,
-      desc: "MVP: landing + forma yoki kichik ilova.",
-      items: ["Landing yoki MVP", "Forma va integratsiya", "Asosiy admin panel", "Responsive dizayn"],
-      cta: "Boshlash",
-      ctaFilled: false,
-    },
-    {
-      tier: "ADVANCED",
-      price: "$15K–$40K",
-      period: "4–6 oy",
-      featured: true,
-      desc: "To'liq ilova, CRM integratsiya, admin va API.",
-      items: ["To'liq web/mobil ilova", "CRM integratsiya", "Admin panel", "API va avtomatlashtirish"],
-      cta: "Loyihani boshlash",
-      ctaFilled: true,
-    },
-    {
-      tier: "MEGA",
-      price: "$50,000+",
-      period: "6–12 oy",
-      featured: false,
-      desc: "Yirik ekotizim va mikroxizmatlar.",
-      items: ["Yirik ekotizim", "Mikroxizmatlar", "Yuqori yuklama", "Uzoq muddatli SLA"],
-      cta: "Boshlash",
-      ctaFilled: false,
-    },
-  ],
-  odoo: [
-    {
-      tier: "STANDARD",
-      price: "$8,800 dan",
-      period: "2–3 oy",
-      featured: false,
-      desc: "Asosiy Odoo modullarini joriy qilish.",
-      items: ["Asosiy modullar", "Sozlash va migratsiya", "Foydalanuvchi o'qitish", "Standart hisobotlar"],
-      cta: "Boshlash",
-      ctaFilled: false,
-    },
-    {
-      tier: "ADVANCED",
-      price: "$25K–$35K",
-      period: "4–6 oy",
-      featured: true,
-      desc: "To'liq ERP, AI va tashqi integratsiyalar.",
-      items: ["To'liq ERP joriy qilish", "Custom modullar", "AI avtomatlashtirish", "Tashqi integratsiya"],
-      cta: "Loyihani boshlash",
-      ctaFilled: true,
-    },
-    {
-      tier: "MEGA",
-      price: "$85,000+",
-      period: "~1 yil",
-      featured: false,
-      desc: "Korporativ ERP ekotizimi.",
-      items: ["Korporativ ekotizim", "Ko'p filial / kompaniya", "Predictive analytics", "24/7 SLA"],
-      cta: "Boshlash",
-      ctaFilled: false,
-    },
-  ],
-};
-
-const CREDENTIALS = [
-  { title: "Odoo Learning Partner", org: "Odoo S.A.", img: "/sertifikat/odoo-learning-partner.svg", status: "TASDIQLANGAN", ok: true },
-  { title: "Davlat ro'yxatidan o'tganlik guvohnomasi", org: '"EMPIRE GROUP CORP" MCHJ', img: "/sertifikat/davlat-royxat-guvohnomasi.png", status: "TASDIQLANGAN", ok: true },
-  { title: "IT Park rezidenti", org: "IT Park O'zbekiston", img: "/sertifikat/it-park.svg", status: "KUTILMOQDA", ok: false },
-  { title: "ISO/IEC 27001", org: "Axborot xavfsizligi standarti", img: "/sertifikat/iso-27001.svg", status: "KUTILMOQDA", ok: false },
-];
-
-const FAQ = [
-  { q: "Loyiha qancha vaqt oladi?", a: "Kichik MVP 3–4 hafta, o'rtacha loyiha 2–3 oy, yirik korporativ tizim 4–6 oy. Aniq muddat Explore bosqichida belgilanadi." },
-  { q: "Narx qanday hisoblanadi?", a: "Fixed-scope: loyiha hajmi aniqlangach, aniq narx beriladi. Yashirin xarajatlar yo'q. Paketlar $5,000 dan boshlanadi." },
-  { q: "Narxlar nega farq qiladi?", a: "Narx murakkablik, integratsiyalar va muddatga bog'liq. Har loyiha uchun alohida hisoblab beramiz." },
-  { q: "Ishlab bo'lingandan keyin yordam beramizmi?", a: "Ha, ishga tushirgandan keyin qo'llab-quvvatlash, xatolarni tuzatish va rivojlantirish davom etadi." },
-  { q: "To'lov qanday amalga oshiriladi?", a: "Bosqichma-bosqich: oldindan qism, keyin sprint natijalariga qarab. To'lov usullari kelishiladi." },
-  { q: "Kod va ma'lumot kimga tegishli bo'ladi?", a: "Barchasi sizga tegishli. To'liq egalik sizda — hech qanday vendor lock-in yo'q." },
-  { q: "Mavjud tizimimni davom ettira olasizmi?", a: "Ha, mavjud loyiha yoki tizimni ko'rib chiqib, davom ettirish yoki qayta qurish bo'yicha yechim beramiz." },
-  { q: "Konsultatsiya bepulmi?", a: "Ha. Explore bosqichida barcha savollarga javob beramiz va aniq reja tuzamiz — hech qanday majburiyat yo'q." },
+/* `scale` optically equalises marks that were drawn at very different
+   weights — the Odoo wordmark fills its box, the scanned state certificate
+   and the ISO seal do not. */
+const CREDENTIAL_MARKS: { img: string; scale: number; ok: boolean }[] = [
+  { img: "/sertifikat/odoo-learning-partner.svg", scale: 0.86, ok: true },
+  { img: "/sertifikat/davlat-royxat-guvohnomasi.png", scale: 1.5, ok: true },
+  { img: "/sertifikat/it-park.svg", scale: 1, ok: false },
+  { img: "/sertifikat/iso-27001.svg", scale: 1.45, ok: false },
 ];
 
 /* ============================ ICONS ============================ */
@@ -274,10 +100,49 @@ const BrandGlyph = ({ path, title }: { path?: string; title: string }) => (
   </svg>
 );
 
+/* ======================== LANGUAGE SWITCHER ========================
+   Three short codes rather than a dropdown: at three languages a menu costs
+   an extra click to show what already fits, and each one is a real URL so
+   the choice stays shareable. */
+
+function LangSwitch({ label, className = "" }: { label: string; className?: string }) {
+  const { locale } = useI18n();
+  const pathname = usePathname();
+  const bare = stripLocale(pathname || "/");
+
+  return (
+    <div className={`vx-lang ${className}`.trim()} role="group" aria-label={label}>
+      {locales.map((l) => (
+        <Link
+          key={l}
+          href={localePath(l, bare)}
+          hrefLang={l}
+          aria-current={l === locale ? "true" : undefined}
+          className={`vx-lang-opt${l === locale ? " active" : ""}`}
+        >
+          {localeShort[l]}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 /* ============================ PAGE ============================ */
 
+/** Projects shown before the reader asks for the rest. */
+const PROJECTS_PREVIEW = 4;
+
 export default function V3Page() {
+  const { locale } = useI18n();
+  const t = v3Copy[locale];
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
+  const projects = t.portfolio.items.map((p, i) => ({ ...p, ...PROJECT_SHOTS[i] }));
+  const team = TEAM_PEOPLE.map((p, i) => ({ ...p, ...t.team.members[i] }));
+  const credentials = CREDENTIAL_MARKS.map((c, i) => ({ ...c, ...t.credentials.items[i] }));
 
   const stack = STACK_TITLES
     .map((t) => toolLogos.find((x) => x.title === t))
@@ -302,6 +167,9 @@ export default function V3Page() {
         html.style.scrollBehavior = prevBehavior;
       };
     }
+    // The fade only exists once JS is driving it. Server-rendered markup stays
+    // fully opaque, so a failed hydration can never leave the page blank.
+    root.classList.add("vx-ready");
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
@@ -321,12 +189,47 @@ export default function V3Page() {
         if (e.getBoundingClientRect().top < vh * 0.9) e.classList.add("in");
       });
     });
+    // Last-resort net: whatever the observer missed becomes visible anyway.
+    const failsafe = window.setTimeout(() => {
+      els.forEach((e) => e.classList.add("in"));
+    }, 4000);
     return () => {
       io.disconnect();
       cancelAnimationFrame(raf);
+      window.clearTimeout(failsafe);
       html.style.scrollBehavior = prevBehavior;
     };
   }, []);
+
+  // Mobile drawer: lock the page behind it, close on Escape, and close when the
+  // viewport grows past the breakpoint that hid the desktop links in the first place.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const { body } = document;
+    const prevOverflow = body.style.overflow;
+    body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    const mq = window.matchMedia("(min-width: 881px)");
+    const onWide = () => mq.matches && setMenuOpen(false);
+    document.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onWide);
+    return () => {
+      body.style.overflow = prevOverflow;
+      document.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onWide);
+    };
+  }, [menuOpen]);
+
+  // Newly revealed project cards need the observer treatment too.
+  useEffect(() => {
+    if (!showAllProjects) return;
+    const raf = requestAnimationFrame(() => {
+      document
+        .querySelectorAll<HTMLElement>("#loyihalar .vx-rise")
+        .forEach((e) => e.classList.add("in"));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [showAllProjects]);
 
   const d = (i: number): CSSProperties =>
     ({ transitionDelay: `${i * 70}ms` } as CSSProperties);
@@ -345,24 +248,68 @@ export default function V3Page() {
             <span className="vx-brand-name">Empire</span>
           </a>
 
-          <nav className="vx-nav-links" aria-label="Asosiy menyu">
-            {NAV_LINKS.map(([label, href]) => (
-              <a key={label} href={href} className="vx-navlink">
+          <nav className="vx-nav-links" aria-label={t.nav.menuLabel}>
+            {t.nav.links.map(([label, href]) => (
+              <a key={href} href={href} className="vx-navlink">
                 {label}
               </a>
             ))}
           </nav>
 
           <div className="vx-nav-actions">
+            <LangSwitch label={t.langLabel} className="vx-hide-menu" />
             <a className="vx-btn vx-btn-ghost vx-hide-sm" href="tel:+998991164658">
               +998 99 116 46 58
             </a>
-            <a className="vx-btn vx-btn-pill" href="#cta">
-              Bepul konsultatsiya
+            <a className="vx-btn vx-btn-filled vx-hide-menu" href="#cta">
+              {t.nav.cta}
             </a>
+            <button
+              type="button"
+              className="vx-burger"
+              aria-label={menuOpen ? t.nav.closeMenu : t.nav.openMenu}
+              aria-expanded={menuOpen}
+              aria-controls="vx-mobile-menu"
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              <span className={`vx-burger-box${menuOpen ? " open" : ""}`} aria-hidden="true">
+                <span />
+                <span />
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* mobile drawer — the nav links have nowhere else to go under 880px */}
+        <div
+          className={`vx-menu${menuOpen ? " open" : ""}`}
+          id="vx-mobile-menu"
+          inert={!menuOpen}
+        >
+          <nav className="vx-menu-links" aria-label={t.nav.menuLabel}>
+            {t.nav.links.map(([label, href]) => (
+              <a key={href} href={href} className="vx-menu-link" onClick={closeMenu}>
+                {label}
+                <Arrow size={14} />
+              </a>
+            ))}
+          </nav>
+          <div className="vx-menu-foot">
+            <a className="vx-btn vx-btn-filled vx-btn-block" href="#cta" onClick={closeMenu}>
+              {t.nav.cta}
+            </a>
+            <a className="vx-btn vx-btn-ghost vx-btn-block" href="tel:+998991164658">
+              +998 99 116 46 58
+            </a>
+            <LangSwitch label={t.langLabel} />
           </div>
         </div>
       </header>
+      <div
+        className={`vx-scrim${menuOpen ? " open" : ""}`}
+        onClick={closeMenu}
+        aria-hidden="true"
+      />
 
       <main id="top">
         {/* ===================== HERO ===================== */}
@@ -374,30 +321,28 @@ export default function V3Page() {
                 <span className="vx-tri-eyebrow">
                   <Triangle size={9} />
                 </span>
-                AI &amp; CUSTOM SOFTWARE DEVELOPMENT
+                {t.hero.eyebrow}
               </p>
 
               <h1 id="vx-hero-h" className="vx-display vx-rise" style={d(1)}>
-                Biznesni{" "}
+                {t.hero.titleBefore}
                 <span className="vx-grad-word">
-                  raqamlashtiramiz
+                  {t.hero.titleAccent}
                   <span className="vx-grad-underline" aria-hidden="true" />
-                </span>{" "}
-                — g'oyadan ishga tushgan mahsulotgacha.
+                </span>
+                {t.hero.titleAfter}
               </h1>
 
               <p className="vx-lede vx-rise" style={d(2)}>
-                Murakkab ichki jarayonlarni ERP, AI, Web va App yechimlari orqali
-                raqamlashtiramiz. G'oyadan tayyor tizim/mahsulotgacha — atigi 2–3
-                oyda.
+                {t.hero.lede}
               </p>
 
               <div className="vx-hero-btns vx-rise" style={d(3)}>
                 <a className="vx-btn vx-btn-filled" href="#cta">
-                  Loyihani boshlash
+                  {t.hero.primary}
                 </a>
                 <a className="vx-btn vx-btn-ghost" href="#loyihalar">
-                  Ishlarni ko'rish <Arrow size={14} />
+                  {t.hero.secondary} <Arrow size={14} />
                 </a>
               </div>
             </div>
@@ -409,24 +354,20 @@ export default function V3Page() {
                   <span className="vx-dot" />
                   <span className="vx-dot" />
                   <span className="vx-dot" />
-                  <span className="vx-cli-title">empire — deploy</span>
+                  <span className="vx-cli-title">{t.hero.cliTitle}</span>
                 </div>
                 <div className="vx-cli-body">
                   <p className="vx-cli-cmd">
                     <span className="vx-cli-tri">
                       <Triangle size={10} />
                     </span>
-                    empire deploy --project motor-lux
+                    {t.hero.cliCmd}
                   </p>
-                  <p className="vx-cli-ok">
-                    <span className="vx-check">✓</span> Build tayyor · 2–3 oy
-                  </p>
-                  <p className="vx-cli-ok">
-                    <span className="vx-check">✓</span> ERP · AI · Web · App
-                  </p>
-                  <p className="vx-cli-ok">
-                    <span className="vx-check">✓</span> Ishga tushirildi
-                  </p>
+                  {t.hero.cliRows.map((row) => (
+                    <p className="vx-cli-ok" key={row}>
+                      <span className="vx-check">✓</span> {row}
+                    </p>
+                  ))}
                   <p className="vx-cli-cmd vx-cli-caret">
                     <span className="vx-cli-tri">
                       <Triangle size={10} />
@@ -438,24 +379,18 @@ export default function V3Page() {
 
               <div className="vx-mockcard" aria-hidden="true">
                 <div className="vx-mockcard-head">
-                  <span className="vx-mono-xs">motor-lux · dashboard</span>
+                  <span className="vx-mono-xs">{t.hero.mockLabel}</span>
                   <span className="vx-mono-xs vx-live">
                     <span className="vx-live-dot" /> LIVE
                   </span>
                 </div>
                 <div className="vx-mock-stats">
-                  <div>
-                    <span className="vx-mono-xs">SAVDO</span>
-                    <strong>+38%</strong>
-                  </div>
-                  <div>
-                    <span className="vx-mono-xs">BUYURTMA</span>
-                    <strong>1,204</strong>
-                  </div>
-                  <div>
-                    <span className="vx-mono-xs">UPTIME</span>
-                    <strong>99.9%</strong>
-                  </div>
+                  {t.hero.mockStats.map(([label, value]) => (
+                    <div key={label}>
+                      <span className="vx-mono-xs">{label}</span>
+                      <strong>{value}</strong>
+                    </div>
+                  ))}
                 </div>
                 <div className="vx-mock-bars">
                   {[38, 52, 46, 68, 60, 82, 74].map((h, i) => (
@@ -471,7 +406,7 @@ export default function V3Page() {
         <section className="vx-section-tight">
           <div className="vx-container">
             <div className="vx-statband vx-rise">
-              {STATS.map(([num, label], i) => (
+              {t.stats.map(([num, label], i) => (
                 <div className="vx-stat" key={label} style={d(i)}>
                   <div className="vx-stat-num">{num}</div>
                   <div className="vx-mono-label">{label}</div>
@@ -480,8 +415,14 @@ export default function V3Page() {
             </div>
 
             <div className="vx-proofwrap">
-              <p className="vx-eyebrow vx-center vx-rise">BIZGA ISHONISHADI</p>
-              <div className="vx-marquee vx-rise" aria-label="Mijozlar">
+              <p className="vx-eyebrow vx-center vx-rise" id="vx-proof-h">
+                {t.proofEyebrow}
+              </p>
+              <div
+                className="vx-marquee vx-rise"
+                role="group"
+                aria-labelledby="vx-proof-h"
+              >
                 <div className="vx-marquee-track">
                   {[...CLIENTS, ...CLIENTS].map((c, i) => (
                     <div className="vx-marquee-slot" key={i}>
@@ -506,20 +447,19 @@ export default function V3Page() {
         <section className="vx-section" id="xizmatlar">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">XIZMATLAR</p>
+              <p className="vx-eyebrow vx-rise">{t.services.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Ikki yo'nalish, bitta standart.
+                {t.services.title}
               </h2>
               <p className="vx-sub vx-rise" style={d(2)}>
-                Maxsus dasturiy ta'minot yoki Odoo ERP — har biri bir xil sifat va
-                shaffof jarayon bilan quriladi.
+                {t.services.sub}
               </p>
             </div>
             <div className="vx-services-grid">
-              {SERVICES.map((s, i) => (
+              {t.services.items.map((s, i) => (
                 <article className="vx-card vx-service vx-rise" key={s.title} style={d(i)}>
                   <div className="vx-service-top">
-                    <span className="vx-mono-tag">{s.n}</span>
+                    <span className="vx-mono-tag">{s.tag}</span>
                     <span className="vx-service-tri">
                       <Triangle size={12} />
                     </span>
@@ -534,7 +474,7 @@ export default function V3Page() {
                     ))}
                   </div>
                   <a className="vx-mono-link" href="#cta">
-                    batafsil <Arrow size={13} />
+                    {t.services.more} <Arrow size={13} />
                   </a>
                 </article>
               ))}
@@ -546,16 +486,16 @@ export default function V3Page() {
         <section className="vx-section" id="loyihalar">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">PORTFOLIO</p>
+              <p className="vx-eyebrow vx-rise">{t.portfolio.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                So'nggi ishlarimiz.
+                {t.portfolio.title}
               </h2>
               <p className="vx-sub vx-rise" style={d(2)}>
-                Real, ishga tushirilgan loyihalar — har biri yechilgan muammo.
+                {t.portfolio.sub}
               </p>
             </div>
             <div className="vx-port-grid">
-              {PROJECTS.map((p, i) => (
+              {(showAllProjects ? projects : projects.slice(0, PROJECTS_PREVIEW)).map((p, i) => (
                 <article className="vx-card vx-portcard vx-rise" key={p.title} style={d(i % 2)}>
                   <div className="vx-port-frame">
                     <div className="vx-port-chrome" aria-hidden="true">
@@ -573,7 +513,7 @@ export default function V3Page() {
                     <span className="vx-mono-tag vx-port-seg">{p.seg}</span>
                     <h3 className="vx-port-title">{p.title}</h3>
                     <p className="vx-port-result">
-                      <span className="vx-li-check">✓</span> Natija: {p.result}
+                      <span className="vx-li-check">✓</span> {t.portfolio.resultLabel}: {p.result}
                     </p>
                     <div className="vx-chips">
                       {p.tags.map((t) => (
@@ -594,20 +534,33 @@ export default function V3Page() {
                 </article>
               ))}
 
-              {/* 8th — CTA tile */}
-              <a className="vx-port-cta vx-rise" href="#cta" style={d(1)}>
-                <span className="vx-port-cta-tri" aria-hidden="true">
-                  <Triangle size={16} />
-                </span>
-                <span className="vx-port-cta-title">Keyingisi — sizniki</span>
-                <span className="vx-card-desc">
-                  Loyihangizni birga rejalashtiramiz va ishga tushiramiz.
-                </span>
-                <span className="vx-mono-link">
-                  Loyihani boshlash <Arrow size={13} />
-                </span>
-              </a>
+              {/* The invitation closes the list, so it only belongs on the full grid. */}
+              {showAllProjects && (
+                <a className="vx-port-cta vx-rise in" href="#cta">
+                  <span className="vx-port-cta-tri" aria-hidden="true">
+                    <Triangle size={16} />
+                  </span>
+                  <span className="vx-port-cta-title">{t.portfolio.ctaTitle}</span>
+                  <span className="vx-card-desc">{t.portfolio.ctaDesc}</span>
+                  <span className="vx-mono-link">
+                    {t.portfolio.ctaLink} <Arrow size={13} />
+                  </span>
+                </a>
+              )}
             </div>
+
+            {!showAllProjects && (
+              <div className="vx-more">
+                <button
+                  type="button"
+                  className="vx-btn vx-btn-ghost"
+                  onClick={() => setShowAllProjects(true)}
+                >
+                  {t.portfolio.showMore(projects.length - PROJECTS_PREVIEW)}
+                  <Arrow size={14} />
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
@@ -615,18 +568,18 @@ export default function V3Page() {
         <section className="vx-section" id="stack">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">BIZNING STACK</p>
+              <p className="vx-eyebrow vx-rise">{t.stack.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Ishonchli, sanoat standarti texnologiyalar.
+                {t.stack.title}
               </h2>
             </div>
             <div className="vx-tilegrid">
-              {stack.map((t, i) => (
-                <div className="vx-card vx-tile vx-rise" key={t.title} style={{ ...d(i % 6), ["--brand" as string]: t.hex } as CSSProperties}>
+              {stack.map((tool, i) => (
+                <div className="vx-card vx-tile vx-rise" key={tool.title} style={{ ...d(i % 6), ["--brand" as string]: tool.hex } as CSSProperties}>
                   <span className="vx-tile-ic">
-                    <BrandGlyph path={t.path} title={t.title} />
+                    <BrandGlyph path={tool.path} title={tool.title} />
                   </span>
-                  <span className="vx-tile-name">{t.title}</span>
+                  <span className="vx-tile-name">{tool.title}</span>
                 </div>
               ))}
             </div>
@@ -637,9 +590,9 @@ export default function V3Page() {
         <section className="vx-section" id="partners">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">GLOBAL STANDART</p>
+              <p className="vx-eyebrow vx-rise">{t.brands.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Dunyo yetakchilari darajasida ishlaymiz.
+                {t.brands.title}
               </h2>
             </div>
             <div className="vx-tilegrid">
@@ -659,19 +612,21 @@ export default function V3Page() {
         <section className="vx-section" id="jarayon">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">QANDAY ISHLAYMIZ</p>
+              <p className="vx-eyebrow vx-rise">{t.process.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                G'oyadan mahsulotgacha — 4 bosqich.
+                {t.process.title}
               </h2>
             </div>
             <div className="vx-process-grid">
-              {PROCESS.map((p, i) => (
-                <article className="vx-card vx-proc vx-rise" key={p.n} style={d(i)}>
+              {t.process.steps.map((p, i) => (
+                <article className="vx-card vx-proc vx-rise" key={p.title} style={d(i)}>
                   <div className="vx-proc-top">
                     <span className="vx-proc-tri">
                       <Triangle size={11} />
                     </span>
-                    <span className="vx-mono-tag">{p.n}</span>
+                    {/* These four really are a sequence, so the number carries
+                        information the reader needs. */}
+                    <span className="vx-mono-tag">{`0${i + 1}`}</span>
                   </div>
                   <h3 className="vx-proc-title">{p.title}</h3>
                   <p className="vx-card-desc">{p.desc}</p>
@@ -692,13 +647,13 @@ export default function V3Page() {
         <section className="vx-section" id="team">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">BIZ KIMMIZ</p>
+              <p className="vx-eyebrow vx-rise">{t.team.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Ortida — real jamoa.
+                {t.team.title}
               </h2>
             </div>
             <div className="vx-team-grid">
-              {TEAM.map((m, i) => (
+              {team.map((m, i) => (
                 <article className="vx-card vx-member vx-rise" key={m.name} style={d(i % 4)}>
                   {m.img ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -719,21 +674,21 @@ export default function V3Page() {
         <section className="vx-section" id="sharhlar">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">MIJOZLAR FIKRI</p>
+              <p className="vx-eyebrow vx-rise">{t.testimonials.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Mijozlarimiz nima deydi.
+                {t.testimonials.title}
               </h2>
             </div>
             <div className="vx-quote-grid">
-              {TESTIMONIALS.map((t, i) => (
-                <figure className="vx-card vx-quote vx-rise" key={t.name} style={d(i % 2)}>
+              {t.testimonials.items.map((q, i) => (
+                <figure className="vx-card vx-quote vx-rise" key={q.name} style={d(i % 2)}>
                   <span className="vx-quote-mark" aria-hidden="true">
                     <Triangle size={12} />
                   </span>
-                  <blockquote className="vx-quote-text">{t.quote}</blockquote>
+                  <blockquote className="vx-quote-text">{q.quote}</blockquote>
                   <figcaption className="vx-quote-cap">
-                    <span className="vx-quote-name">{t.name}</span>
-                    <span className="vx-mono-label">{t.role}</span>
+                    <span className="vx-quote-name">{q.name}</span>
+                    <span className="vx-mono-label">{q.role}</span>
                   </figcaption>
                 </figure>
               ))}
@@ -745,17 +700,22 @@ export default function V3Page() {
         <section className="vx-section" id="credentials">
           <div className="vx-container">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">ISHONCH VA TASDIQ</p>
+              <p className="vx-eyebrow vx-rise">{t.credentials.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Rasmiy maqom va sertifikatlar.
+                {t.credentials.title}
               </h2>
             </div>
             <div className="vx-cred-grid">
-              {CREDENTIALS.map((c, i) => (
+              {credentials.map((c, i) => (
                 <article className="vx-card vx-cred vx-rise" key={c.title} style={d(i % 4)}>
                   <div className="vx-cred-img">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={c.img} alt={`${c.title} sertifikati`} loading="lazy" />
+                    <img
+                      src={c.img}
+                      alt={`${c.title} sertifikati`}
+                      loading="lazy"
+                      style={{ ["--cs" as string]: c.scale } as CSSProperties}
+                    />
                   </div>
                   <span className={`vx-cred-status ${c.ok ? "vx-cred-ok" : "vx-cred-wait"}`}>
                     {c.ok ? "✓" : "●"} {c.status}
@@ -772,13 +732,13 @@ export default function V3Page() {
         <section className="vx-section" id="faq">
           <div className="vx-container vx-faq-wrap">
             <div className="vx-sec-head">
-              <p className="vx-eyebrow vx-rise">SAVOL-JAVOB</p>
+              <p className="vx-eyebrow vx-rise">{t.faq.eyebrow}</p>
               <h2 className="vx-heading vx-rise" style={d(1)}>
-                Ko'p so'raladigan savollar.
+                {t.faq.title}
               </h2>
             </div>
             <div className="vx-faq">
-              {FAQ.map((f, i) => {
+              {t.faq.items.map((f, i) => {
                 const isOpen = openFaq === i;
                 return (
                   <div
@@ -788,7 +748,9 @@ export default function V3Page() {
                   >
                     <button
                       className="vx-faq-q"
+                      id={`vx-faq-q-${i}`}
                       aria-expanded={isOpen}
+                      aria-controls={`vx-faq-a-${i}`}
                       onClick={() => setOpenFaq(isOpen ? null : i)}
                     >
                       <span>{f.q}</span>
@@ -796,7 +758,15 @@ export default function V3Page() {
                         <Triangle size={11} />
                       </span>
                     </button>
-                    <div className="vx-faq-a" role="region">
+                    {/* `inert` keeps the collapsed copy out of the reading and tab
+                        order without the display:none that would kill the transition. */}
+                    <div
+                      className="vx-faq-a"
+                      id={`vx-faq-a-${i}`}
+                      role="region"
+                      aria-labelledby={`vx-faq-q-${i}`}
+                      inert={!isOpen}
+                    >
                       <p>{f.a}</p>
                     </div>
                   </div>
@@ -810,16 +780,22 @@ export default function V3Page() {
         <section className="vx-section" id="cta">
           <div className="vx-container">
             <div className="vx-ctaband vx-rise">
-              <p className="vx-eyebrow vx-center">TAYYORMISIZ?</p>
-              <h2 className="vx-heading vx-cta-h">Loyihangizni bugun boshlaymiz.</h2>
+              <p className="vx-eyebrow vx-center">{t.cta.eyebrow}</p>
+              <h2 className="vx-heading vx-cta-h">{t.cta.title}</h2>
               <div className="vx-cta-btns">
                 <a className="vx-btn vx-btn-filled vx-btn-lg" href="tel:+998991164658">
-                  Bepul konsultatsiya
+                  {t.cta.call}
+                </a>
+                <a
+                  className="vx-btn vx-btn-ghost vx-btn-lg"
+                  href="https://t.me/muslimansoriy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t.cta.telegram} <Arrow size={14} />
                 </a>
               </div>
-              <p className="vx-mono-label vx-cta-meta">
-                +998 99 116 46 58 · t.me/muslimansoriy · Toshkent
-              </p>
+              <p className="vx-mono-label vx-cta-meta">{t.cta.meta}</p>
             </div>
           </div>
         </section>
@@ -835,39 +811,45 @@ export default function V3Page() {
               </span>
               <span className="vx-brand-name">Empire</span>
             </a>
-            <p className="vx-footer-desc">
-              Toshkentda AI, ERP va maxsus dasturiy ta'minot — g'oyadan ishga
-              tushgan mahsulotgacha.
-            </p>
+            <p className="vx-footer-desc">{t.footer.desc}</p>
           </div>
 
           <div className="vx-footer-col">
-            <p className="vx-mono-label vx-footer-h">Xizmatlar</p>
-            <a href="#xizmatlar">Maxsus dasturiy ta'minot</a>
-            <a href="#xizmatlar">Odoo ERP &amp; AI</a>
-            <a href="#loyihalar">Loyihalar</a>
+            <p className="vx-mono-label vx-footer-h">{t.footer.servicesHead}</p>
+            {t.footer.services.map(([label, href]) => (
+              <a key={label} href={href}>
+                {label}
+              </a>
+            ))}
           </div>
 
           <div className="vx-footer-col">
-            <p className="vx-mono-label vx-footer-h">Kompaniya</p>
-            <a href="#loyihalar">Loyihalar</a>
-            <a href="#jarayon">Jarayon</a>
-            <a href="#sharhlar">Sharhlar</a>
-            <a href="#credentials">Sertifikatlar</a>
+            <p className="vx-mono-label vx-footer-h">{t.footer.companyHead}</p>
+            {t.footer.company.map(([label, href]) => (
+              <a key={href} href={href}>
+                {label}
+              </a>
+            ))}
           </div>
 
           <div className="vx-footer-col">
-            <p className="vx-mono-label vx-footer-h">Aloqa</p>
-            <a href="https://t.me/muslimansoriy" target="_blank" rel="noopener noreferrer">Telegram</a>
-            <a href="mailto:info@empiregroup.uz">Email</a>
-            <a href="tel:+998991164658">Telefon</a>
+            <p className="vx-mono-label vx-footer-h">{t.footer.contactHead}</p>
+            {t.footer.contact.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                {...(href.startsWith("http")
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {label}
+              </a>
+            ))}
           </div>
         </div>
         <div className="vx-container vx-footer-bottom">
-          <span className="vx-mono-label">
-            © 2026 Empire Group. Barcha huquqlar himoyalangan.
-          </span>
-          <span className="vx-mono-label">Toshkent · O'zbekiston</span>
+          <span className="vx-mono-label">{t.footer.rights}</span>
+          <span className="vx-mono-label">{t.footer.place}</span>
         </div>
       </footer>
     </div>
@@ -878,8 +860,11 @@ export default function V3Page() {
 
 const CSS = `
 .vx{
+  /* Neutrals run cool-free on purpose: this is a white-paper page, and every
+     tier below --graphite is text, so each one clears WCAG AA (4.5:1) on
+     --white. --smoke and --ash are decoration only (rules, dots, dashes). */
   --paper:#fafafa; --white:#ffffff; --hair:#ebebeb; --ash:#c9c9c9;
-  --smoke:#a8a8a8; --graphite:#8a8a8a; --slate:#7d7d7d; --stone:#666666;
+  --smoke:#a8a8a8; --graphite:#8a8a8a; --slate:#707070; --stone:#666666;
   --charcoal:#4d4d4d; --obsidian:#171717; --carbon:#000000;
   --green:#297a3a;
   --spectrum:linear-gradient(90deg,rgb(0,255,149) 0%,rgb(255,208,0) 25%,rgb(255,23,68) 50%,rgb(149,0,255) 75%,rgb(0,229,255) 100%);
@@ -902,14 +887,17 @@ const CSS = `
 .vx img{display:block;max-width:100%;}
 .vx section[id]{scroll-margin-top:84px;}
 
-/* ---------- reveal ---------- */
+/* ---------- reveal ----------
+   Server-rendered markup is always opaque. The fade is switched on by the
+   .vx-ready class the effect adds, so a hydration failure degrades to a
+   visible page rather than a blank one. No will-change: dozens of promoted
+   layers cost more than the transform they save. */
 .vx .vx-rise{
-  opacity:1;
   transform:translateY(18px);
   transition:opacity .6s var(--ease),transform .6s var(--ease);
-  will-change:transform,opacity;
 }
-.vx .vx-rise.in{transform:none;}
+.vx.vx-ready .vx-rise{opacity:0;}
+.vx .vx-rise.in{transform:none;opacity:1;}
 
 /* ---------- container / section ---------- */
 .vx-container{max-width:1280px;margin:0 auto;padding:0 24px;width:100%;}
@@ -950,14 +938,16 @@ const CSS = `
 .vx-mono-link:hover::after{width:100%;}
 .vx-mono-link:hover svg{transform:translateX(3px);}
 
-/* ---------- headings ---------- */
+/* ---------- headings ----------
+   Tracking is set in em, not px: at the 31px mobile size a fixed -1.8px
+   reads as a much tighter fit than it does at 36px. */
 .vx-heading{
-  font-family:var(--sans);font-size:36px;line-height:1.08;letter-spacing:-1.8px;
-  font-weight:450;color:var(--obsidian);margin:0;
+  font-family:var(--sans);font-size:36px;line-height:1.08;letter-spacing:-.05em;
+  font-weight:450;color:var(--obsidian);margin:0;text-wrap:balance;
 }
 .vx-sub{
   font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--stone);
-  margin:18px 0 0;max-width:62ch;font-weight:400;
+  margin:18px 0 0;max-width:62ch;font-weight:400;text-wrap:pretty;
 }
 .vx-sec-head{margin-bottom:52px;max-width:660px;}
 .vx-center-head{margin-left:auto;margin-right:auto;text-align:center;}
@@ -994,6 +984,69 @@ const CSS = `
 .vx-navlink:hover::after{width:100%;}
 .vx-nav-actions{display:flex;align-items:center;gap:10px;}
 
+/* ---------- language ----------
+   Three codes side by side rather than a dropdown: at this count the menu
+   would hide what already fits, and every option is a real, shareable URL. */
+.vx-lang{
+  display:inline-flex;align-items:center;gap:2px;padding:2px;
+  border-radius:8px;box-shadow:0 0 0 1px var(--hair);background:var(--white);
+}
+.vx-lang-opt{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  padding:5px 8px;border-radius:6px;color:var(--stone);line-height:1;
+  transition:color .18s ease,background .18s ease;
+}
+.vx-lang-opt:hover{color:var(--obsidian);background:var(--paper);}
+.vx-lang-opt.active{background:var(--obsidian);color:#fff;}
+.vx-menu .vx-lang{width:100%;justify-content:center;}
+.vx-menu .vx-lang-opt{flex:1;text-align:center;padding:9px 8px;}
+
+/* ---------- mobile drawer ----------
+   Two rules, not three: the burger appears exactly where .vx-nav-links
+   disappears, so the links are never unreachable at any width. */
+.vx-burger{
+  display:none;width:38px;height:34px;padding:0;border:0;cursor:pointer;
+  background:transparent;border-radius:6px;box-shadow:0 0 0 1px var(--hair);
+  align-items:center;justify-content:center;transition:box-shadow .2s ease;
+}
+.vx-burger:hover{box-shadow:0 0 0 1px var(--obsidian);}
+.vx-burger-box{position:relative;width:16px;height:11px;display:block;}
+.vx-burger-box span{
+  position:absolute;left:0;width:100%;height:1.5px;background:var(--obsidian);
+  border-radius:2px;transition:transform .3s var(--ease),opacity .2s ease;
+}
+.vx-burger-box span:first-child{top:0;}
+.vx-burger-box span:last-child{bottom:0;}
+.vx-burger-box.open span:first-child{transform:translateY(4.75px) rotate(45deg);}
+.vx-burger-box.open span:last-child{transform:translateY(-4.75px) rotate(-45deg);}
+
+.vx-menu{
+  display:none;
+  position:absolute;left:0;right:0;top:64px;z-index:49;
+  background:var(--white);border-top:1px solid var(--hair);
+  box-shadow:0 24px 48px -24px rgba(0,0,0,.18);
+  padding:14px 24px 22px;
+  max-height:calc(100dvh - 64px);overflow-y:auto;
+  opacity:0;transform:translateY(-8px);visibility:hidden;
+  transition:opacity .22s ease,transform .26s var(--ease),visibility 0s linear .26s;
+}
+.vx-menu.open{opacity:1;transform:none;visibility:visible;transition-delay:0s;}
+.vx-menu-links{display:flex;flex-direction:column;}
+.vx-menu-link{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--sans);font-size:17px;font-weight:450;letter-spacing:-.02em;
+  color:var(--obsidian);padding:15px 2px;border-bottom:1px solid var(--hair);
+}
+.vx-menu-link svg{color:var(--ash);transition:transform .25s ease,color .2s ease;}
+.vx-menu-link:hover svg{transform:translateX(3px);color:var(--obsidian);}
+.vx-menu-foot{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+.vx-scrim{
+  display:none;
+  position:fixed;inset:64px 0 0;z-index:40;background:rgba(23,23,23,.32);
+  opacity:0;pointer-events:none;transition:opacity .24s ease;
+}
+.vx-scrim.open{opacity:1;pointer-events:auto;}
+
 /* ---------- buttons ---------- */
 .vx-btn{
   font-family:var(--sans);font-size:14px;font-weight:400;line-height:1;
@@ -1006,22 +1059,20 @@ const CSS = `
 .vx .vx-btn-filled:hover{background:#000;transform:translateY(-2px);}
 .vx .vx-btn-ghost{background:transparent;color:var(--charcoal);box-shadow:0 0 0 1px var(--hair);}
 .vx .vx-btn-ghost:hover{color:var(--obsidian);box-shadow:0 0 0 1px var(--obsidian);transform:translateY(-2px);}
-.vx .vx-btn-pill{
-  background:var(--obsidian);color:#fff;border-radius:9999px;padding:8px 16px;
-  box-shadow:0 0 0 1px var(--obsidian);
-}
-.vx .vx-btn-pill:hover{background:#000;transform:translateY(-1px);}
-.vx .vx-btn-invert{background:var(--white);color:var(--obsidian);box-shadow:0 0 0 1px rgba(255,255,255,.2);}
-.vx .vx-btn-invert:hover{background:var(--paper);transform:translateY(-2px);}
-.vx-btn-block{width:100%;margin-top:auto;}
+.vx-btn-block{width:100%;}
 .vx-btn-lg{padding:13px 26px;font-size:15px;}
+.vx-more{display:flex;justify-content:center;margin-top:28px;}
 
-/* ---------- cards ---------- */
+/* ---------- cards ----------
+   Only cards that lead somewhere lift on hover; a static tile that rises
+   under the cursor promises a click it can't honour. Everything else gets
+   the border sharpening alone. */
 .vx-card{
   background:var(--white);border-radius:6px;box-shadow:var(--ring);
   padding:20px;transition:transform .28s var(--ease),box-shadow .28s ease;
 }
-.vx-card:hover{transform:var(--lift);box-shadow:var(--ring-hover);}
+.vx-card:hover{box-shadow:var(--ring-hover);}
+.vx-service:hover,.vx-portcard:hover{transform:var(--lift);}
 
 /* ---------- hero ---------- */
 .vx-hero{position:relative;padding:72px 0 88px;overflow:hidden;}
@@ -1041,7 +1092,7 @@ const CSS = `
 .vx-hero-copy{max-width:640px;}
 .vx-display{
   font-family:var(--sans);font-size:60px;line-height:1;letter-spacing:-.06em;
-  font-weight:450;color:var(--obsidian);margin:0 0 24px;
+  font-weight:450;color:var(--obsidian);margin:0 0 24px;text-wrap:balance;
 }
 .vx-grad-word{position:relative;display:inline-block;white-space:nowrap;}
 .vx-grad-underline{
@@ -1052,7 +1103,7 @@ const CSS = `
 @keyframes vx-sweep{0%{background-position:0% 0%;}100%{background-position:200% 0%;}}
 .vx-lede{
   font-family:var(--sans);font-size:16px;line-height:1.5;color:var(--charcoal);
-  margin:0 0 28px;max-width:520px;font-weight:400;
+  margin:0 0 28px;max-width:520px;font-weight:400;text-wrap:pretty;
 }
 .vx-hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
 
@@ -1061,7 +1112,7 @@ const CSS = `
 .vx-cli{background:var(--white);border-radius:6px;box-shadow:var(--ring);overflow:hidden;}
 .vx-cli-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--hair);}
 .vx-dot{width:9px;height:9px;border-radius:50%;background:var(--hair);box-shadow:0 0 0 1px rgba(0,0,0,.05);flex-shrink:0;}
-.vx-cli-title{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--smoke);margin-left:8px;text-transform:lowercase;}
+.vx-cli-title{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--slate);margin-left:8px;text-transform:lowercase;}
 .vx-cli-body{padding:16px;display:flex;flex-direction:column;gap:9px;font-family:var(--mono);font-size:13px;line-height:1.4;}
 .vx-cli-cmd{margin:0;color:var(--obsidian);display:flex;align-items:center;gap:9px;}
 .vx-cli-tri{color:var(--carbon);display:inline-flex;}
@@ -1077,7 +1128,7 @@ const CSS = `
 @keyframes vx-pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 .vx-mock-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
 .vx-mock-stats div{display:flex;flex-direction:column;gap:4px;}
-.vx-mock-stats strong{font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);}
+.vx-mock-stats strong{font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);font-variant-numeric:tabular-nums;}
 .vx-mock-bars{display:flex;align-items:flex-end;gap:6px;height:64px;padding-top:6px;border-top:1px solid var(--hair);}
 .vx-mock-bars span{flex:1;background:var(--obsidian);border-radius:2px 2px 0 0;min-height:6px;opacity:.85;transition:height .5s ease;}
 .vx-mock-bars span:last-child{background:var(--green);}
@@ -1086,7 +1137,7 @@ const CSS = `
 .vx-statband{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:6px;box-shadow:var(--ring);overflow:hidden;}
 .vx-stat{padding:28px 24px;border-right:1px solid var(--hair);}
 .vx-stat:last-child{border-right:0;}
-.vx-stat-num{font-family:var(--sans);font-size:34px;font-weight:450;letter-spacing:-.05em;color:var(--obsidian);margin-bottom:6px;line-height:1;}
+.vx-stat-num{font-family:var(--sans);font-size:34px;font-weight:450;letter-spacing:-.05em;color:var(--obsidian);margin-bottom:6px;line-height:1;font-variant-numeric:tabular-nums;}
 
 /* ---------- proof marquee (real client logos, like main site) ---------- */
 .vx-proofwrap{margin-top:44px;}
@@ -1097,16 +1148,20 @@ const CSS = `
 }
 .vx-marquee-track{
   display:flex;width:max-content;align-items:center;
-  animation:vx-scroll 44s linear infinite;
+  animation:vx-scroll 54s linear infinite;
 }
 .vx-marquee:hover .vx-marquee-track{animation-play-state:paused;}
+/* The slot is the gutter. --s used to scale a logo *past* max-width, so a
+   1.2 mark rendered 158px inside a 150px slot and collided with its
+   neighbours; the cap now applies after the optical scale. */
 .vx-marquee-slot{
-  flex:0 0 auto;width:150px;height:64px;
+  flex:0 0 auto;width:184px;height:64px;
   display:flex;align-items:center;justify-content:center;
 }
 .vx-marquee-slot img{
-  max-height:28px;max-width:132px;width:auto;object-fit:contain;
-  filter:grayscale(1);opacity:.5;transform:scale(var(--s,1));
+  max-height:calc(28px * var(--s,1));max-width:calc(120px * var(--s,1));
+  width:auto;object-fit:contain;
+  filter:grayscale(1);opacity:.55;
   transition:filter .3s ease,opacity .3s ease;
 }
 .vx-marquee-slot img:hover{filter:grayscale(0);opacity:1;}
@@ -1117,8 +1172,8 @@ const CSS = `
 .vx-service{display:flex;flex-direction:column;padding:28px;min-height:100%;}
 .vx-service-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
 .vx-service-tri{color:var(--carbon);opacity:.9;display:inline-flex;}
-.vx-card-title{font-family:var(--sans);font-size:22px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);margin:0 0 10px;}
-.vx-card-desc{font-family:var(--sans);font-size:15px;line-height:1.5;color:var(--charcoal);margin:0 0 18px;}
+.vx-card-title{font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);margin:0 0 10px;text-wrap:balance;}
+.vx-card-desc{font-family:var(--sans);font-size:15px;line-height:1.5;color:var(--charcoal);margin:0 0 18px;text-wrap:pretty;}
 .vx-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
 .vx-chip{
   font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--stone);
@@ -1131,16 +1186,18 @@ const CSS = `
 .vx-port-frame{border-bottom:1px solid var(--hair);background:var(--paper);overflow:hidden;}
 .vx-port-chrome{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--hair);background:var(--white);}
 .vx-port-addr{
-  font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--smoke);
+  font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--stone);
   margin-left:8px;background:var(--paper);padding:3px 10px;border-radius:9999px;
   box-shadow:0 0 0 1px var(--hair);
 }
-.vx-port-shot{aspect-ratio:16/10;overflow:hidden;}
-.vx-port-shot img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .45s var(--ease);}
+/* The captures are 1920x1080. A 16/10 frame cropped ~5% off both sides and
+   sliced the app chrome, so the frame matches the asset instead. */
+.vx-port-shot{aspect-ratio:16/9;overflow:hidden;}
+.vx-port-shot img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .45s var(--ease);}
 .vx-portcard:hover .vx-port-shot img{transform:scale(1.03);}
 .vx-port-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1;}
 .vx-port-seg{margin-bottom:10px;color:var(--slate);}
-.vx-port-title{font-family:var(--sans);font-size:19px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);margin:0 0 10px;line-height:1.25;}
+.vx-port-title{font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.03em;color:var(--obsidian);margin:0 0 10px;line-height:1.25;text-wrap:balance;}
 .vx-port-result{font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--charcoal);margin:0 0 16px;display:flex;align-items:baseline;gap:7px;line-height:1.45;}
 .vx-port-body .vx-chips{margin-bottom:16px;}
 .vx-li-check{color:var(--green);font-weight:600;flex-shrink:0;}
@@ -1174,7 +1231,7 @@ const CSS = `
 .vx-proc{display:flex;flex-direction:column;padding:24px;}
 .vx-proc-top{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
 .vx-proc-tri{color:var(--carbon);display:inline-flex;}
-.vx-proc-title{font-family:var(--sans);font-size:19px;font-weight:450;letter-spacing:-.02em;color:var(--obsidian);margin:0 0 8px;}
+.vx-proc-title{font-family:var(--sans);font-size:20px;font-weight:450;letter-spacing:-.02em;color:var(--obsidian);margin:0 0 8px;}
 
 /* ---------- team ---------- */
 .vx-team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
@@ -1184,10 +1241,15 @@ const CSS = `
   display:flex;align-items:center;justify-content:center;margin-bottom:16px;
   font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:.02em;flex-shrink:0;
 }
+/* One photo among seven monograms read as an odd one out. Desaturating it by
+   default lets the whole row sit in the page's monochrome, and colour on
+   hover is the same grayscale-to-brand move the logo rows already use. */
 .vx-avatar-img{
   width:46px;height:46px;border-radius:6px;object-fit:cover;object-position:center;
   margin-bottom:16px;box-shadow:0 0 0 1px var(--hair);flex-shrink:0;
+  filter:grayscale(1) contrast(1.04);transition:filter .3s ease;
 }
+.vx-member:hover .vx-avatar-img{filter:none;}
 .vx-member-name{font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:-.02em;color:var(--obsidian);margin:0 0 6px;}
 .vx-member-role{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);margin:0 0 12px;line-height:1.5;}
 .vx-member-bio{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--charcoal);margin:0;}
@@ -1200,52 +1262,24 @@ const CSS = `
 .vx-quote-cap{display:flex;flex-direction:column;gap:4px;margin-top:auto;}
 .vx-quote-name{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--obsidian);}
 
-/* ---------- pricing ---------- */
-.vx-track-tabs{
-  display:flex;gap:4px;padding:4px;margin:0 auto 32px;width:max-content;max-width:100%;
-  background:var(--white);box-shadow:var(--ring);border-radius:9999px;flex-wrap:wrap;justify-content:center;
-}
-.vx-track-tab{
-  font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-  padding:9px 18px;border-radius:9999px;border:0;background:transparent;color:var(--stone);
-  cursor:pointer;transition:background .2s ease,color .2s ease;white-space:nowrap;
-}
-.vx-track-tab:hover{color:var(--obsidian);}
-.vx-track-tab.active{background:var(--obsidian);color:#fff;}
-.vx-pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}
-.vx-price{display:flex;flex-direction:column;padding:28px;position:relative;}
-.vx-price-amt{font-family:var(--sans);font-size:30px;font-weight:450;letter-spacing:-.04em;color:var(--obsidian);margin:14px 0 4px;line-height:1;}
-.vx-price-period{margin-bottom:14px;}
-.vx-price-desc{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--stone);margin:0 0 20px;padding-bottom:18px;border-bottom:1px solid var(--hair);}
-.vx-price-list{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:11px;}
-.vx-price-list li{font-family:var(--sans);font-size:14px;color:var(--charcoal);display:flex;align-items:flex-start;gap:9px;line-height:1.4;}
-.vx-price-feat{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian),0 0 0 2px var(--paper);}
-.vx-price-feat:hover{transform:var(--lift);box-shadow:0 0 0 1px #000,0 0 0 2px var(--paper);}
-.vx-price-feat .vx-price-amt{color:#fff;}
-.vx-price-feat .vx-mono-tag{color:var(--smoke);}
-.vx-price-feat .vx-price-desc{color:#a3a3a3;border-bottom-color:rgba(255,255,255,.12);}
-.vx-price-feat .vx-price-list li{color:#d4d4d4;}
-.vx-price-feat .vx-mono-label{color:var(--smoke);}
-.vx-price-badge{
-  position:absolute;top:-1px;right:-1px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;
-  background:var(--white);color:var(--obsidian);padding:6px 10px;border-radius:0 6px 0 6px;
-  box-shadow:0 0 0 1px rgba(255,255,255,.15);
-}
-.vx-price-note{display:block;text-align:center;margin-top:28px;color:var(--stone);}
-
 /* ---------- credentials ---------- */
 .vx-cred-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
 .vx-cred{display:flex;flex-direction:column;padding:22px;min-height:220px;}
+/* --cs optically equalises marks drawn at wildly different weights, so the
+   row reads as one set instead of four unrelated crops. */
 .vx-cred-img{
-  height:76px;display:flex;align-items:center;justify-content:center;
+  height:88px;display:flex;align-items:center;justify-content:center;
   background:var(--white);box-shadow:0 0 0 1px var(--hair);border-radius:6px;
   padding:10px;margin-bottom:16px;overflow:hidden;
 }
-.vx-cred-img img{max-height:100%;max-width:100%;object-fit:contain;}
+.vx-cred-img img{
+  max-height:min(100%,calc(48px * var(--cs,1)));
+  max-width:min(100%,calc(72% * var(--cs,1)));
+  object-fit:contain;
+}
 .vx-cred-status{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;display:inline-flex;align-items:center;gap:6px;width:max-content;}
 .vx-cred-ok{color:var(--green);}
-.vx-cred-wait{color:var(--smoke);}
+.vx-cred-wait{color:var(--stone);}
 .vx-cred-title{font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:-.01em;color:var(--obsidian);margin:0 0 8px;line-height:1.35;}
 
 /* ---------- faq ---------- */
@@ -1262,7 +1296,9 @@ const CSS = `
 .vx-faq-tri{color:var(--carbon);display:inline-flex;transition:transform .3s var(--ease);flex-shrink:0;}
 .vx-faq-row.open .vx-faq-tri{transform:rotate(180deg);}
 .vx-faq-a{max-height:0;opacity:0;transition:max-height .34s var(--ease),opacity .3s ease;}
-.vx-faq-row.open .vx-faq-a{max-height:240px;opacity:1;}
+/* Generous enough that the longest answer can never be clipped on a 360px
+   screen; max-height only has to exceed the content, not match it. */
+.vx-faq-row.open .vx-faq-a{max-height:520px;opacity:1;}
 .vx-faq-a p{margin:0;padding:0 22px 22px;font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--charcoal);max-width:680px;}
 
 /* ---------- final cta ---------- */
@@ -1277,7 +1313,7 @@ const CSS = `
   background:var(--spectrum);background-size:200% 100%;animation:vx-sweep 5s linear infinite;
 }
 .vx-cta-h{font-size:40px;letter-spacing:-.045em;margin:14px 0 28px;line-height:1.02;max-width:640px;}
-.vx-cta-btns{margin-bottom:24px;}
+.vx-cta-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;}
 .vx-cta-meta{color:var(--stone);}
 
 /* ---------- footer ---------- */
@@ -1305,18 +1341,25 @@ const CSS = `
   .vx-cred-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media (max-width:880px){
+  /* The desktop links go away and the drawer takes over in the same rule,
+     so there is no width at which the navigation is unreachable. */
   .vx-nav-links{display:none;}
+  .vx-hide-menu{display:none;}
+  .vx-burger{display:inline-flex;}
+  .vx-menu{display:block;}
+  .vx-scrim{display:block;}
   .vx-hero-grid{grid-template-columns:1fr;gap:40px;}
   .vx-display{font-size:44px;}
   .vx-services-grid{grid-template-columns:1fr;}
   .vx-port-grid{grid-template-columns:1fr;}
   .vx-quote-grid{grid-template-columns:1fr;}
-  .vx-pricing-grid{grid-template-columns:1fr;}
   .vx-footer-grid{grid-template-columns:1fr 1fr;}
   .vx-section{padding:64px 0;}
 }
 @media (max-width:640px){
   .vx-hide-sm{display:none;}
+  .vx-cta-btns{flex-direction:column;align-self:stretch;}
+  .vx-cta-btns .vx-btn{width:100%;}
   .vx-statband{grid-template-columns:1fr 1fr;}
   .vx-stat:nth-child(2){border-right:0;}
   .vx-stat:nth-child(1),.vx-stat:nth-child(2){border-bottom:1px solid var(--hair);}
@@ -1332,10 +1375,11 @@ const CSS = `
 
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
-  .vx .vx-rise{transform:none;transition:none;}
-  .vx .vx-rise.in{transform:none;}
+  .vx .vx-rise,.vx.vx-ready .vx-rise{transform:none;transition:none;opacity:1;}
   .vx *{animation:none!important;}
   .vx-grad-underline{background:var(--spectrum);}
-  .vx-btn:hover,.vx-card:hover,.vx-proof-logo:hover img,.vx-portcard:hover .vx-port-shot img,.vx-port-cta:hover{transform:none;}
+  .vx-btn:hover,.vx-card:hover,.vx-service:hover,.vx-portcard:hover,
+  .vx-portcard:hover .vx-port-shot img,.vx-port-cta:hover{transform:none;}
+  .vx-menu{transition:none;}
 }
 `;
