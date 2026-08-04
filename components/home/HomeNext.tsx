@@ -959,7 +959,9 @@ const CSS = `
   --ink:#0f1013;
   --body:#4a4c53;
   --muted:#6b6d75;
-  --faint:#8d8f97;
+  /* Decoration only — chevrons, arrows, dots. Every tier that carries text
+     stops at --muted, which clears AA on both grounds. */
+  --faint:#74767e;
   --on-ink:#ffffff;
 
   /* ---- The dark chapter carries its own ground, in both themes. ---- */
@@ -1335,7 +1337,7 @@ const CSS = `
 .nx-step{padding:0 28px 0 0;position:relative;}
 .nx-step + .nx-step{padding-left:28px;border-left:1px solid var(--line);}
 .nx-step-n{
-  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.08em;color:var(--faint);
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.08em;color:var(--muted);
   display:block;margin-bottom:14px;
 }
 .nx-step .nx-body{margin:0;}
@@ -1465,6 +1467,15 @@ const CSS = `
 .nx-footer-legal-rows{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:10px;}
 .nx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;}
 
+/* ---------- touch targets ----------
+   Inline links and footer rows sat at 20–24px tall. Fine for a cursor,
+   too small for a thumb, so they grow on coarse pointers only. */
+@media (pointer:coarse){
+  .nx-link,.nx-footer-col a,.nx-channel a,.nx-menu-link{min-height:44px;display:flex;align-items:center;}
+  .nx-footer-col{gap:2px;}
+  .nx-lang-opt{padding:11px 12px;}
+}
+
 /* ---------- focus ---------- */
 .nx a:focus-visible,.nx button:focus-visible,
 .nx input:focus-visible,.nx select:focus-visible,.nx textarea:focus-visible{
@@ -1489,12 +1500,12 @@ const CSS = `
   padding:11px 13px;width:100%;transition:border-color .2s ease,box-shadow .2s ease;
 }
 .nx-field textarea{resize:vertical;line-height:1.5;}
-.nx-field input::placeholder,.nx-field textarea::placeholder{color:var(--faint);}
+.nx-field input::placeholder,.nx-field textarea::placeholder{color:var(--muted);}
 .nx-field input:focus,.nx-field select:focus,.nx-field textarea:focus{
   outline:none;border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent);
 }
 .nx-field-err{font-family:var(--sans);font-size:var(--t-small);color:#c2352b;}
-.nx-form-note{color:var(--faint);text-transform:none;letter-spacing:0;}
+.nx-form-note{color:var(--muted);text-transform:none;letter-spacing:0;}
 .nx-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
 .nx-form-done{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
 .nx-form-check{
@@ -1540,8 +1551,8 @@ const CSS = `
   .nx{--t-display:56px;--t-h2:32px;--t-figure:38px;}
   .nx-team{grid-template-columns:repeat(3,1fr);}
   .nx-guard-list{grid-template-columns:1fr 1fr;}
-  .nx-trio{grid-template-columns:1fr 1fr;}
-  .nx-trio > *:last-child:nth-child(3){grid-column:span 2;}
+  /* A trio does NOT reflow to two-plus-one-double-wide: it made the MEGA
+     tier twice the size of the others and the third article a banner. */
 }
 @media (max-width:920px){
   .nx-nav-links{display:none;}
@@ -1557,7 +1568,11 @@ const CSS = `
   .nx-case-cols{grid-template-columns:1fr;gap:32px;}
   .nx-steps{grid-template-columns:1fr 1fr;gap:28px 0;}
   .nx-step:nth-child(3){padding-left:0;border-left:0;}
+  .nx-trio{grid-template-columns:1fr;}
+  /* Both cells share one ratio here — a 16/10 next to a 4/5 left 214px of
+     empty grey under the shorter one. */
   .nx-office{grid-template-columns:1fr 1fr;}
+  .nx-office-1,.nx-office-2{aspect-ratio:4/3;}
   .nx-office-3{display:none;}
   .nx-contact-grid{grid-template-columns:1fr;gap:40px;}
   .nx-creds{grid-template-columns:1fr 1fr;}
@@ -1570,7 +1585,10 @@ const CSS = `
   .nx-nav-inner{padding:0 20px;}
   .nx-hero{padding-top:64px;}
   .nx-hero-shot{margin-top:40px;}
-  .nx-frame-phone{display:none;}
+  /* A 1920px dashboard squeezed to 340px is colour noise, not proof. On a
+     phone the phone build is the honest thing to show. */
+  .nx-frame-desktop{display:none;}
+  .nx-frame-phone{position:static;width:200px;margin:0 auto;bottom:auto;left:auto;}
   .nx-stats{grid-template-columns:1fr 1fr;gap:20px 0;}
   .nx-stat{border-right:0;}
   .nx-stat:nth-child(-n+2){padding-bottom:20px;border-bottom:1px solid var(--line);}
@@ -1584,8 +1602,6 @@ const CSS = `
   .nx-team{grid-template-columns:1fr 1fr;}
   .nx-office{grid-template-columns:1fr;}
   .nx-office-2{display:none;}
-  .nx-trio{grid-template-columns:1fr;}
-  .nx-trio > *:last-child:nth-child(3){grid-column:auto;}
   .nx-guard-list{grid-template-columns:1fr;}
   .nx-channels{grid-template-columns:1fr;}
   .nx-creds{grid-template-columns:1fr;gap:18px;}
