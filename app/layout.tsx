@@ -52,6 +52,9 @@ export const viewport: Viewport = {
 const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  // Stable id so pages can add facts about the company (services, FAQ)
+  // by reference instead of describing a second, competing entity.
+  "@id": `${SITE}#organisation`,
   name: "Empire Group",
   legalName: '"EMPIRE GROUP CORP" MCHJ',
   alternateName: "Empire IT Solutions",
@@ -69,7 +72,9 @@ const orgSchema = {
   },
   areaServed: "UZ",
   foundingDate: "2023",
-  numberOfEmployees: { "@type": "QuantitativeValue", value: 10 },
+  // Matches the eight people the team section actually shows — a structured
+  // figure that contradicts the visible page is worse than none.
+  numberOfEmployees: { "@type": "QuantitativeValue", value: 8 },
   sameAs: ["https://t.me/muslimansoriy", "https://instagram.com/empiregroup.uz"],
   contactPoint: {
     "@type": "ContactPoint",

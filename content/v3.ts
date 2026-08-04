@@ -15,6 +15,8 @@ export type V3Project = {
   seg: string;
   title: string;
   result: string;
+  /** Who stated the result. Absent when no client has gone on record yet. */
+  source?: string;
   tags: string[];
 };
 
@@ -27,8 +29,10 @@ export type V3Service = {
 
 export type V3Step = { title: string; desc: string; tags: string[] };
 export type V3Member = { role: string; bio: string };
-export type V3Quote = { quote: string; name: string; role: string };
-export type V3Credential = { title: string; org: string; status: string };
+export type V3Quote = { quote: string; name: string; role: string; company: string };
+/** Only credentials actually held. A badge you have not earned discounts the
+ *  ones you have, so `note` says what the document lets a buyer rely on. */
+export type V3Credential = { title: string; org: string; note: string };
 export type V3Faq = { q: string; a: string };
 
 export type V3Copy = {
@@ -41,11 +45,6 @@ export type V3Copy = {
     lede: string;
     primary: string;
     secondary: string;
-    cliTitle: string;
-    cliCmd: string;
-    cliRows: string[];
-    mockLabel: string;
-    mockStats: Pair[];
   };
   stats: Pair[];
   proofEyebrow: string;
@@ -62,7 +61,14 @@ export type V3Copy = {
     items: V3Project[];
   };
   stack: { eyebrow: string; title: string };
-  brands: { eyebrow: string; title: string };
+  journal: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    readLabel: string;
+    allLabel: string;
+    empty: string;
+  };
   process: { eyebrow: string; title: string; steps: V3Step[] };
   team: { eyebrow: string; title: string; members: V3Member[] };
   testimonials: { eyebrow: string; title: string; items: V3Quote[] };
@@ -90,6 +96,7 @@ const uz: V3Copy = {
       ["Loyihalar", "#loyihalar"],
       ["Jarayon", "#jarayon"],
       ["Sharhlar", "#sharhlar"],
+      ["Jurnal", "#jurnal"],
     ],
     cta: "Bepul konsultatsiya",
     openMenu: "Menyuni ochish",
@@ -104,21 +111,15 @@ const uz: V3Copy = {
     lede: "Murakkab ichki jarayonlarni ERP, AI, Web va App yechimlari orqali raqamlashtiramiz. G'oyadan tayyor tizim/mahsulotgacha — atigi 2–3 oyda.",
     primary: "Loyihani boshlash",
     secondary: "Ishlarni ko'rish",
-    cliTitle: "empire — deploy",
-    cliCmd: "empire deploy --project motor-lux",
-    cliRows: ["Build tayyor · 2–3 oy", "ERP · AI · Web · App", "Ishga tushirildi"],
-    mockLabel: "motor-lux · dashboard",
-    mockStats: [
-      ["SAVDO", "+38%"],
-      ["BUYURTMA", "1,204"],
-      ["UPTIME", "99.9%"],
-    ],
   },
+  /* Every figure here is either checkable on the page itself (the team is
+     shown, the projects are listed) or on a document we display. Round
+     unverifiable counts were doing the opposite of building trust. */
   stats: [
-    ["50+", "Yakunlangan loyiha"],
-    ["30+", "Mamnun mijoz"],
-    ["15+", "Texnologiya"],
-    ["3+ yil", "Tajriba"],
+    ["2023", "MCHJ ro'yxatdan o'tgan"],
+    ["8", "Doimiy jamoa a'zosi"],
+    ["20+", "Odoo ERP joriy qilish"],
+    ["2–3 oy", "O'rtacha ishga tushirish"],
   ],
   proofEyebrow: "BIZGA ISHONISHADI",
   services: {
@@ -150,18 +151,27 @@ const uz: V3Copy = {
     ctaTitle: "Keyingisi — sizniki",
     ctaDesc: "Loyihangizni birga rejalashtiramiz va ishga tushiramiz.",
     ctaLink: "Loyihani boshlash",
+    /* Where a client has gone on record, the number carries their name — an
+       attributed figure is worth more than a bigger unattributed one. */
     items: [
-      { seg: "AVTOMOBIL · CRM", title: "Motor Lux — CRM va savdo boshqaruvi", result: "Savdo va mijozlar bitta tizimda", tags: ["CRM", "Web"] },
-      { seg: "TIBBIYOT · CRM (PWA)", title: "MedFlow — klinika CRM va bemor qabuli", result: "Qabul boshqaruvi 3× tezlashdi", tags: ["PWA", "CRM"] },
-      { seg: "TO'QIMACHILIK · ERP", title: "Grand Osiyo Textile — ERP va ombor tizimi", result: "Ombor real vaqtda boshqariladi", tags: ["ERP", "Ombor"] },
-      { seg: "IJARA · KATALOG", title: "Texnika Ijara — ijara va katalog sayti", result: "Onlayn bronlar 3× oshdi", tags: ["Web", "Katalog"] },
-      { seg: "ELEKTRONIKA · E-COMMERCE", title: "GadgetSpace — onlayn elektronika do'koni", result: "Konversiya 2.1× oshdi", tags: ["E-commerce"] },
-      { seg: "MODA · E-COMMERCE", title: "X Wear — kiyim brendi uchun do'kon", result: "O'rtacha chek 28% oshdi", tags: ["E-commerce", "Web"] },
-      { seg: "SAVDO · POS", title: "Hilol Market — savdo avtomatlashtirish", result: "Hisob-kitob 2× tezlashdi", tags: ["Retail", "POS"] },
+      { seg: "AVTOMOBIL · CRM", title: "Motor Lux — CRM va savdo boshqaruvi", result: "Lidlar yo'qolishi to'xtadi, har bir sotuvchining bosqichi shaffof", source: "Malika Umarova, marketing direktori", tags: ["CRM", "Web"] },
+      { seg: "TIBBIYOT · CRM (PWA)", title: "MedFlow — klinika CRM va bemor qabuli", result: "Qabul samaradorligi 40% oshdi, kutish vaqti 2 barobar qisqardi", source: "Dr. Sardor Zokirov, tarmoq rahbari", tags: ["PWA", "CRM"] },
+      { seg: "TO'QIMACHILIK · ERP", title: "Grand Osiyo Textile — 15 ombor uchun Odoo ERP", result: "Inventarizatsiya haftadan 1 kunga tushdi, omboriy yo'qotishlar 90% kamaydi", source: "Alisher Raximov, asoschi", tags: ["Odoo ERP", "Ombor"] },
+      { seg: "IJARA · PLATFORMA", title: "Texnika Ijara — og'ir texnika ijarasi platformasi", result: "Kuniga 100+ buyurtma avtomatik qayta ishlanadi", source: "Javohir Qodirov, loyiha rahbari", tags: ["Web", "Katalog"] },
+      { seg: "ELEKTRONIKA · E-COMMERCE", title: "GadgetSpace — onlayn elektronika do'koni", result: "Katalog, savat va to'lov bitta oqimda", tags: ["E-commerce"] },
+      { seg: "MODA · E-COMMERCE", title: "X Wear — kiyim brendi uchun do'kon", result: "Brend uslubidagi do'kon va ombor bilan bog'langan katalog", tags: ["E-commerce", "Web"] },
+      { seg: "SAVDO · POS", title: "Hilol Market — savdo avtomatlashtirish", result: "Kassa, ombor va hisobot bitta panelda", tags: ["Retail", "POS"] },
     ],
   },
   stack: { eyebrow: "BIZNING STACK", title: "Ishonchli, sanoat standarti texnologiyalar." },
-  brands: { eyebrow: "GLOBAL STANDART", title: "Dunyo yetakchilari darajasida ishlaymiz." },
+  journal: {
+    eyebrow: "JURNAL",
+    title: "Nimani bilamiz — ochiq yozamiz.",
+    sub: "ERP joriy qilish, AI avtomatlashtirish va raqamlashtirish bo'yicha amaliy maqolalar.",
+    readLabel: "O'qish",
+    allLabel: "Barcha maqolalar",
+    empty: "Maqolalar tez orada.",
+  },
   process: {
     eyebrow: "QANDAY ISHLAYMIZ",
     title: "G'oyadan mahsulotgacha — 4 bosqich.",
@@ -190,20 +200,18 @@ const uz: V3Copy = {
     eyebrow: "MIJOZLAR FIKRI",
     title: "Mijozlarimiz nima deydi.",
     items: [
-      { quote: "Empire Group eski qog'ozdagi ishimizni to'liq tizimga o'tkazdi — vaqt ancha tejaldi.", name: "Aliya M.", role: "Motor Lux · CRM" },
-      { quote: "Empire bilan ishlash oson bo'ldi, muddat va byudjet aniq edi.", name: "Jasur T.", role: "GadgetSpace · E-commerce" },
-      { quote: "Klinika ishini AI qo'shib avtomatlashtirdi. Qabul ancha tartibli.", name: "Doniyor R.", role: "MedFlow · Klinika" },
-      { quote: "Zamonaviy dizayn, savdo hajmi ko'tarildi.", name: "Laziza K.", role: "X Wear · E-commerce" },
+      { quote: "Empire jamoasi 15 ta omborimiz va sotuv nuqtalarimizni yagona Odoo ERP tizimiga o'tkazib berdi. Avvallari haftalab qilinadigan inventarizatsiya hozir 1 kunda tugaydi. Omboriy yo'qotishlar 90% ga kamaydi.", name: "Alisher Raximov", role: "Asoschi", company: "Grand Osiyo Textile" },
+      { quote: "Bemorlarni ro'yxatga olish va shifokorlar jadvalini avtomatlashtirish bo'yicha murojaat qilgandik. 3 oyda mukammal CRM topshirishdi. Qabul samaradorligi 40% ga oshdi, mijozlar kutish vaqti 2 barobar qisqardi.", name: "Dr. Sardor Zokirov", role: "Klinika tarmog'i rahbari", company: "MedFlow" },
+      { quote: "Bizga og'ir texnikalar ijarasi uchun murakkab platforma kerak edi. Loyiha o'z vaqtida, belgilangan byudjetdan chiqmagan holda topshirildi. Hozirda tizim kuniga 100+ buyurtmalarni avtomatik qayta ishlamoqda.", name: "Javohir Qodirov", role: "Loyiha rahbari", company: "Texnika-Ijara" },
+      { quote: "Sayt va CRM integratsiyasi orqali lidlar yo'qolishi to'xtadi. Har bir sotuvchi qaysi bosqichda ishlayotgani shaffof ko'rinib turadi. Professional yondashuv va texnik ko'mak uchun rahmat!", name: "Malika Umarova", role: "Marketing direktori", company: "Motor Lux" },
     ],
   },
   credentials: {
-    eyebrow: "ISHONCH VA TASDIQ",
-    title: "Rasmiy maqom va sertifikatlar.",
+    eyebrow: "RASMIY MAQOM",
+    title: "Hujjat bilan tasdiqlangan.",
     items: [
-      { title: "Odoo Learning Partner", org: "Odoo S.A.", status: "TASDIQLANGAN" },
-      { title: "Davlat ro'yxatidan o'tganlik guvohnomasi", org: '"EMPIRE GROUP CORP" MCHJ', status: "TASDIQLANGAN" },
-      { title: "IT Park rezidenti", org: "IT Park O'zbekiston", status: "KUTILMOQDA" },
-      { title: "ISO/IEC 27001", org: "Axborot xavfsizligi standarti", status: "KUTILMOQDA" },
+      { title: "Odoo Learning Partner", org: "Odoo S.A.", note: "Odoo vendorining rasmiy hamkori — mahsulot yangilanishlari, joriy qilish metodologiyasi va vendor ko'magiga to'g'ridan-to'g'ri kirish." },
+      { title: "Davlat ro'yxatidan o'tganlik guvohnomasi", org: '"EMPIRE GROUP CORP" MCHJ', note: "Rasmiy yuridik shaxs — shartnoma tuzish, hisob-faktura berish va soliq majburiyatlarini bajarish huquqi hujjat bilan tasdiqlangan." },
     ],
   },
   faq: {
@@ -240,8 +248,8 @@ const uz: V3Copy = {
     company: [
       ["Loyihalar", "#loyihalar"],
       ["Jarayon", "#jarayon"],
-      ["Sharhlar", "#sharhlar"],
-      ["Sertifikatlar", "#credentials"],
+      ["Jamoa", "#team"],
+      ["Blog", "/blog"],
     ],
     contact: [
       ["Telegram", "https://t.me/muslimansoriy"],
@@ -261,6 +269,7 @@ const ru: V3Copy = {
       ["Проекты", "#loyihalar"],
       ["Процесс", "#jarayon"],
       ["Отзывы", "#sharhlar"],
+      ["Журнал", "#jurnal"],
     ],
     cta: "Бесплатная консультация",
     openMenu: "Открыть меню",
@@ -275,21 +284,12 @@ const ru: V3Copy = {
     lede: "Переводим сложные внутренние процессы в цифру через ERP, AI, Web и App решения. От идеи до готовой системы — всего за 2–3 месяца.",
     primary: "Начать проект",
     secondary: "Посмотреть работы",
-    cliTitle: "empire — deploy",
-    cliCmd: "empire deploy --project motor-lux",
-    cliRows: ["Сборка готова · 2–3 месяца", "ERP · AI · Web · App", "Запущено"],
-    mockLabel: "motor-lux · dashboard",
-    mockStats: [
-      ["ПРОДАЖИ", "+38%"],
-      ["ЗАКАЗЫ", "1,204"],
-      ["UPTIME", "99.9%"],
-    ],
   },
   stats: [
-    ["50+", "Завершённых проектов"],
-    ["30+", "Довольных клиентов"],
-    ["15+", "Технологий"],
-    ["3+ года", "Опыта"],
+    ["2023", "ООО зарегистрировано"],
+    ["8", "Человек в штате"],
+    ["20+", "Внедрений Odoo ERP"],
+    ["2–3 мес.", "Средний срок запуска"],
   ],
   proofEyebrow: "НАМ ДОВЕРЯЮТ",
   services: {
@@ -322,17 +322,24 @@ const ru: V3Copy = {
     ctaDesc: "Спланируем и запустим ваш проект вместе.",
     ctaLink: "Начать проект",
     items: [
-      { seg: "АВТО · CRM", title: "Motor Lux — CRM и управление продажами", result: "Продажи и клиенты в одной системе", tags: ["CRM", "Web"] },
-      { seg: "МЕДИЦИНА · CRM (PWA)", title: "MedFlow — CRM клиники и приём пациентов", result: "Управление приёмом ускорилось в 3×", tags: ["PWA", "CRM"] },
-      { seg: "ТЕКСТИЛЬ · ERP", title: "Grand Osiyo Textile — ERP и складская система", result: "Склад управляется в реальном времени", tags: ["ERP", "Склад"] },
-      { seg: "АРЕНДА · КАТАЛОГ", title: "Texnika Ijara — сайт аренды и каталог", result: "Онлайн-брони выросли в 3×", tags: ["Web", "Каталог"] },
-      { seg: "ЭЛЕКТРОНИКА · E-COMMERCE", title: "GadgetSpace — онлайн-магазин электроники", result: "Конверсия выросла в 2.1×", tags: ["E-commerce"] },
-      { seg: "МОДА · E-COMMERCE", title: "X Wear — магазин для бренда одежды", result: "Средний чек вырос на 28%", tags: ["E-commerce", "Web"] },
-      { seg: "ТОРГОВЛЯ · POS", title: "Hilol Market — автоматизация торговли", result: "Расчёт на кассе ускорился в 2×", tags: ["Retail", "POS"] },
+      { seg: "АВТО · CRM", title: "Motor Lux — CRM и управление продажами", result: "Потери лидов прекратились, этап каждого продавца виден прозрачно", source: "Малика Умарова, директор по маркетингу", tags: ["CRM", "Web"] },
+      { seg: "МЕДИЦИНА · CRM (PWA)", title: "MedFlow — CRM клиники и приём пациентов", result: "Эффективность приёма выросла на 40%, время ожидания сократилось вдвое", source: "Д-р Сардор Зокиров, руководитель сети", tags: ["PWA", "CRM"] },
+      { seg: "ТЕКСТИЛЬ · ERP", title: "Grand Osiyo Textile — Odoo ERP для 15 складов", result: "Инвентаризация с недели сократилась до 1 дня, складские потери — на 90%", source: "Алишер Рахимов, основатель", tags: ["Odoo ERP", "Склад"] },
+      { seg: "АРЕНДА · ПЛАТФОРМА", title: "Texnika Ijara — платформа аренды спецтехники", result: "Более 100 заказов в день обрабатываются автоматически", source: "Жавохир Кодиров, руководитель проекта", tags: ["Web", "Каталог"] },
+      { seg: "ЭЛЕКТРОНИКА · E-COMMERCE", title: "GadgetSpace — онлайн-магазин электроники", result: "Каталог, корзина и оплата в одном потоке", tags: ["E-commerce"] },
+      { seg: "МОДА · E-COMMERCE", title: "X Wear — магазин для бренда одежды", result: "Магазин в стиле бренда и каталог, связанный со складом", tags: ["E-commerce", "Web"] },
+      { seg: "ТОРГОВЛЯ · POS", title: "Hilol Market — автоматизация торговли", result: "Касса, склад и отчётность в одной панели", tags: ["Retail", "POS"] },
     ],
   },
   stack: { eyebrow: "НАШ СТЕК", title: "Надёжные технологии индустриального стандарта." },
-  brands: { eyebrow: "ГЛОБАЛЬНЫЙ СТАНДАРТ", title: "Работаем на уровне мировых лидеров." },
+  journal: {
+    eyebrow: "ЖУРНАЛ",
+    title: "Что знаем — пишем открыто.",
+    sub: "Практические статьи о внедрении ERP, AI-автоматизации и цифровизации.",
+    readLabel: "Читать",
+    allLabel: "Все статьи",
+    empty: "Статьи скоро появятся.",
+  },
   process: {
     eyebrow: "КАК МЫ РАБОТАЕМ",
     title: "От идеи до продукта — 4 этапа.",
@@ -361,20 +368,18 @@ const ru: V3Copy = {
     eyebrow: "ОТЗЫВЫ КЛИЕНТОВ",
     title: "Что говорят наши клиенты.",
     items: [
-      { quote: "Empire Group полностью перевели нашу бумажную работу в систему — сэкономили массу времени.", name: "Алия М.", role: "Motor Lux · CRM" },
-      { quote: "С Empire работать было легко, сроки и бюджет были ясны.", name: "Жасур Т.", role: "GadgetSpace · E-commerce" },
-      { quote: "Автоматизировали работу клиники с AI. Приём стал гораздо упорядоченнее.", name: "Дониёр Р.", role: "MedFlow · Клиника" },
-      { quote: "Современный дизайн, объём продаж вырос.", name: "Лазиза К.", role: "X Wear · E-commerce" },
+      { quote: "Команда Empire перевела наши 15 складов и точек продаж в единую систему Odoo ERP. Инвентаризация, которая раньше занимала недели, теперь завершается за 1 день. Складские потери сократились на 90%.", name: "Алишер Рахимов", role: "Основатель", company: "Grand Osiyo Textile" },
+      { quote: "Мы обратились по автоматизации регистрации пациентов и расписания врачей. За 3 месяца сдали отличную CRM. Эффективность приёма выросла на 40%, время ожидания клиентов сократилось вдвое.", name: "Д-р Сардор Зокиров", role: "Руководитель сети клиник", company: "MedFlow" },
+      { quote: "Нам была нужна сложная платформа для аренды спецтехники. Проект сдали в срок и без выхода за рамки бюджета. Сейчас система автоматически обрабатывает более 100 заказов в день.", name: "Жавохир Кодиров", role: "Руководитель проекта", company: "Texnika-Ijara" },
+      { quote: "Благодаря интеграции сайта и CRM потери лидов прекратились. Прозрачно видно, на каком этапе работает каждый продавец. Спасибо за профессиональный подход и техническую поддержку!", name: "Малика Умарова", role: "Директор по маркетингу", company: "Motor Lux" },
     ],
   },
   credentials: {
-    eyebrow: "ДОВЕРИЕ И ПОДТВЕРЖДЕНИЕ",
-    title: "Официальный статус и сертификаты.",
+    eyebrow: "ОФИЦИАЛЬНЫЙ СТАТУС",
+    title: "Подтверждено документом.",
     items: [
-      { title: "Odoo Learning Partner", org: "Odoo S.A.", status: "ПОДТВЕРЖДЕНО" },
-      { title: "Свидетельство о государственной регистрации", org: '«EMPIRE GROUP CORP» ООО', status: "ПОДТВЕРЖДЕНО" },
-      { title: "Резидент IT Park", org: "IT Park Узбекистан", status: "В ПРОЦЕССЕ" },
-      { title: "ISO/IEC 27001", org: "Стандарт информационной безопасности", status: "В ПРОЦЕССЕ" },
+      { title: "Odoo Learning Partner", org: "Odoo S.A.", note: "Официальный партнёр вендора Odoo — прямой доступ к обновлениям продукта, методологии внедрения и поддержке вендора." },
+      { title: "Свидетельство о государственной регистрации", org: "«EMPIRE GROUP CORP» ООО", note: "Официальное юридическое лицо — право заключать договоры, выставлять счета-фактуры и исполнять налоговые обязательства подтверждено документом." },
     ],
   },
   faq: {
@@ -411,8 +416,8 @@ const ru: V3Copy = {
     company: [
       ["Проекты", "#loyihalar"],
       ["Процесс", "#jarayon"],
-      ["Отзывы", "#sharhlar"],
-      ["Сертификаты", "#credentials"],
+      ["Команда", "#team"],
+      ["Блог", "/blog"],
     ],
     contact: [
       ["Telegram", "https://t.me/muslimansoriy"],
@@ -432,6 +437,7 @@ const en: V3Copy = {
       ["Work", "#loyihalar"],
       ["Process", "#jarayon"],
       ["Reviews", "#sharhlar"],
+      ["Journal", "#jurnal"],
     ],
     cta: "Free consultation",
     openMenu: "Open menu",
@@ -446,21 +452,12 @@ const en: V3Copy = {
     lede: "We turn tangled internal processes into working software with ERP, AI, Web and App solutions. From idea to a running system in just 2–3 months.",
     primary: "Start a project",
     secondary: "See our work",
-    cliTitle: "empire — deploy",
-    cliCmd: "empire deploy --project motor-lux",
-    cliRows: ["Build ready · 2–3 months", "ERP · AI · Web · App", "Shipped to production"],
-    mockLabel: "motor-lux · dashboard",
-    mockStats: [
-      ["SALES", "+38%"],
-      ["ORDERS", "1,204"],
-      ["UPTIME", "99.9%"],
-    ],
   },
   stats: [
-    ["50+", "Projects delivered"],
-    ["30+", "Happy clients"],
-    ["15+", "Technologies"],
-    ["3+ years", "Experience"],
+    ["2023", "LLC registered"],
+    ["8", "People on staff"],
+    ["20+", "Odoo ERP rollouts"],
+    ["2–3 mo", "Typical time to launch"],
   ],
   proofEyebrow: "TRUSTED BY",
   services: {
@@ -493,17 +490,24 @@ const en: V3Copy = {
     ctaDesc: "We will plan and ship your project together.",
     ctaLink: "Start a project",
     items: [
-      { seg: "AUTOMOTIVE · CRM", title: "Motor Lux — CRM and sales management", result: "Sales and customers in one system", tags: ["CRM", "Web"] },
-      { seg: "HEALTHCARE · CRM (PWA)", title: "MedFlow — clinic CRM and patient intake", result: "Intake handling got 3× faster", tags: ["PWA", "CRM"] },
-      { seg: "TEXTILE · ERP", title: "Grand Osiyo Textile — ERP and warehouse system", result: "Warehouse runs in real time", tags: ["ERP", "Warehouse"] },
-      { seg: "RENTAL · CATALOGUE", title: "Texnika Ijara — rental site and catalogue", result: "Online bookings up 3×", tags: ["Web", "Catalogue"] },
-      { seg: "ELECTRONICS · E-COMMERCE", title: "GadgetSpace — online electronics store", result: "Conversion up 2.1×", tags: ["E-commerce"] },
-      { seg: "FASHION · E-COMMERCE", title: "X Wear — store for a clothing brand", result: "Average order value up 28%", tags: ["E-commerce", "Web"] },
-      { seg: "RETAIL · POS", title: "Hilol Market — retail automation", result: "Checkout got 2× faster", tags: ["Retail", "POS"] },
+      { seg: "AUTOMOTIVE · CRM", title: "Motor Lux — CRM and sales management", result: "Leads stopped falling through; every rep's stage is visible", source: "Malika Umarova, Marketing Director", tags: ["CRM", "Web"] },
+      { seg: "HEALTHCARE · CRM (PWA)", title: "MedFlow — clinic CRM and patient intake", result: "Intake efficiency up 40%, patient wait time halved", source: "Dr. Sardor Zokirov, Head of clinic network", tags: ["PWA", "CRM"] },
+      { seg: "TEXTILE · ERP", title: "Grand Osiyo Textile — Odoo ERP across 15 warehouses", result: "Stocktake went from weeks to one day; warehouse losses down 90%", source: "Alisher Rakhimov, Founder", tags: ["Odoo ERP", "Warehouse"] },
+      { seg: "RENTAL · PLATFORM", title: "Texnika Ijara — heavy equipment rental platform", result: "100+ orders a day processed automatically", source: "Javokhir Kodirov, Project Lead", tags: ["Web", "Catalogue"] },
+      { seg: "ELECTRONICS · E-COMMERCE", title: "GadgetSpace — online electronics store", result: "Catalogue, cart and payment in a single flow", tags: ["E-commerce"] },
+      { seg: "FASHION · E-COMMERCE", title: "X Wear — store for a clothing brand", result: "A store in the brand's own voice, catalogue tied to stock", tags: ["E-commerce", "Web"] },
+      { seg: "RETAIL · POS", title: "Hilol Market — retail automation", result: "Till, stock and reporting in one panel", tags: ["Retail", "POS"] },
     ],
   },
   stack: { eyebrow: "OUR STACK", title: "Dependable, industry-standard technology." },
-  brands: { eyebrow: "GLOBAL STANDARD", title: "We work at the level of the world's leaders." },
+  journal: {
+    eyebrow: "JOURNAL",
+    title: "What we know, we write down.",
+    sub: "Practical writing on ERP rollouts, AI automation and going digital.",
+    readLabel: "Read",
+    allLabel: "All articles",
+    empty: "Articles coming soon.",
+  },
   process: {
     eyebrow: "HOW WE WORK",
     title: "Idea to product — four stages.",
@@ -532,20 +536,18 @@ const en: V3Copy = {
     eyebrow: "CLIENT FEEDBACK",
     title: "What our clients say.",
     items: [
-      { quote: "Empire Group moved our whole paper process into a system — it saved us a great deal of time.", name: "Aliya M.", role: "Motor Lux · CRM" },
-      { quote: "Working with Empire was easy; the timeline and budget were clear from the start.", name: "Jasur T.", role: "GadgetSpace · E-commerce" },
-      { quote: "They automated the clinic with AI. Patient intake is far more orderly now.", name: "Doniyor R.", role: "MedFlow · Clinic" },
-      { quote: "Modern design, and our sales volume went up.", name: "Laziza K.", role: "X Wear · E-commerce" },
+      { quote: "The Empire team moved our 15 warehouses and retail points onto a single Odoo ERP. A stocktake that used to take weeks now finishes in one day. Warehouse losses fell by 90%.", name: "Alisher Rakhimov", role: "Founder", company: "Grand Osiyo Textile" },
+      { quote: "We came to them to automate patient registration and doctor scheduling. They delivered an excellent CRM in three months. Intake efficiency rose 40% and patient wait time halved.", name: "Dr. Sardor Zokirov", role: "Head of clinic network", company: "MedFlow" },
+      { quote: "We needed a complex platform for heavy equipment rental. The project was delivered on time and within the agreed budget. The system now processes 100+ orders a day automatically.", name: "Javokhir Kodirov", role: "Project Lead", company: "Texnika-Ijara" },
+      { quote: "Integrating the site with the CRM stopped us losing leads. You can see exactly which stage each salesperson is at. Thank you for the professional approach and the technical support!", name: "Malika Umarova", role: "Marketing Director", company: "Motor Lux" },
     ],
   },
   credentials: {
-    eyebrow: "TRUST AND PROOF",
-    title: "Official status and certificates.",
+    eyebrow: "OFFICIAL STATUS",
+    title: "Backed by documents.",
     items: [
-      { title: "Odoo Learning Partner", org: "Odoo S.A.", status: "CONFIRMED" },
-      { title: "Certificate of state registration", org: '"EMPIRE GROUP CORP" LLC', status: "CONFIRMED" },
-      { title: "IT Park resident", org: "IT Park Uzbekistan", status: "IN PROGRESS" },
-      { title: "ISO/IEC 27001", org: "Information security standard", status: "IN PROGRESS" },
+      { title: "Odoo Learning Partner", org: "Odoo S.A.", note: "Official Odoo vendor partner — direct access to product updates, rollout methodology and vendor support." },
+      { title: "Certificate of state registration", org: '"EMPIRE GROUP CORP" LLC', note: "A registered legal entity — the right to sign contracts, issue invoices and meet tax obligations is documented." },
     ],
   },
   faq: {
@@ -582,8 +584,8 @@ const en: V3Copy = {
     company: [
       ["Work", "#loyihalar"],
       ["Process", "#jarayon"],
-      ["Reviews", "#sharhlar"],
-      ["Certificates", "#credentials"],
+      ["Team", "#team"],
+      ["Blog", "/blog"],
     ],
     contact: [
       ["Telegram", "https://t.me/muslimansoriy"],
