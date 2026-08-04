@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { usePathname } from "next/navigation";
 import { useI18n } from "@/lib/i18n";
 import { ConsultForm } from "./ConsultForm";
 import { Close } from "./Icons";
@@ -25,8 +26,18 @@ export function useConsult(): ConsultValue {
 const AUTO_KEY = "sd_consult_autoshown";
 const AUTO_DELAY = 60_000; // 60s
 
+/**
+ * The homepage carries its own lead form in its own visual language, so the
+ * shared modal popping over it would show two designs at once and ask for
+ * details the visitor can already leave in front of them. Every other page
+ * still gets it. Matches `/`, `/ru` and `/en`.
+ */
+const HAS_OWN_FORM = /^\/(?:ru|en)?\/?$/;
+
 export function ConsultProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setOpen] = useState(false);
+  const pathname = usePathname();
+  const hasOwnForm = HAS_OWN_FORM.test(pathname || "/");
   const open = useCallback(() => {
     // any manual open counts as "shown" so the timer won't pop it again
     try {
@@ -36,8 +47,9 @@ export function ConsultProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const close = useCallback(() => setOpen(false), []);
 
-  // auto-open the consultation form once, ~90s into the visit
+  // auto-open the consultation form once, ~60s into the visit
   useEffect(() => {
+    if (hasOwnForm) return;
     try {
       if (sessionStorage.getItem(AUTO_KEY)) return;
     } catch {}
@@ -49,7 +61,7 @@ export function ConsultProvider({ children }: { children: React.ReactNode }) {
       setOpen(true);
     }, AUTO_DELAY);
     return () => window.clearTimeout(id);
-  }, []);
+  }, [hasOwnForm]);
 
   return (
     <ConsultContext.Provider value={{ open, close, isOpen }}>

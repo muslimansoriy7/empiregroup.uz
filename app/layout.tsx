@@ -1,9 +1,21 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Geist, Geist_Mono } from "next/font/google";
 import { defaultLocale } from "@/content";
 import "./globals.css";
+
+// The real Geist from Google Fonts (self-hosted by next/font at build time),
+// not the geist npm package — this is the exact face vercel.com/font ships.
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+  display: "swap",
+});
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -27,8 +39,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // one colour: the site does not follow the device scheme
-  themeColor: "#0a0a0a",
+  // browser chrome follows the active theme (approximated via the device
+  // scheme for the very first paint; the toggle takes over after that)
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
@@ -36,6 +52,9 @@ export const viewport: Viewport = {
 const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  // Stable id so pages can add facts about the company (services, FAQ)
+  // by reference instead of describing a second, competing entity.
+  "@id": `${SITE}#organisation`,
   name: "Empire Group",
   legalName: '"EMPIRE GROUP CORP" MCHJ',
   alternateName: "Empire IT Solutions",
@@ -53,7 +72,9 @@ const orgSchema = {
   },
   areaServed: "UZ",
   foundingDate: "2023",
-  numberOfEmployees: { "@type": "QuantitativeValue", value: 10 },
+  // Matches the eight people the team section actually shows — a structured
+  // figure that contradicts the visible page is worse than none.
+  numberOfEmployees: { "@type": "QuantitativeValue", value: 8 },
   sameAs: ["https://t.me/muslimansoriy", "https://instagram.com/empiregroup.uz"],
   contactPoint: {
     "@type": "ContactPoint",
@@ -83,9 +104,14 @@ const websiteSchema = {
   publisher: { "@type": "Organization", name: "Empire Group", url: SITE },
 };
 
-// Arms the scroll-reveal `.js` flag before paint. The site is permanently
-// dark, so there is no theme to restore and no theme JS.
-const BOOT_SCRIPT = `document.documentElement.classList.add('js')`;
+// Runs before paint: restores the saved theme and arms the scroll-reveal
+// `.js` flag. First visit defaults to dark (the brand's established look);
+// once the header toggle is used the choice is persisted to localStorage and
+// wins here. Setting data-theme synchronously avoids a flash of the wrong theme.
+// Runs before paint. A stored choice always wins; with nothing stored we
+// follow the operating system rather than forcing light on someone whose
+// machine is set to dark.
+const BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}document.documentElement.classList.add('js');})()`;
 
 export default function RootLayout({
   children,
@@ -93,7 +119,8 @@ export default function RootLayout({
   return (
     <html
       lang={defaultLocale}
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      data-theme="light"
+      className={`${geistSans.variable} ${geistMono.variable}`}
       suppressHydrationWarning
     >
       <head>

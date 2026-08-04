@@ -36,7 +36,7 @@ export default async function RahmatPage({ params }) {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href={localePath(lang, "/")}
-              className="inline-flex h-11 items-center rounded-[var(--radius-pill)] bg-ink px-6 text-sm font-medium text-elevated transition-colors hover:bg-[#383838]"
+              className="inline-flex h-11 items-center rounded-[var(--radius-pill)] bg-ink px-6 text-sm font-medium text-elevated transition-colors hover:bg-ink-hover"
             >
               Bosh sahifaga →
             </Link>

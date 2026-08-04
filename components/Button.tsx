@@ -15,12 +15,12 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-ink text-elevated rounded-[var(--radius-pill)] hover:bg-[#383838] shadow-[var(--shadow-whisper)]",
+    "bg-ink text-elevated border border-ink rounded-[var(--radius-pill)] hover:bg-ink-hover hover:border-ink-hover shadow-[var(--shadow-whisper)]",
   secondary:
     "bg-elevated text-ink rounded-[var(--radius-pill)] border border-hairline hover:border-ink/30 hover:bg-canvas",
-  nav: "bg-ink text-elevated rounded-[var(--radius-btn)] hover:bg-[#383838]",
+  nav: "bg-ink text-elevated border border-ink rounded-[var(--radius-pill)] hover:bg-ink-hover hover:border-ink-hover",
   "nav-ghost":
-    "bg-elevated text-ink rounded-[var(--radius-btn)] border border-hairline hover:border-ink/30 hover:bg-canvas",
+    "bg-elevated text-ink rounded-[var(--radius-pill)] border border-hairline hover:border-ink/30 hover:bg-canvas",
 };
 
 const sizes: Record<Size, string> = {

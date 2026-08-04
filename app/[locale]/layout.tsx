@@ -72,5 +72,22 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  return <Providers initialLocale={locale}>{children}</Providers>;
+  return (
+    <>
+      {/* The single <html> tag lives in the root layout, which renders before
+          the locale segment is known, so it ships lang="uz" for every route.
+          This per-locale script is baked into each locale's STATIC HTML (via
+          generateStaticParams) and corrects <html lang> before paint — so
+          screen readers and JS-rendering crawlers get the right language on
+          /ru/* and /en/* immediately, without opting any route into dynamic
+          rendering. (A fully static raw-HTML lang would need a route-group
+          multi-root-layout refactor.) */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `document.documentElement.lang=${JSON.stringify(locale)}`,
+        }}
+      />
+      <Providers initialLocale={locale}>{children}</Providers>
+    </>
+  );
 }

@@ -55,6 +55,17 @@ function localeRouting(request) {
 export async function middleware(request) {
   const path = request.nextUrl.pathname;
 
+  // Static business-card microsites live in /public (/card, /abbos, …). They
+  // are plain HTML, not part of the localised app tree, so skip i18n and serve
+  // the folder's index.html directly (Next.js doesn't do directory-index
+  // resolution for public files on its own).
+  if (/^\/(card|abbos)(\/|$)/.test(path)) {
+    if (path.endsWith('.html')) return NextResponse.next();
+    const url = request.nextUrl.clone();
+    url.pathname = `${path.replace(/\/$/, '')}/index.html`;
+    return NextResponse.rewrite(url);
+  }
+
   // Admin sits outside the localised tree and needs a Supabase session check.
   if (path.startsWith('/admin')) {
     let response = NextResponse.next({ request });

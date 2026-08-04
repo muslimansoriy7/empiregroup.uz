@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import { Container } from "../Container";
 import { Reveal } from "../Reveal";
@@ -36,7 +37,7 @@ function TgProofPhone({
   src?: string;
 }) {
   return (
-    <PhoneFrame className="shrink-0 snap-center" float>
+    <PhoneFrame className="shrink-0">
       {src ? (
         <Image
           src={src}
@@ -46,7 +47,7 @@ function TgProofPhone({
           className="h-auto w-full"
         />
       ) : (
-        <div className="flex h-[460px] flex-col bg-canvas">
+        <div className="flex aspect-[9/16] flex-col bg-canvas">
           {/* telegram chat header */}
           <div className="flex items-center gap-2.5 border-b border-hairline bg-elevated px-3 pb-2.5 pt-8">
             <span
@@ -129,11 +130,22 @@ const PROOF_ACCENTS: Accent[] = ["develop", "preview", "ship", "develop"];
 export function Testimonials() {
   const { t } = useI18n();
   const testimonials = t.testimonials;
+  const phoneTrackRef = useRef<HTMLDivElement>(null);
+
+  // Smoothly slow (not stop) the phone marquee while a visitor hovers to read.
+  const setPhoneRate = (rate: number) => {
+    phoneTrackRef.current
+      ?.getAnimations()
+      .forEach((a) => (a.playbackRate = rate));
+  };
+
+  const proofPhones = testimonials.items.slice(0, 4);
+  const phoneTrack = [...proofPhones, ...proofPhones];
 
   return (
     <section
       id="sharhlar"
-      className="scroll-mt-10 border-t border-hairline bg-canvas py-[clamp(72px,9vw,128px)]"
+      className="scroll-mt-10 border-t border-hairline bg-canvas py-[var(--section-py)]"
     >
       <Container>
         <div className="max-w-2xl">
@@ -154,7 +166,7 @@ export function Testimonials() {
                   <div className="text-[15px] font-semibold text-ink">
                     {item.name}
                   </div>
-                  <div className="mt-0.5 font-mono text-[12px] text-mute">
+                  <div className="mt-0.5 font-sans text-[12px] text-mute">
                     {item.role}
                   </div>
                 </figcaption>
@@ -182,14 +194,27 @@ export function Testimonials() {
           </div>
 
           <Reveal as="div">
-            <div className="-mx-5 mt-7 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 sm:mx-0 sm:justify-center sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {testimonials.items.slice(0, 4).map((item, i) => (
-                <TgProofPhone
-                  key={item.name}
-                  name={item.name}
-                  accent={PROOF_ACCENTS[i % PROOF_ACCENTS.length]}
-                />
-              ))}
+            {/* infinite marquee — mirrors the trust-bar logo scroll; the track
+                is duplicated so the -50% loop is seamless, and hovering slows
+                (not stops) it so a visitor can read a card. */}
+            <div
+              className="marquee-mask group relative -mx-5 mt-7 overflow-hidden px-5 py-4 sm:mx-0 sm:px-0"
+              onMouseEnter={() => setPhoneRate(0.15)}
+              onMouseLeave={() => setPhoneRate(1)}
+            >
+              <div
+                ref={phoneTrackRef}
+                className="marquee-track flex w-max gap-5 motion-reduce:animate-none"
+                style={{ "--marquee-duration": "52s" } as React.CSSProperties}
+              >
+                {phoneTrack.map((item, i) => (
+                  <TgProofPhone
+                    key={i}
+                    name={item.name}
+                    accent={PROOF_ACCENTS[i % PROOF_ACCENTS.length]}
+                  />
+                ))}
+              </div>
             </div>
           </Reveal>
         </div>

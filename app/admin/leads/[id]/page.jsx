@@ -51,19 +51,19 @@ export default async function LeadDetailPage({ params }) {
     revalidatePath('/admin/leads')
   }
 
-  const cardStyle = { background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 12, padding: 20, marginBottom: 16 }
-  const inputStyle = { width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 13, color: '#E8ECF1', boxSizing: 'border-box' }
+  const cardStyle = { background: 'var(--color-hairline-soft)', border: '1px solid var(--color-hairline)', borderRadius: 12, padding: 20, marginBottom: 16 }
+  const inputStyle = { width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid var(--color-hairline)', background: 'var(--color-hairline-soft)', fontSize: 13, color: 'var(--color-ink)', boxSizing: 'border-box' }
 
   return (
     <div>
-      <Link href="/admin/leads" style={{ fontSize: 14, color: '#C8A24A', textDecoration: 'none', marginBottom: 16, display: 'inline-block' }}>
+      <Link href="/admin/leads" style={{ fontSize: 14, color: 'var(--color-link)', textDecoration: 'none', marginBottom: 16, display: 'inline-block' }}>
         ← Barcha leadlar
       </Link>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, color: '#E8ECF1' }}>{lead.name || 'Nomsiz lead'}</h1>
-          <div style={{ display: 'flex', gap: 12, fontSize: 14, color: '#7B8FA6' }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, color: 'var(--color-ink)' }}>{lead.name || 'Nomsiz lead'}</h1>
+          <div style={{ display: 'flex', gap: 12, fontSize: 14, color: 'var(--color-mute)' }}>
             {lead.phone && <span>📞 {lead.phone}</span>}
             {lead.email && <span>📧 {lead.email}</span>}
             {lead.company && <span>🏢 {lead.company}</span>}
@@ -80,7 +80,7 @@ export default async function LeadDetailPage({ params }) {
         <div>
           {/* Info card */}
           <div style={cardStyle}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: '#E8ECF1' }}>Lead ma'lumotlari</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'var(--color-ink)' }}>Lead ma'lumotlari</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 20px', fontSize: 14 }}>
               {[
                 ['Xizmat', lead.service],
@@ -94,14 +94,14 @@ export default async function LeadDetailPage({ params }) {
                 ['Keyingi follow-up', fmt(lead.next_follow_up)],
               ].map(([label, val]) => (
                 <div key={label}>
-                  <span style={{ color: '#7B8FA6', fontSize: 12 }}>{label}</span>
-                  <div style={{ fontWeight: 500, color: '#E8ECF1' }}>{val || '—'}</div>
+                  <span style={{ color: 'var(--color-mute)', fontSize: 12 }}>{label}</span>
+                  <div style={{ fontWeight: 500, color: 'var(--color-ink)' }}>{val || '—'}</div>
                 </div>
               ))}
             </div>
             {lead.message && (
-              <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.06)' }}>
-                <span style={{ color: '#7B8FA6', fontSize: 12 }}>Xabar</span>
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--color-hairline-soft)' }}>
+                <span style={{ color: 'var(--color-mute)', fontSize: 12 }}>Xabar</span>
                 <p style={{ fontSize: 14, marginTop: 4, fontStyle: 'italic', color: 'rgba(232,236,241,.8)' }}>&ldquo;{lead.message}&rdquo;</p>
               </div>
             )}
@@ -116,10 +116,10 @@ export default async function LeadDetailPage({ params }) {
 
           {/* Add activity */}
           <div style={cardStyle}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: '#E8ECF1' }}>+ Eslatma / Faoliyat</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: 'var(--color-ink)' }}>+ Eslatma / Faoliyat</h3>
             <form action={addNoteAction}>
               <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
-                <select name="type" style={{ padding: '7px 12px', borderRadius: 7, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 13, color: '#E8ECF1' }}>
+                <select name="type" style={{ padding: '7px 12px', borderRadius: 7, border: '1px solid var(--color-hairline)', background: 'var(--color-hairline-soft)', fontSize: 13, color: 'var(--color-ink)' }}>
                   <option value="note">📝 Eslatma</option>
                   <option value="call">📞 Qo'ng'iroq</option>
                   <option value="email">📧 Email</option>
@@ -128,8 +128,8 @@ export default async function LeadDetailPage({ params }) {
                 </select>
               </div>
               <textarea name="description" rows={3} required placeholder="Yozing..."
-                style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 14, color: '#E8ECF1', boxSizing: 'border-box', marginBottom: 10 }} />
-              <button type="submit" style={{ background: '#C8A24A', color: '#0E1A2B', padding: '8px 20px', borderRadius: 7, border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid var(--color-hairline)', background: 'var(--color-hairline-soft)', fontSize: 14, color: 'var(--color-ink)', boxSizing: 'border-box', marginBottom: 10 }} />
+              <button type="submit" style={{ background: 'var(--color-link)', color: 'var(--color-ink)', padding: '8px 20px', borderRadius: 7, border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
                 Saqlash
               </button>
             </form>
@@ -137,16 +137,16 @@ export default async function LeadDetailPage({ params }) {
 
           {/* Activity log */}
           <div style={cardStyle}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: '#E8ECF1' }}>Faoliyat tarixi</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, color: 'var(--color-ink)' }}>Faoliyat tarixi</h3>
             {activities.length === 0 ? (
-              <p style={{ fontSize: 13, color: '#7B8FA6', textAlign: 'center', padding: 16 }}>Hali faoliyat yo'q</p>
+              <p style={{ fontSize: 13, color: 'var(--color-mute)', textAlign: 'center', padding: 16 }}>Hali faoliyat yo'q</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {activities.map(a => (
-                  <div key={a.id} style={{ display: 'flex', gap: 10, padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,.04)' }}>
+                  <div key={a.id} style={{ display: 'flex', gap: 10, padding: '10px 0', borderBottom: '1px solid var(--color-hairline-soft)' }}>
                     <span style={{ fontSize: 18 }}>{ACTIVITY_TYPES[a.type] || '📝'}</span>
                     <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: 14, margin: 0, color: '#E8ECF1' }}>{a.description}</p>
+                      <p style={{ fontSize: 14, margin: 0, color: 'var(--color-ink)' }}>{a.description}</p>
                       <span style={{ fontSize: 12, color: 'rgba(123,143,166,.6)' }}>{fmt(a.created_at)}</span>
                     </div>
                   </div>
@@ -160,7 +160,7 @@ export default async function LeadDetailPage({ params }) {
         <div>
           {/* Change status */}
           <div style={cardStyle}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: '#E8ECF1' }}>Statusni o'zgartirish</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: 'var(--color-ink)' }}>Statusni o'zgartirish</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {Object.entries(STATUS_UZ).filter(([k]) => k !== lead.status).map(([k, v]) => (
                 <form key={k} action={changeStatusAction}>
@@ -176,26 +176,26 @@ export default async function LeadDetailPage({ params }) {
 
           {/* Quick edit */}
           <div style={cardStyle}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: '#E8ECF1' }}>Tez tahrir</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10, color: 'var(--color-ink)' }}>Tez tahrir</h3>
             <form action={updateLeadAction}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <div>
-                  <label style={{ fontSize: 12, color: '#7B8FA6', display: 'block', marginBottom: 3 }}>Kompaniya</label>
+                  <label style={{ fontSize: 12, color: 'var(--color-mute)', display: 'block', marginBottom: 3 }}>Kompaniya</label>
                   <input name="company" defaultValue={lead.company || ''} style={inputStyle} />
                 </div>
                 <div>
-                  <label style={{ fontSize: 12, color: '#7B8FA6', display: 'block', marginBottom: 3 }}>Deal qiymati (so'm)</label>
+                  <label style={{ fontSize: 12, color: 'var(--color-mute)', display: 'block', marginBottom: 3 }}>Deal qiymati (so'm)</label>
                   <input name="deal_value" type="number" defaultValue={lead.deal_value || ''} style={inputStyle} />
                 </div>
                 <div>
-                  <label style={{ fontSize: 12, color: '#7B8FA6', display: 'block', marginBottom: 3 }}>Keyingi follow-up</label>
+                  <label style={{ fontSize: 12, color: 'var(--color-mute)', display: 'block', marginBottom: 3 }}>Keyingi follow-up</label>
                   <input name="next_follow_up" type="datetime-local" defaultValue={lead.next_follow_up ? lead.next_follow_up.slice(0, 16) : ''} style={inputStyle} />
                 </div>
                 <div>
-                  <label style={{ fontSize: 12, color: '#7B8FA6', display: 'block', marginBottom: 3 }}>Eslatmalar</label>
+                  <label style={{ fontSize: 12, color: 'var(--color-mute)', display: 'block', marginBottom: 3 }}>Eslatmalar</label>
                   <textarea name="notes" rows={3} defaultValue={lead.notes || ''} style={inputStyle} />
                 </div>
-                <button type="submit" style={{ background: '#C8A24A', color: '#0E1A2B', padding: '8px 16px', borderRadius: 7, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+                <button type="submit" style={{ background: 'var(--color-link)', color: 'var(--color-ink)', padding: '8px 16px', borderRadius: 7, border: 'none', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
                   Saqlash
                 </button>
               </div>

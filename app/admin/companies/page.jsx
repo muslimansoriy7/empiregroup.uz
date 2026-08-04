@@ -47,8 +47,8 @@ async function changeStatus(formData) {
   revalidatePath('/admin/companies')
 }
 
-const inputStyle = { width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 14, color: '#E8ECF1', boxSizing: 'border-box' }
-const selectStyle = { padding: '7px 10px', borderRadius: 7, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 14, color: '#E8ECF1' }
+const inputStyle = { width: '100%', padding: '7px 10px', borderRadius: 7, border: '1px solid var(--color-hairline)', background: 'var(--color-hairline-soft)', fontSize: 14, color: 'var(--color-ink)', boxSizing: 'border-box' }
+const selectStyle = { padding: '7px 10px', borderRadius: 7, border: '1px solid var(--color-hairline)', background: 'var(--color-hairline-soft)', fontSize: 14, color: 'var(--color-ink)' }
 
 export default async function CompaniesPage() {
   const companies = await getCompanies({})
@@ -57,8 +57,8 @@ export default async function CompaniesPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6, color: '#E8ECF1' }}>🏢 Kompaniyalar (ABM)</h1>
-      <p style={{ fontSize: 14, color: '#7B8FA6', marginBottom: 20 }}>B2B maqsadli kompaniyalar va klientlar</p>
+      <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6, color: 'var(--color-ink)' }}>🏢 Kompaniyalar (ABM)</h1>
+      <p style={{ fontSize: 14, color: 'var(--color-mute)', marginBottom: 20 }}>B2B maqsadli kompaniyalar va klientlar</p>
 
       {/* Stats */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
@@ -71,8 +71,8 @@ export default async function CompaniesPage() {
       </div>
 
       {/* Add new */}
-      <div style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 12, padding: 22, marginBottom: 24 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14, color: '#E8ECF1' }}>+ Yangi kompaniya</h3>
+      <div style={{ background: 'var(--color-hairline-soft)', border: '1px solid var(--color-hairline)', borderRadius: 12, padding: 22, marginBottom: 24 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14, color: 'var(--color-ink)' }}>+ Yangi kompaniya</h3>
         <form action={saveCompany}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
             {[
@@ -84,18 +84,18 @@ export default async function CompaniesPage() {
               ['website', 'Veb-sayt', 'company.uz'],
             ].map(([n, l, p, req]) => (
               <div key={n}>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#7B8FA6' }}>{l}</label>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: 'var(--color-mute)' }}>{l}</label>
                 <input name={n} placeholder={p} required={req || false} style={inputStyle} />
               </div>
             ))}
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
             <div>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#7B8FA6' }}>Manzil</label>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: 'var(--color-mute)' }}>Manzil</label>
               <input name="address" placeholder="Toshkent, Amir Temur 42" style={inputStyle} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: '#7B8FA6' }}>Eslatma</label>
+              <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4, color: 'var(--color-mute)' }}>Eslatma</label>
               <input name="notes" placeholder="Qisqacha izoh..." style={inputStyle} />
             </div>
           </div>
@@ -103,7 +103,7 @@ export default async function CompaniesPage() {
             <select name="status" style={selectStyle}>
               {Object.entries(STATUS_UZ).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
-            <button type="submit" style={{ background: '#C8A24A', color: '#0E1A2B', padding: '9px 22px', borderRadius: 8, border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+            <button type="submit" style={{ background: 'var(--color-link)', color: 'var(--color-ink)', padding: '9px 22px', borderRadius: 8, border: 'none', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
               Qo'shish
             </button>
           </div>
@@ -112,32 +112,32 @@ export default async function CompaniesPage() {
 
       {/* List */}
       {companies.length === 0 ? (
-        <p style={{ color: '#7B8FA6', textAlign: 'center', padding: 30 }}>Kompaniya yo'q. Yuqorida formadan qo'shing.</p>
+        <p style={{ color: 'var(--color-mute)', textAlign: 'center', padding: 30 }}>Kompaniya yo'q. Yuqorida formadan qo'shing.</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {companies.map(c => (
             <div key={c.id} style={{
-              background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 10, padding: '16px 18px',
+              background: 'var(--color-hairline-soft)', border: '1px solid var(--color-hairline)', borderRadius: 10, padding: '16px 18px',
               display: 'grid', gridTemplateColumns: '1fr auto', gap: 14, alignItems: 'center'
             }}>
               <div>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 4 }}>
-                  <strong style={{ fontSize: 15, color: '#E8ECF1' }}>{c.name}</strong>
+                  <strong style={{ fontSize: 15, color: 'var(--color-ink)' }}>{c.name}</strong>
                   <span style={{
                     fontSize: 11, padding: '2px 10px', borderRadius: 12, fontWeight: 600,
                     background: `${STATUS_CLR[c.status] || '#6b7280'}15`,
                     color: STATUS_CLR[c.status] || '#6b7280'
                   }}>{STATUS_UZ[c.status] || c.status}</span>
-                  {c.industry && <span style={{ fontSize: 12, color: '#7B8FA6' }}>{c.industry}</span>}
-                  {c.size && <span style={{ fontSize: 12, color: '#7B8FA6' }}>({c.size})</span>}
+                  {c.industry && <span style={{ fontSize: 12, color: 'var(--color-mute)' }}>{c.industry}</span>}
+                  {c.size && <span style={{ fontSize: 12, color: 'var(--color-mute)' }}>({c.size})</span>}
                 </div>
-                <div style={{ display: 'flex', gap: 14, fontSize: 13, color: '#7B8FA6', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 14, fontSize: 13, color: 'var(--color-mute)', flexWrap: 'wrap' }}>
                   {c.phone && <span>📞 {c.phone}</span>}
                   {c.email && <span>📧 {c.email}</span>}
                   {c.website && <span>🌐 {c.website}</span>}
                   {c.address && <span>📍 {c.address}</span>}
                 </div>
-                {c.notes && <p style={{ fontSize: 13, color: '#7B8FA6', marginTop: 4 }}>{c.notes}</p>}
+                {c.notes && <p style={{ fontSize: 13, color: 'var(--color-mute)', marginTop: 4 }}>{c.notes}</p>}
               </div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {Object.entries(STATUS_UZ).filter(([k]) => k !== c.status).slice(0, 2).map(([k, v]) => (
@@ -145,8 +145,8 @@ export default async function CompaniesPage() {
                     <input type="hidden" name="id" value={c.id} />
                     <input type="hidden" name="status" value={k} />
                     <button type="submit" style={{
-                      padding: '5px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)',
-                      background: 'rgba(255,255,255,.04)', fontSize: 11, cursor: 'pointer', whiteSpace: 'nowrap', color: '#E8ECF1'
+                      padding: '5px 10px', borderRadius: 6, border: '1px solid var(--color-hairline)',
+                      background: 'var(--color-hairline-soft)', fontSize: 11, cursor: 'pointer', whiteSpace: 'nowrap', color: 'var(--color-ink)'
                     }}>→ {v}</button>
                   </form>
                 ))}

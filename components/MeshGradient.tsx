@@ -18,7 +18,7 @@ export function MeshGradient({ className }: { className?: string }) {
     >
       {/* develop — blue → cyan, top center (70vw wide → 15vw inset centers it) */}
       <div
-        className="absolute left-[15vw] top-[-22%] h-[60vh] w-[70vw] rounded-full opacity-60 blur-[90px] animate-[mesh-drift_22s_ease-in-out_infinite]"
+        className="absolute left-[15vw] top-[-22%] h-[62vh] w-[72vw] rounded-full opacity-70 blur-[86px] saturate-[1.15] animate-[mesh-drift_22s_ease-in-out_infinite]"
         style={{
           background:
             "radial-gradient(circle at 50% 50%, var(--color-grad-develop-start), var(--color-grad-develop-end) 45%, transparent 72%)",
@@ -26,7 +26,7 @@ export function MeshGradient({ className }: { className?: string }) {
       />
       {/* preview — violet → pink, upper right */}
       <div
-        className="absolute right-[2%] top-[-10%] h-[55vh] w-[48vw] rounded-full opacity-50 blur-[100px] animate-[mesh-drift_27s_ease-in-out_infinite_reverse]"
+        className="absolute right-[2%] top-[-10%] h-[58vh] w-[50vw] rounded-full opacity-60 blur-[96px] saturate-[1.15] animate-[mesh-drift_27s_ease-in-out_infinite_reverse]"
         style={{
           background:
             "radial-gradient(circle at 50% 50%, var(--color-grad-preview-start), var(--color-grad-preview-end) 45%, transparent 72%)",

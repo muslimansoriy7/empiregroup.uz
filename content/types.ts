@@ -59,6 +59,8 @@ export type Dict = {
     fieldLabel: string;
     fieldPlaceholder: string;
     fieldOptions: string[];
+    fieldOtherLabel: string;
+    fieldOtherPlaceholder: string;
     phoneLabel: string;
     phonePlaceholder: string;
     emailLabel: string;
@@ -170,6 +172,13 @@ export type Dict = {
     quote: string;
     socials: { label: string; value: string; href: string }[];
   };
+  team: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    members: { name: string; role: string; bio: string; photo?: string }[];
+    chips: string[];
+  };
   process: {
     eyebrow: string;
     title: string;
@@ -178,9 +187,11 @@ export type Dict = {
     steps: { no: string; title: string; body: string; tags: string[] }[];
   };
   whyUs: {
-    eyebrow: string;
-    title: string;
-    items: { title: string; body: string }[];
+    badge: string;
+    titleLead: string;
+    titleAccent: string;
+    negatives: string[];
+    positives: string[];
   };
   testimonials: {
     eyebrow: string;

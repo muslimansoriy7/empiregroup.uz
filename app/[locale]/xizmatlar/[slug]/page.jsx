@@ -7,7 +7,12 @@ import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
 import { ConsultForm } from '@/components/ConsultForm';
 import { getGeoEntry, geoSlugs } from '@/lib/geo';
-import { localePath, localeAlternates } from '@/lib/locale-path';
+import { localePath, localeAlternates, canonicalFor } from '@/lib/locale-path';
+
+// These pages carry Uzbek copy for every locale (getGeoEntry is not translated),
+// so they must NOT advertise distinct ru/en versions — that is duplicate content
+// with false hreflang. Treat them as uz-only: ru/en requests canonicalize to uz.
+const GEO_LOCALES = ['uz'];
 import { isLocale, defaultLocale } from '@/content';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
@@ -25,14 +30,14 @@ export async function generateMetadata({ params }) {
     title: { absolute: entry.title },
     description: entry.description,
     alternates: {
-      canonical: localePath(lang, `/xizmatlar/${slug}`),
-      languages: { ...localeAlternates(`/xizmatlar/${slug}`), 'x-default': `/xizmatlar/${slug}` },
+      canonical: canonicalFor(lang, `/xizmatlar/${slug}`, GEO_LOCALES),
+      languages: { ...localeAlternates(`/xizmatlar/${slug}`, GEO_LOCALES), 'x-default': `/xizmatlar/${slug}` },
     },
     openGraph: {
       type: 'website',
       title: entry.title,
       description: entry.description,
-      url: `${SITE}/xizmatlar/${slug}`,
+      url: `${SITE}${canonicalFor(lang, `/xizmatlar/${slug}`, GEO_LOCALES)}`,
       images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', title: entry.title, description: entry.description },

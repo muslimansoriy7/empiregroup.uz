@@ -88,6 +88,8 @@ export const uz: Dict = {
       "Maxsus dasturiy ta'minot",
       "Odoo ERP & AI Joriy qilish",
     ],
+    fieldOtherLabel: "Boshqa",
+    fieldOtherPlaceholder: "Yo'nalishni o'zingiz yozing…",
     phoneLabel: "Telefon",
     phonePlaceholder: "+998 90 123 45 67",
     emailLabel: "Email",
@@ -251,6 +253,28 @@ export const uz: Dict = {
       { kicker: "Maxsus dasturiy ta'minot", title: "Qo'lda qilinadigan ish — yashirin xarajat", body: "Adminlar kuniga soatlab bir xil ishni takrorlardi. Biz uni maxsus tizim va integratsiyalarga topshirdik. Endi tizim 24/7 ishlaydi, xato qilmaydi.", result: "Qo'l mehnati 70% qisqardi", frame: "browser", accent: "ship" },
     ],
   },
+  team: {
+    eyebrow: "Biz kimmiz",
+    title: "Ortida — real jamoa",
+    subtitle:
+      "Tizimingizni qutini emas, tanish odamlar quradi. Shu sababli har birimiz ochiqmiz.",
+    members: [
+      { name: "Muslim Ansoriy", role: "Ta'sischi va CEO · Technical Product Manager", bio: "7+ yil IT va biznes-avtomatlashtirish sohasida. Odoo ERP joriy qilish bo'yicha Markaziy Osiyo va Kavkaz mintaqasi Partner Manager. To'qimachilik, avtomobil va savdo sohalarida 20+ ERP loyihasini boshqargan. Biznes-jarayonlarni raqamlashtirish va mahsulot strategiyasi bo'yicha ixtisoslashgan." },
+      { name: "Abbos Jo'rayev", role: "Hammuassis va Operatsion direktor", bio: "6+ yil IT loyihalarni boshqarish tajribasi. Mijozlar bilan ishlash, loyiha byudjeti va jamoa koordinatsiyasi yo'nalishini olib boradi. Ishlab chiqarish korxonalarida biznes-tahlil va TZ tayyorlash bo'yicha kuchli tajribaga ega." },
+      { name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 yil Python/Odoo development. 30+ custom modul ishlab chiqqan, Odoo 14–18 versiyalari bilan ishlaydi. MES va tashqi tizimlar bilan integratsiya (REST API, XML-RPC) yo'nalishida ixtisoslashgan." },
+      { name: "Dilnoza Yusupova", role: "Biznes-analitik · ERP Consultant", bio: "4 yil biznes-jarayonlarni tahlil qilish va hujjatlashtirish tajribasi. Mijoz ehtiyojlarini texnik talablarga aylantirish, AS-IS / TO-BE modellashtirish va foydalanuvchilarni o'qitish bilan shug'ullanadi." },
+      { name: "Jasurbek Toshmatov", role: "Full-stack Developer", bio: "5 yil web va mobil ilovalar ishlab chiqish tajribasi. React, Next.js, TypeScript, Node.js, PostgreSQL. Korporativ saytlar, B2B portallar va PWA yechimlar ustida ishlaydi." },
+      { name: "Nilufar Karimova", role: "Digital Marketing Lead", bio: "6 yil marketing tajribasi. SEO, kontekst reklama, kontent-strategiya va lead generation. B2B sohasida marketing voronkalarini qurish va CRM bilan bog'lash bo'yicha ixtisoslashgan." },
+      { name: "Bekzod Ergashev", role: "DevOps · System Administrator", bio: "4 yil server infratuzilmasi bilan ishlash tajribasi. Linux, Docker, CI/CD, ma'lumotlar bazasi zaxiralash va xavfsizlik. Odoo serverlarini deploy qilish va optimallashtirish bilan shug'ullanadi." },
+      { name: "Malika Sobirova", role: "UI/UX Designer", bio: "4 yil interfeys dizayni tajribasi. Figma, dizayn tizimlari, foydalanuvchi tadqiqoti. ERP interfeyslari va korporativ web-saytlarni loyihalash yo'nalishida ishlaydi." },
+    ],
+    chips: [
+      "Toshkent · O'zbekiston",
+      "2023 yildan beri",
+      "“EMPIRE GROUP CORP” MCHJ",
+      "8 kishilik jamoa",
+    ],
+  },
   founder: {
     eyebrow: "Aloqa",
     title: "Empire Group",
@@ -270,7 +294,7 @@ export const uz: Dict = {
   },
   process: {
     eyebrow: "Qanday ishlaymiz",
-    title: "Explore → Plan → Build → Commit",
+    title: "G'oyadan ishga tushgan mahsulotgacha",
     ctaLabel: "Loyihani boshlash",
     ctaHref: "#aloqa",
     steps: [
@@ -281,15 +305,22 @@ export const uz: Dict = {
     ],
   },
   whyUs: {
-    eyebrow: "Nega Empire Group",
-    title: "Ishonchli hamkor — boshidan oxirigacha.",
-    items: [
-      { title: "Fixed-scope narx", body: "Kelishilgan narx — yashirin xarajatlarsiz. Nimaga pul to'layotganingizni aniq bilasiz." },
-      { title: "Senior muhandislar", body: "Tajribali jamoa: real ishga tushirilgan tizimlar tajribasi bilan." },
-      { title: "Shaffof muddat", body: "Har sprint natijasi ko'rinadi, jarayonni real vaqtda kuzatasiz." },
-      { title: "To'liq egalik", body: "Kod, dizayn va ma'lumotlar — hammasi sizniki. Hech qanday vendor lock-in yo'q." },
-      { title: "Keyingi yordam", body: "Ishga tushirgandan keyin ham qo'llab-quvvatlash va rivojlantirish." },
-      { title: "Zamonaviy stack", body: "Flutter, React, Next.js, Odoo, AI — zamonaviy va barqaror texnologiyalar." },
+    badge: "Nega Empire Group",
+    titleLead: "Tartibsizlikni o'zingizga yutmang.",
+    titleAccent: "Ishonch bilan quring.",
+    negatives: [
+      "Asosiy muammolar kech chiqadi — doimiy “yong'in o'chirish” rejimi",
+      "Ortiqcha koordinatsiya asosiy jamoaning kuchini yeydi",
+      "Ma'lumotlarga ishonib bo'lmaydi — doimiy qayta tekshirish",
+      "Tarqoq ijrochilar mos kelmaydigan natijalar beradi",
+      "Spec va qarorlar turli tizimlarda ko'milib qoladi",
+    ],
+    positives: [
+      "Bosqichma-bosqich bog'liqlik xaritasi — kutilmagan xarajatlarsiz",
+      "Silliq jamoa uzatmalari — tez va ishga tayyor natijalar",
+      "Jonli validatsiya talablarni barcha bosqichlarda qat'iy ushlaydi",
+      "Barcha ishlar yagona javobgar kontakt orqali boshqariladi",
+      "Markazlashgan kontekst va aniq yozuvlar har qarorni tezlashtiradi",
     ],
   },
   testimonials: {

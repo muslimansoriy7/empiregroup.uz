@@ -1,39 +1,47 @@
 @import "tailwindcss";
 
-/* The site is dark, always — regardless of the device's colour-scheme
-   setting. The dark values live directly in @theme (there is no light set
-   to switch away from), and `color-scheme: dark` on <html> makes the
-   browser paint form controls, scrollbars and autofill dark to match.
-   Tailwind's `dark:` variant is forced on so any dark:-prefixed utility
-   still applies. */
-@custom-variant dark (&);
+/* The site ships two themes — light and dark — switched at runtime by the
+   header toggle, which sets `data-theme="light|dark"` on <html> (persisted to
+   localStorage, applied before paint by the boot script in layout.tsx).
+   Every colour is a semantic token that resolves to a per-theme variable
+   (see the `:root` / `[data-theme="dark"]` palettes below), so the whole UI
+   flips by swapping those variables — no `dark:` utilities needed for colour.
+   The `dark` variant is scoped to the dark tree for the few places that still
+   need it (e.g. inverting monochrome client logos). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ============================================================
    Shift Digital — Vercel/Geist design tokens (Tailwind v4 @theme)
    Source of truth: theme.css + DESIGN-vercel.md
    ============================================================ */
 @theme {
-  /* ---- Fonts (geist package sets --font-geist-sans / --font-geist-mono) ---- */
+  /* ---- Fonts — Geist only. Geist Sans is the single UI typeface across the
+         whole site; Geist Mono is used for the few code/table contexts. No
+         third-party webfonts. (geist package sets --font-geist-sans/-mono.) ---- */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, monospace;
 
-  /* ---- Color: ink / canvas ladder ---- */
-  --color-ink: #ededed;          /* headings, primary CTA, borders */
-  --color-body: #a0a0a0;         /* body copy */
-  --color-mute: #8f8f8f;         /* secondary captions, logo-strip labels */
-  --color-faint: #6e6e6e;        /* lowest tier — placeholders */
-  --color-hairline: #2a2a2a;     /* 1px borders + dividers */
-  --color-hairline-soft: #1c1c1c;/* faint inset wells */
-  --color-canvas: #0a0a0a;       /* page background */
-  --color-elevated: #161616;     /* card / button surface */
+  /* ---- Color: ink / canvas ladder (values live in the theme palettes
+         below; these map the Tailwind token name to the per-theme var, so
+         `text-ink`, `bg-canvas`, direct `var(--color-hairline)` refs, etc.
+         all flip when `data-theme` changes) ---- */
+  --color-ink: var(--ink);            /* headings, primary CTA, borders */
+  --color-body: var(--body);          /* body copy */
+  --color-mute: var(--mute);          /* secondary captions, logo-strip labels */
+  --color-faint: var(--faint);        /* lowest tier — placeholders */
+  --color-hairline: var(--hairline);  /* 1px borders + dividers */
+  --color-hairline-soft: var(--hairline-soft); /* faint inset wells */
+  --color-canvas: var(--canvas);      /* page background */
+  --color-elevated: var(--elevated);  /* card / button surface */
+  --color-ink-hover: var(--ink-hover);/* hover state for ink-filled buttons */
   --color-carbon: #000000;
 
   /* ---- Color: accent (links + gradient only) ---- */
-  --color-link: #3b9eff;
-  --color-link-deep: #0761d1;
-  --color-link-soft: #d3e5ff;
+  --color-link: var(--link);
+  --color-link-deep: var(--link-deep);
+  --color-link-soft: var(--link-soft);
 
   /* ---- Mesh gradient stops (hero only) ---- */
   --color-grad-develop-start: #007cf0;
@@ -73,22 +81,87 @@
   --text-display--letter-spacing: -0.04em;
   --text-display--font-weight: 600;
 
-  /* ---- Radius (bimodal: square chrome vs pill marketing) ---- */
-  --radius-btn: 6px;
-  --radius-card: 12px;
-  --radius-card-lg: 16px;
+  /* ---- Radius — Questly direction leans soft/rounded: chrome radius bumped
+         6→10, cards 12→18 and 16→24 for the pillowy card language; marketing
+         controls stay full pills. ---- */
+  --radius-btn: 10px;
+  --radius-card: 18px;
+  --radius-card-lg: 24px;
   --radius-pill-cat: 64px;
   --radius-pill: 100px;
   --radius-round: 9999px;
 
-  /* ---- Elevation (1px hairline first, whisper shadow at most) ---- */
-  --shadow-whisper: 0px 1px 2px rgba(0, 0, 0, 0.5),
-    0px 0px 0px 1px rgba(255, 255, 255, 0.05);
-  --shadow-float: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px,
-    rgba(0, 0, 0, 0.5) 0px 2px 8px 0px, rgba(0, 0, 0, 0.6) 0px 16px 40px -8px;
+  /* ---- Elevation (1px hairline first, whisper shadow at most; the ring +
+         shadow recipe differs per theme — white hairline ring on dark, soft
+         black ring on light — so these map to per-theme vars too) ---- */
+  --shadow-whisper: var(--whisper);
+  --shadow-float: var(--float);
 
   /* ---- Container ---- */
   --container-page: 1200px;
+}
+
+/* ============================================================
+   Theme palettes — the actual colour values per theme. The header toggle
+   sets data-theme on <html>; absent an attribute (should not happen after the
+   boot script runs) the site falls back to light via :root.
+   ============================================================ */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Questly light palette — a cool, slightly blue-grey near-white ground with
+     pure-white cards floating on top, near-black (not pure) ink, and hairlines
+     tinted the same cool direction as the ground so borders read as chosen. */
+  --ink: #101114;            /* headings, primary CTA, borders */
+  --body: #4a4e57;           /* body copy */
+  --mute: #6b7079;           /* secondary captions */
+  --faint: #6e727b;          /* lowest tier — placeholders (kept ≥4.5:1 on canvas) */
+  --hairline: #e7e9ee;       /* 1px borders + dividers (cool-tinted) */
+  --hairline-soft: #f1f3f6;  /* faint inset wells */
+  --canvas: #f6f7f9;         /* page background — cool near-white */
+  --elevated: #ffffff;       /* card / button surface (lifts off canvas) */
+  --ink-hover: #2b2d33;      /* ink button hover — lighter charcoal */
+
+  --link: #0068d6;
+  --link-deep: #0052ab;
+  --link-soft: #0068d6;
+
+  --whisper: 0px 1px 2px rgba(0, 0, 0, 0.06),
+    0px 0px 0px 1px rgba(0, 0, 0, 0.05);
+  --float: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.08) 0px 2px 8px 0px, rgba(0, 0, 0, 0.16) 0px 16px 40px -8px;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ink: #ededed;
+  --body: #a0a0a0;
+  --mute: #8f8f8f;
+  --faint: #6e6e6e;
+  --hairline: #2a2a2a;
+  --hairline-soft: #1c1c1c;
+  --canvas: #0a0a0a;
+  --elevated: #161616;
+  --ink-hover: #d4d4d4;      /* ink button hover — dim the near-white fill (keeps dark text legible) */
+
+  --link: #3b9eff;
+  --link-deep: #0761d1;
+  --link-soft: #d3e5ff;
+
+  --whisper: 0px 1px 2px rgba(0, 0, 0, 0.5),
+    0px 0px 0px 1px rgba(255, 255, 255, 0.05);
+  --float: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.5) 0px 2px 8px 0px, rgba(0, 0, 0, 0.6) 0px 16px 40px -8px;
+}
+
+/* Section vertical rhythm — single source of truth. Each section applies
+   this as both top and bottom padding, so the gap between two adjacent
+   sections is 2×, i.e. a uniform 240px on desktop, easing down on smaller
+   screens. Change this one value to retune the whole page's section spacing. */
+:root {
+  --section-py: clamp(80px, 12vw, 120px);
 }
 
 /* ============================================================
@@ -102,7 +175,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    color-scheme: dark;
+    /* color-scheme is set per-theme by the palettes above so form controls,
+       scrollbars and autofill match the active theme */
   }
 
   body {
@@ -114,7 +188,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "cv11", "ss01";
+    /* No stylistic-set overrides — render Geist exactly as Google Fonts ships it. */
   }
 
   ::selection {
@@ -132,6 +206,23 @@
     text-decoration: none;
   }
 
+  /* Interactive controls always show the hand cursor on hover. Tailwind's
+     preflight resets <button> to the default arrow, and anchors used as
+     buttons (no href) don't get a pointer either — so name them all here. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  summary,
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-link);
     outline-offset: 2px;
@@ -143,14 +234,15 @@
    Reusable utilities
    ============================================================ */
 @layer utilities {
-  /* Geist Mono uppercase section eyebrow */
+  /* Section eyebrow — Questly direction drops the mono/technical label for a
+     clean tracked sans micro-caps label. */
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: var(--text-eyebrow);
     line-height: 1.33;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-mute);
   }
 
@@ -504,9 +596,11 @@ html.lenis body {
 .founder-photo {
   filter: grayscale(1);
   transform: scale(1);
+  /* colour (filter) and zoom (transform) share one timing so the reveal and the
+     scale move together, not one lagging behind the other. */
   transition:
-    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform 400ms ease-in-out,
+    filter 400ms ease-in-out;
   will-change: transform, filter;
 }
 .group:hover .founder-photo {

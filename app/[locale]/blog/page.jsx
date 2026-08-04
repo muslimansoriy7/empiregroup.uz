@@ -29,6 +29,13 @@ export async function generateMetadata({ params }) {
       type: 'website',
       images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
     },
+    // Prevent inheriting the root layout's (home page) twitter card.
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Blog — Empire Group',
+      description: "IT, SEO/GEO, AI va biznesni avtomatlashtirish bo'yicha foydali maqolalar.",
+      images: [`${SITE}/og.png`],
+    },
   };
 }
 
@@ -41,26 +48,9 @@ function fmt(d) {
   } catch { return ''; }
 }
 
-const STATIC_POSTS = [
-  {
-    id: 'static-odoo',
-    slug: 'odoo-joriy-qilish-bosqichlari',
-    title_uz: "Odoo ERP joriy qilishning 5 fazasi",
-    excerpt_uz: "Discovery, Design, Build, Deploy va Support — Odoo ERP joriy qilishning beshta fazasi. Har biri uchun maqsad, faoliyat, natija va xavflar.",
-    category: 'Odoo ERP',
-    published_at: '2025-07-18',
-    cover_url: null,
-  },
-  {
-    id: 'static-tz',
-    slug: 'transformatsiya-zanjiri',
-    title_uz: "Biznes transformatsiyasining 5 bosqichli zanjiri",
-    excerpt_uz: "Raqamlashtirish — bu faqat dastur o'rnatish emas. Besh bosqichli zanjir orqali biznesingizni tizimli transformatsiya qiling.",
-    category: 'Transformatsiya',
-    published_at: '2025-07-15',
-    cover_url: null,
-  },
-];
+// The blog is now fully CMS-driven — every post lives in Supabase and renders
+// through the shared [slug] template, so there are no hand-built static posts.
+const STATIC_POSTS = [];
 
 export default async function BlogPage({ params }) {
   const { locale } = await params;
@@ -87,7 +77,7 @@ export default async function BlogPage({ params }) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema).replace(/</g, "\\u003c") }}
       />
       <Nav />
       <main>

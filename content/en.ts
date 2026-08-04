@@ -88,6 +88,8 @@ export const en: Dict = {
       "Custom software",
       "Odoo ERP & AI implementation",
     ],
+    fieldOtherLabel: "Other",
+    fieldOtherPlaceholder: "Describe the direction yourself…",
     phoneLabel: "Phone",
     phonePlaceholder: "+998 90 123 45 67",
     emailLabel: "Email",
@@ -251,6 +253,28 @@ export const en: Dict = {
       { kicker: "Custom software", title: "Manual work — a hidden cost", body: "Admins spent hours a day repeating the same task. We handed it to a custom system and integrations. Now the system runs 24/7 and doesn't make mistakes.", result: "Manual labor cut by 70%", frame: "browser", accent: "ship" },
     ],
   },
+  team: {
+    eyebrow: "Who we are",
+    title: "Behind it — a real team",
+    subtitle:
+      "Your system is built by people you know, not a black box. That's why we're open.",
+    members: [
+      { name: "Muslim Ansoriy", role: "Founder & CEO · Technical Product Manager", bio: "7+ years in IT and business automation. Partner Manager for Odoo ERP implementation across Central Asia and the Caucasus. Has led 20+ ERP projects in textile, automotive and retail. Specializes in business-process digitization and product strategy." },
+      { name: "Abbos Jo'rayev", role: "Co-founder & COO", bio: "6+ years managing IT projects. Leads client relationships, project budgets and team coordination. Strong background in business analysis and requirements (TZ) at manufacturing companies." },
+      { name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 years of Python/Odoo development. Built 30+ custom modules, works with Odoo 14–18. Specializes in integration with MES and external systems (REST API, XML-RPC)." },
+      { name: "Dilnoza Yusupova", role: "Business Analyst · ERP Consultant", bio: "4 years analyzing and documenting business processes. Turns client needs into technical requirements, does AS-IS / TO-BE modeling and user training." },
+      { name: "Jasurbek Toshmatov", role: "Full-stack Developer", bio: "5 years building web and mobile apps. React, Next.js, TypeScript, Node.js, PostgreSQL. Works on corporate sites, B2B portals and PWA solutions." },
+      { name: "Nilufar Karimova", role: "Digital Marketing Lead", bio: "6 years in marketing. SEO, paid search, content strategy and lead generation. Specializes in building B2B marketing funnels and wiring them to CRM." },
+      { name: "Bekzod Ergashev", role: "DevOps · System Administrator", bio: "4 years with server infrastructure. Linux, Docker, CI/CD, database backups and security. Handles deployment and optimization of Odoo servers." },
+      { name: "Malika Sobirova", role: "UI/UX Designer", bio: "4 years of interface design. Figma, design systems, user research. Works on designing ERP interfaces and corporate websites." },
+    ],
+    chips: [
+      "Tashkent · Uzbekistan",
+      "since 2023",
+      "“EMPIRE GROUP CORP” LLC",
+      "team of 8",
+    ],
+  },
   founder: {
     eyebrow: "Contact",
     title: "Empire Group",
@@ -270,7 +294,7 @@ export const en: Dict = {
   },
   process: {
     eyebrow: "How we work",
-    title: "Explore → Plan → Build → Commit",
+    title: "From idea to a shipped product",
     ctaLabel: "Start a project",
     ctaHref: "#aloqa",
     steps: [
@@ -281,15 +305,22 @@ export const en: Dict = {
     ],
   },
   whyUs: {
-    eyebrow: "Why Empire Group",
-    title: "A reliable partner — from start to finish.",
-    items: [
-      { title: "Fixed-scope pricing", body: "An agreed price — no hidden costs. You know exactly what you're paying for." },
-      { title: "Senior engineers", body: "An experienced team: with a track record of systems shipped to production." },
-      { title: "Transparent timeline", body: "Every sprint's result is visible; you follow the process in real time." },
-      { title: "Full ownership", body: "Code, design and data — all yours. No vendor lock-in whatsoever." },
-      { title: "Post-launch support", body: "Support and further development even after launch." },
-      { title: "Modern stack", body: "Flutter, React, Next.js, Odoo, AI — modern and stable technologies." },
+    badge: "Why Empire Group",
+    titleLead: "Stop absorbing the chaos.",
+    titleAccent: "Run with confidence.",
+    negatives: [
+      "Reactive firefighting when foundational issues surface too late",
+      "Bloated coordination overhead drains your core team",
+      "Constant re-verification because the data can't be trusted",
+      "Fragmented vendors produce mismatched deliverables",
+      "Scattered specs and decisions buried across siloed systems",
+    ],
+    positives: [
+      "Layered dependency maps eliminate costly surprises at every phase",
+      "Streamlined handoffs deliver production-ready outcomes fast",
+      "Live validation loops keep requirements locked across all stages",
+      "One accountable contact runs the entire engagement",
+      "Centralized context and clear records accelerate every decision",
     ],
   },
   testimonials: {

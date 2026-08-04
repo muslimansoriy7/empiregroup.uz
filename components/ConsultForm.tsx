@@ -82,6 +82,8 @@ export function ConsultForm({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [field, setField] = useState(defaultField);
+  // When the visitor picks "Boshqa/Other" they type their own direction here.
+  const [fieldOther, setFieldOther] = useState("");
   const [budget, setBudget] = useState("");
   const [message, setMessage] = useState("");
   // Honeypot: invisible to people, irresistible to bots. The API treats a
@@ -90,6 +92,10 @@ export function ConsultForm({
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // "Boshqa" selected → the typed value is what we actually record/send.
+  const isOtherField = field === c.fieldOtherLabel;
+  const resolvedField = isOtherField ? fieldOther.trim() : field.trim();
 
   useEffect(() => {
     if (!autoFocusFirst) return;
@@ -125,7 +131,7 @@ export function ConsultForm({
         body: JSON.stringify({
           name: name.trim(),
           phone: phone.trim(),
-          service: field.trim(),
+          service: resolvedField,
           budget: budget.trim(),
           message: message.trim(),
           company_website: companyWebsite,
@@ -142,6 +148,7 @@ export function ConsultForm({
       setName("");
       setPhone("");
       setField(defaultField);
+      setFieldOther("");
       setBudget("");
       setMessage("");
       setStatus("success");
@@ -158,7 +165,7 @@ export function ConsultForm({
       c.telegramPrefill,
       name.trim() && `${c.nameLabel}: ${name}`,
       phone.trim() && `${c.phoneLabel}: ${phone}`,
-      field.trim() && `${c.fieldLabel}: ${field}`,
+      resolvedField && `${c.fieldLabel}: ${resolvedField}`,
       message.trim() && `${c.messageLabel}: ${message}`,
     ]
       .filter(Boolean)
@@ -181,7 +188,7 @@ export function ConsultForm({
             href={tgHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-ink px-5 text-sm font-medium text-elevated transition-colors hover:bg-[#383838]"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-ink px-5 text-sm font-medium text-elevated transition-colors hover:bg-ink-hover"
           >
             <Telegram className="size-4" /> Telegram
           </a>
@@ -249,8 +256,19 @@ export function ConsultForm({
           value={field}
           onChange={setField}
           placeholder={c.fieldPlaceholder}
-          options={c.fieldOptions}
+          options={[...c.fieldOptions, c.fieldOtherLabel]}
         />
+        {isOtherField && (
+          <input
+            type="text"
+            value={fieldOther}
+            onChange={(e) => setFieldOther(e.target.value)}
+            placeholder={c.fieldOtherPlaceholder}
+            className="consult-input mt-2"
+            autoFocus
+            aria-label={c.fieldOtherPlaceholder}
+          />
+        )}
       </Field>
 
       <Field label={c.budgetLabel}>

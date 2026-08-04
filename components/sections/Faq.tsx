@@ -14,7 +14,7 @@ export function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="scroll-mt-10 py-[clamp(72px,9vw,128px)]">
+    <section id="faq" className="scroll-mt-10 py-[var(--section-py)]">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <div className="max-w-md">

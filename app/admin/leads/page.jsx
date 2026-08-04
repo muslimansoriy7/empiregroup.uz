@@ -42,7 +42,7 @@ function KanbanCard({ lead }) {
           {lead.service && <span>{lead.service}</span>}
         </div>
         {lead.company && (
-          <div style={{ fontSize: 12, color: '#E8ECF1', marginTop: 4, fontWeight: 500 }}>🏢 {lead.company}</div>
+          <div style={{ fontSize: 12, color: 'var(--color-ink)', marginTop: 4, fontWeight: 500 }}>🏢 {lead.company}</div>
         )}
         {lead.deal_value && (
           <div className="crm-card-value">💰 {money(lead.deal_value)} so'm</div>
@@ -79,14 +79,14 @@ export default async function LeadsPage({ searchParams }) {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 2, color: '#E8ECF1' }}>📩 Lead Pipeline</h1>
-          <p style={{ fontSize: 13, color: '#7B8FA6' }}>{allLeads.length} ta lead · Pipeline: {money(totalValue)} so'm</p>
+          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 2, color: 'var(--color-ink)' }}>📩 Lead Pipeline</h1>
+          <p style={{ fontSize: 13, color: 'var(--color-mute)' }}>{allLeads.length} ta lead · Pipeline: {money(totalValue)} so'm</p>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
-          <Link href="/admin/leads?view=kanban" className="crm-pill" style={{ background: view === 'kanban' ? '#C8A24A' : 'rgba(255,255,255,.06)', color: view === 'kanban' ? '#0E1A2B' : '#7B8FA6' }}>
+          <Link href="/admin/leads?view=kanban" className="crm-pill" style={{ background: view === 'kanban' ? 'var(--color-link)' : 'var(--color-hairline-soft)', color: view === 'kanban' ? 'var(--color-ink)' : 'var(--color-mute)' }}>
             ◻ Kanban
           </Link>
-          <Link href="/admin/leads?view=list" className="crm-pill" style={{ background: view === 'list' ? '#C8A24A' : 'rgba(255,255,255,.06)', color: view === 'list' ? '#0E1A2B' : '#7B8FA6' }}>
+          <Link href="/admin/leads?view=list" className="crm-pill" style={{ background: view === 'list' ? 'var(--color-link)' : 'var(--color-hairline-soft)', color: view === 'list' ? 'var(--color-ink)' : 'var(--color-mute)' }}>
             ☰ Ro'yxat
           </Link>
         </div>
@@ -97,7 +97,7 @@ export default async function LeadsPage({ searchParams }) {
         <form style={{ flex: 1, maxWidth: 320 }}>
           <input type="hidden" name="view" value={view} />
           <input name="q" defaultValue={search} placeholder="Qidirish (ism, tel, kompaniya)..."
-            style={{ width: '100%', padding: '8px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)', fontSize: 14, color: '#E8ECF1' }} />
+            style={{ width: '100%', padding: '8px 14px', borderRadius: 8, border: '1px solid var(--color-hairline)', background: 'var(--color-hairline-soft)', fontSize: 14, color: 'var(--color-ink)' }} />
         </form>
         {search && <Link href={`/admin/leads?view=${view}`} style={{ fontSize: 13, color: '#ef6b5a', textDecoration: 'none' }}>✕ Tozalash</Link>}
       </div>
@@ -105,11 +105,11 @@ export default async function LeadsPage({ searchParams }) {
       {allLeads.length === 0 && !search ? (
         <div style={{ textAlign: 'center', padding: '60px 20px' }}>
           <div style={{ fontSize: 48, marginBottom: 12 }}>📩</div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, color: '#E8ECF1' }}>Leadlar kutilmoqda</h2>
-          <p style={{ fontSize: 14, color: '#7B8FA6' }}>Saytdagi forma to'ldirilganda leadlar bu yerda ko'rinadi</p>
+          <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6, color: 'var(--color-ink)' }}>Leadlar kutilmoqda</h2>
+          <p style={{ fontSize: 14, color: 'var(--color-mute)' }}>Saytdagi forma to'ldirilganda leadlar bu yerda ko'rinadi</p>
         </div>
       ) : search && allLeads.length === 0 ? (
-        <p style={{ color: '#7B8FA6', textAlign: 'center', padding: 40 }}>"{search}" bo'yicha natija topilmadi</p>
+        <p style={{ color: 'var(--color-mute)', textAlign: 'center', padding: 40 }}>"{search}" bo'yicha natija topilmadi</p>
       ) : view === 'kanban' ? (
         /* KANBAN VIEW */
         <div className="crm-kanban">
@@ -120,7 +120,7 @@ export default async function LeadsPage({ searchParams }) {
                 <span className="count" style={{ color: stage.color }}>{grouped[stage.key].length}</span>
               </div>
               {grouped[stage.key].length === 0 ? (
-                <p style={{ fontSize: 12, color: '#7B8FA6', textAlign: 'center', padding: '20px 0' }}>Bo'sh</p>
+                <p style={{ fontSize: 12, color: 'var(--color-mute)', textAlign: 'center', padding: '20px 0' }}>Bo'sh</p>
               ) : (
                 grouped[stage.key].map(lead => (
                   <KanbanCard key={lead.id} lead={lead} />
@@ -133,12 +133,12 @@ export default async function LeadsPage({ searchParams }) {
         /* LIST VIEW */
         <>
           <div className="crm-filters" style={{ marginBottom: 14 }}>
-            <Link href={`/admin/leads?view=list`} className="crm-pill" style={{ background: !filterStatus ? '#C8A24A' : 'rgba(255,255,255,.06)', color: !filterStatus ? '#0E1A2B' : '#7B8FA6' }}>
+            <Link href={`/admin/leads?view=list`} className="crm-pill" style={{ background: !filterStatus ? 'var(--color-link)' : 'var(--color-hairline-soft)', color: !filterStatus ? 'var(--color-ink)' : 'var(--color-mute)' }}>
               Hammasi ({allLeads.length})
             </Link>
             {PIPELINE.map(s => (
               <Link key={s.key} href={`/admin/leads?view=list&status=${s.key}`} className="crm-pill"
-                style={{ background: filterStatus === s.key ? s.color : 'rgba(255,255,255,.06)', color: filterStatus === s.key ? '#fff' : '#7B8FA6' }}>
+                style={{ background: filterStatus === s.key ? s.color : 'var(--color-hairline-soft)', color: filterStatus === s.key ? '#fff' : 'var(--color-mute)' }}>
                 {s.label} ({grouped[s.key].length})
               </Link>
             ))}
@@ -148,13 +148,13 @@ export default async function LeadsPage({ searchParams }) {
               <div key={lead.id} className="crm-lead-row">
                 <Link href={`/admin/leads/${lead.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 4 }}>
-                    <strong style={{ fontSize: 14, color: '#E8ECF1' }}>{lead.name || '—'}</strong>
-                    {lead.company && <span style={{ fontSize: 12, color: '#7B8FA6' }}>({lead.company})</span>}
+                    <strong style={{ fontSize: 14, color: 'var(--color-ink)' }}>{lead.name || '—'}</strong>
+                    {lead.company && <span style={{ fontSize: 12, color: 'var(--color-mute)' }}>({lead.company})</span>}
                     <span className="crm-badge" style={{ background: `${PIPELINE.find(p => p.key === lead.status)?.color || '#6b7280'}15`, color: PIPELINE.find(p => p.key === lead.status)?.color || '#6b7280' }}>
                       {PIPELINE.find(p => p.key === lead.status)?.label || lead.status}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', gap: 14, fontSize: 13, color: '#7B8FA6', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: 14, fontSize: 13, color: 'var(--color-mute)', flexWrap: 'wrap' }}>
                     {lead.phone && <span>📞 {lead.phone}</span>}
                     {lead.service && <span>🎯 {lead.service}</span>}
                     {lead.deal_value && <span>💰 {money(lead.deal_value)}</span>}

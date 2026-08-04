@@ -1,15 +1,41 @@
 import Link from 'next/link'
 import './fonts.css'
-import { localePath } from '@/lib/locale-path'
+import { localePath, localeAlternates, canonicalFor } from '@/lib/locale-path'
 import { isLocale, defaultLocale } from '@/content'
 
-export const metadata = {
-  title: 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group',
-  description: "Empire Group — korxonalarni tizimlashtirish va AI yordamida aqlli avtomatlashtirish. ERP joriy etish, AI avtomatlashtirish, maxsus dasturiy yechimlar.",
-  openGraph: {
-    title: 'Raqamli Transformatsiya — Empire Group',
-    description: "Tizimlashtirish + AI avtomatlashtirish. Tarqoq jarayonlarni yagona tizimga birlashtiramiz.",
-  },
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz'
+const PATH = '/tizimlashtirish'
+// Uzbek-only content across every locale, so it canonicalizes to uz (no false
+// ru/en hreflang / duplicate content — same policy as the geo service pages).
+const TZ_LOCALES = ['uz']
+
+export async function generateMetadata({ params }) {
+  const { locale } = await params
+  const lang = isLocale(locale) ? locale : defaultLocale
+  const title = 'Raqamli Transformatsiya — Tizimlashtirish | Empire Group'
+  const description =
+    "Empire Group — korxonalarni tizimlashtirish va AI yordamida aqlli avtomatlashtirish. ERP joriy etish, AI avtomatlashtirish, maxsus dasturiy yechimlar."
+  return {
+    title: { absolute: title },
+    description,
+    alternates: {
+      canonical: canonicalFor(lang, PATH, TZ_LOCALES),
+      languages: { ...localeAlternates(PATH, TZ_LOCALES), 'x-default': PATH },
+    },
+    openGraph: {
+      type: 'website',
+      title: 'Raqamli Transformatsiya — Empire Group',
+      description: "Tizimlashtirish + AI avtomatlashtirish. Tarqoq jarayonlarni yagona tizimga birlashtiramiz.",
+      url: `${SITE}${canonicalFor(lang, PATH, TZ_LOCALES)}`,
+      images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Raqamli Transformatsiya — Empire Group',
+      description: "Tizimlashtirish + AI avtomatlashtirish. Tarqoq jarayonlarni yagona tizimga birlashtiramiz.",
+      images: [`${SITE}/og.png`],
+    },
+  }
 }
 
 const gold = '#D4B85F'
@@ -48,7 +74,7 @@ export default async function TizimlashtrishPage({ params }) {
         </header>
         <div style={{
           color: cream,
-          fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
+          fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)",
           position: 'relative',
         }}>
       {/* Grid overlay */}
@@ -62,12 +88,12 @@ export default async function TizimlashtrishPage({ params }) {
 
         {/* Hero */}
         <div style={{ padding: '140px 40px 40px' }}>
-          <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 30 }}>
+          <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 30 }}>
             — AI & Custom IT solutions for businesses
           </div>
 
           <h1 style={{
-            fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
+            fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)",
             fontSize: 'clamp(42px, 8vw, 62px)', fontWeight: 500, lineHeight: 0.98,
             letterSpacing: '-0.04em', color: cream, margin: '0 0 24px',
           }}>
@@ -75,7 +101,7 @@ export default async function TizimlashtrishPage({ params }) {
           </h1>
 
           <p style={{
-            fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
+            fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)",
             fontSize: 22, fontWeight: 500, lineHeight: 1.3, letterSpacing: '-0.015em',
             color: `rgba(240,237,225,0.88)`, margin: '0 0 34px', maxWidth: 500,
           }}>
@@ -88,7 +114,7 @@ export default async function TizimlashtrishPage({ params }) {
 
           <div style={{ borderLeft: `2px solid ${gold}`, padding: '4px 0 4px 22px', margin: '32px 0 0' }}>
             <p style={{
-              fontFamily: "var(--display, 'Fraunces',Georgia,serif)",
+              fontFamily: "var(--display, var(--font-geist-sans),sans-serif)",
               fontSize: 17, lineHeight: 1.5, color: cream, fontStyle: 'italic', margin: 0,
             }}>
               Maqsadimiz — tashkilotlardagi tartibsizlik va chalg'ituvchi to'siqlarni bartaraf etib, tarqoq jarayonlarni yagona, sog'lom vujudga keltirishdir.
@@ -113,7 +139,7 @@ export default async function TizimlashtrishPage({ params }) {
             </g>
             <circle cx="300" cy="110" r="26" fill="none" stroke="rgba(212,184,95,0.4)" strokeWidth="0.5" />
             <circle cx="300" cy="110" r="9" fill={gold} />
-            <text x="300" y="150" textAnchor="middle" fontFamily="var(--mono, 'JetBrains Mono',monospace)" fontSize="9" fill="rgba(240,237,225,0.75)" letterSpacing="0.14em">Tizim / System</text>
+            <text x="300" y="150" textAnchor="middle" fontFamily="var(--mono, var(--font-geist-mono),monospace)" fontSize="9" fill="rgba(240,237,225,0.75)" letterSpacing="0.14em">Tizim / System</text>
 
             {[
               [70, 60, 46, 'Moliya'],
@@ -123,7 +149,7 @@ export default async function TizimlashtrishPage({ params }) {
             ].map(([cx, cy, ty, label]) => (
               <g key={label}>
                 <circle cx={cx} cy={cy} r="3.5" fill={cream} />
-                <text x={cx} y={ty} textAnchor="middle" fontFamily="var(--mono, 'JetBrains Mono',monospace)" fontSize="8" fill="rgba(240,237,225,0.65)" letterSpacing="0.1em">{label}</text>
+                <text x={cx} y={ty} textAnchor="middle" fontFamily="var(--mono, var(--font-geist-mono),monospace)" fontSize="8" fill="rgba(240,237,225,0.65)" letterSpacing="0.1em">{label}</text>
               </g>
             ))}
             {[
@@ -134,7 +160,7 @@ export default async function TizimlashtrishPage({ params }) {
             ].map(([cx, cy, ty, label]) => (
               <g key={label}>
                 <circle cx={cx} cy={cy} r="3.5" fill={cream} />
-                <text x={cx} y={ty} textAnchor="middle" fontFamily="var(--mono, 'JetBrains Mono',monospace)" fontSize="8" fill="rgba(240,237,225,0.65)" letterSpacing="0.1em">{label}</text>
+                <text x={cx} y={ty} textAnchor="middle" fontFamily="var(--mono, var(--font-geist-mono),monospace)" fontSize="8" fill="rgba(240,237,225,0.65)" letterSpacing="0.1em">{label}</text>
               </g>
             ))}
 
@@ -149,11 +175,11 @@ export default async function TizimlashtrishPage({ params }) {
 
         {/* Missiya — Uch ustun */}
         <div style={{ padding: '48px 40px 40px' }}>
-          <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 22 }}>
+          <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 22 }}>
             {'// Missiya  ·  Uch ustun'}
           </div>
           <h2 style={{
-            fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
+            fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)",
             fontSize: 'clamp(24px, 4vw, 30px)', fontWeight: 500, lineHeight: 1.2,
             letterSpacing: '-0.02em', color: cream, margin: '0 0 40px', maxWidth: 520,
           }}>
@@ -183,10 +209,10 @@ export default async function TizimlashtrishPage({ params }) {
             ].map(p => (
               <div key={p.num} style={{ borderTop: '0.5px solid rgba(240,237,225,0.22)', paddingTop: 22 }}>
                 <div style={{ display: 'flex', gap: 24, alignItems: 'baseline' }}>
-                  <div style={{ fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)", fontSize: 34, fontWeight: 500, color: gold, lineHeight: 1, letterSpacing: '-0.02em', minWidth: 44 }}>{p.num}</div>
+                  <div style={{ fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)", fontSize: 34, fontWeight: 500, color: gold, lineHeight: 1, letterSpacing: '-0.02em', minWidth: 44 }}>{p.num}</div>
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)", fontSize: 20, fontWeight: 500, color: cream, margin: '0 0 6px', letterSpacing: '-0.01em' }}>{p.title}</h3>
-                    <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: 'rgba(212,184,95,0.95)', letterSpacing: '0.14em', marginBottom: 12 }}>{p.tag}</div>
+                    <h3 style={{ fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)", fontSize: 20, fontWeight: 500, color: cream, margin: '0 0 6px', letterSpacing: '-0.01em' }}>{p.title}</h3>
+                    <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: 'rgba(212,184,95,0.95)', letterSpacing: '0.14em', marginBottom: 12 }}>{p.tag}</div>
                     <p style={{ fontSize: 13.5, lineHeight: 1.75, color: 'rgba(240,237,225,0.75)', margin: 0 }}>{p.text}</p>
                   </div>
                 </div>
@@ -199,9 +225,9 @@ export default async function TizimlashtrishPage({ params }) {
             marginTop: 40, background: 'rgba(212,184,95,0.08)', border: '0.5px solid rgba(212,184,95,0.3)',
             borderRadius: 12, padding: '24px 28px',
           }}>
-            <div style={{ fontFamily: "var(--display, 'Fraunces',Georgia,serif)", fontSize: 36, color: gold, fontStyle: 'italic', lineHeight: 0.6, opacity: 0.85 }}>&ldquo;</div>
+            <div style={{ fontFamily: "var(--display, var(--font-geist-sans),sans-serif)", fontSize: 36, color: gold, fontStyle: 'italic', lineHeight: 0.6, opacity: 0.85 }}>&ldquo;</div>
             <p style={{
-              fontFamily: "var(--display, 'Fraunces',Georgia,serif)",
+              fontFamily: "var(--display, var(--font-geist-sans),sans-serif)",
               fontSize: 16, lineHeight: 1.6, color: cream, fontStyle: 'italic', margin: '4px 0 0',
             }}>
               Aynan shu mukammal tartib va yaxlitlik orqali biz xodimlarga mutlaqo xotirjam, barqaror hamda o'z imkoniyatlarini to'liq namoyon eta oladigan faoliyat yuritish imkonini yaratib beramiz.
@@ -213,11 +239,11 @@ export default async function TizimlashtrishPage({ params }) {
 
         {/* Xizmatlar */}
         <div style={{ padding: '52px 40px 56px' }}>
-          <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 14 }}>
+          <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: gold, letterSpacing: '0.18em', marginBottom: 14 }}>
             {'// Yo\'nalishlar'}
           </div>
           <h2 style={{
-            fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)",
+            fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)",
             fontSize: 'clamp(34px, 6vw, 44px)', fontWeight: 500, lineHeight: 1,
             letterSpacing: '-0.035em', color: cream, margin: '0 0 48px',
           }}>
@@ -227,11 +253,11 @@ export default async function TizimlashtrishPage({ params }) {
           {/* Service I */}
           <div style={{ marginBottom: 48 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 18, gap: 20 }}>
-              <div style={{ fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)", fontSize: 26, fontWeight: 500, color: gold, letterSpacing: '-0.02em' }}>I</div>
+              <div style={{ fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)", fontSize: 26, fontWeight: 500, color: gold, letterSpacing: '-0.02em' }}>I</div>
               <div style={{ flex: 1, height: '0.5px', background: 'rgba(240,237,225,0.2)' }} />
-              <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: 'rgba(240,237,225,0.55)', letterSpacing: '0.16em' }}>Custom software development</div>
+              <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: 'rgba(240,237,225,0.55)', letterSpacing: '0.16em' }}>Custom software development</div>
             </div>
-            <h3 style={{ fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)", fontSize: 28, fontWeight: 500, lineHeight: 1.1, letterSpacing: '-0.02em', color: cream, margin: '0 0 16px' }}>
+            <h3 style={{ fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)", fontSize: 28, fontWeight: 500, lineHeight: 1.1, letterSpacing: '-0.02em', color: cream, margin: '0 0 16px' }}>
               Maxsus dasturiy yechimlar
             </h3>
             <p style={{ fontSize: 13.5, lineHeight: 1.75, color: 'rgba(240,237,225,0.75)', margin: '0 0 24px', maxWidth: 540 }}>
@@ -243,7 +269,7 @@ export default async function TizimlashtrishPage({ params }) {
                 "Mavjud tashkiliy tizimlarda yopilmay qolgan bo'shliqlarni to'ldiruvchi, muassasaning o'ziga xos talablarini qondirish uchun maxsus yozilgan dasturiy vositalar yaratish.",
               ].map((t, i) => (
                 <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                  <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: gold, marginTop: 4, minWidth: 24, letterSpacing: '0.08em' }}>0{i + 1}</div>
+                  <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: gold, marginTop: 4, minWidth: 24, letterSpacing: '0.08em' }}>0{i + 1}</div>
                   <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(240,237,225,0.88)', margin: 0 }}>{t}</p>
                 </div>
               ))}
@@ -253,11 +279,11 @@ export default async function TizimlashtrishPage({ params }) {
           {/* Service II */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 18, gap: 20 }}>
-              <div style={{ fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)", fontSize: 26, fontWeight: 500, color: gold, letterSpacing: '-0.02em' }}>II</div>
+              <div style={{ fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)", fontSize: 26, fontWeight: 500, color: gold, letterSpacing: '-0.02em' }}>II</div>
               <div style={{ flex: 1, height: '0.5px', background: 'rgba(240,237,225,0.2)' }} />
-              <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: 'rgba(240,237,225,0.55)', letterSpacing: '0.16em' }}>ERP · AI implementation</div>
+              <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: 'rgba(240,237,225,0.55)', letterSpacing: '0.16em' }}>ERP · AI implementation</div>
             </div>
-            <h3 style={{ fontFamily: "var(--body, 'Outfit',system-ui,sans-serif)", fontSize: 28, fontWeight: 500, lineHeight: 1.1, letterSpacing: '-0.02em', color: cream, margin: '0 0 16px' }}>
+            <h3 style={{ fontFamily: "var(--body, var(--font-geist-sans),system-ui,sans-serif)", fontSize: 28, fontWeight: 500, lineHeight: 1.1, letterSpacing: '-0.02em', color: cream, margin: '0 0 16px' }}>
               Aqlli tizimlashtirish
             </h3>
             <p style={{ fontSize: 13.5, lineHeight: 1.75, color: 'rgba(240,237,225,0.75)', margin: '0 0 24px', maxWidth: 540 }}>
@@ -270,7 +296,7 @@ export default async function TizimlashtrishPage({ params }) {
                 "Ehtimoliy uzilishlar va uskunalar nosozligini ular sodir bo'lishidan avval ko'ra oladigan, tashkilot uzluksizligini xavf-xatardan himoya qiluvchi aqlli mexanizmlarni o'rnatish.",
               ].map((t, i) => (
                 <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                  <div style={{ fontFamily: "var(--mono, 'JetBrains Mono',monospace)", fontSize: 11, color: gold, marginTop: 4, minWidth: 24, letterSpacing: '0.08em' }}>0{i + 1}</div>
+                  <div style={{ fontFamily: "var(--mono, var(--font-geist-mono),monospace)", fontSize: 11, color: gold, marginTop: 4, minWidth: 24, letterSpacing: '0.08em' }}>0{i + 1}</div>
                   <p style={{ fontSize: 13.5, lineHeight: 1.7, color: 'rgba(240,237,225,0.88)', margin: 0 }}>{t}</p>
                 </div>
               ))}

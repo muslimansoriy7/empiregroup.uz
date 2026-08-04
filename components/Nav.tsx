@@ -8,6 +8,7 @@ import { useConsult } from "./ConsultModal";
 import { Button } from "./Button";
 import { Wordmark } from "./Wordmark";
 import { LangSwitcher } from "./LangSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { Menu, Close, Phone } from "./Icons";
 
 export function Nav() {
@@ -76,6 +77,7 @@ export function Nav() {
             <Phone className="size-4 text-mute" />
             {t.nav.phone.label}
           </a>
+          <ThemeToggle />
           <LangSwitcher />
           <Button onClick={openConsult} variant="nav" size="sm">
             {t.nav.cta.label}
@@ -84,9 +86,10 @@ export function Nav() {
 
         {/* mobile actions */}
         <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
           <LangSwitcher />
           <button
-            className="grid size-11 place-items-center rounded-[var(--radius-btn)] border border-hairline bg-elevated text-ink"
+            className="grid size-11 place-items-center rounded-full border border-hairline bg-elevated text-ink"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
