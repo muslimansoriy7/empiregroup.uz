@@ -14,7 +14,14 @@ import { useI18n } from "@/lib/i18n";
 
 type Status = "idle" | "sending" | "success";
 
-export function HomeForm({ compact = false }: { compact?: boolean }) {
+export function HomeForm({
+  compact = false,
+  ns = "vx",
+}: {
+  compact?: boolean;
+  /** Class-name namespace so the same form can wear either page skin. */
+  ns?: "vx" | "nx";
+}) {
   const { t } = useI18n();
   const c = t.consult;
 
@@ -83,21 +90,21 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
 
   if (status === "success") {
     return (
-      <div className="vx-form vx-form-done" role="status">
-        <span className="vx-form-check" aria-hidden="true">
+      <div className={`${ns}-form ${ns}-form-done`} role="status">
+        <span className={`${ns}-form-check`} aria-hidden="true">
           ✓
         </span>
-        <h3 className="vx-card-title">{c.successTitle}</h3>
-        <p className="vx-card-desc">{c.successBody}</p>
+        <h3 className={`${ns}-card-title`}>{c.successTitle}</h3>
+        <p className={`${ns}-card-desc`}>{c.successBody}</p>
       </div>
     );
   }
 
   return (
-    <form className="vx-form" onSubmit={onSubmit} noValidate>
-      <div className="vx-form-row">
-        <label className="vx-field">
-          <span className="vx-mono-label">{c.nameLabel}</span>
+    <form className={`${ns}-form`} onSubmit={onSubmit} noValidate>
+      <div className={`${ns}-form-row`}>
+        <label className={`${ns}-field`}>
+          <span className={`${ns}-mono-label`}>{c.nameLabel}</span>
           <input
             type="text"
             value={name}
@@ -106,11 +113,11 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
             autoComplete="name"
             aria-invalid={Boolean(errors.name)}
           />
-          {errors.name && <span className="vx-field-err">{errors.name}</span>}
+          {errors.name && <span className={`${ns}-field-err`}>{errors.name}</span>}
         </label>
 
-        <label className="vx-field">
-          <span className="vx-mono-label">{c.phoneLabel}</span>
+        <label className={`${ns}-field`}>
+          <span className={`${ns}-mono-label`}>{c.phoneLabel}</span>
           <input
             type="tel"
             value={phone}
@@ -119,13 +126,13 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
             autoComplete="tel"
             aria-invalid={Boolean(errors.phone)}
           />
-          {errors.phone && <span className="vx-field-err">{errors.phone}</span>}
+          {errors.phone && <span className={`${ns}-field-err`}>{errors.phone}</span>}
         </label>
       </div>
 
-      <div className="vx-form-row">
-        <label className="vx-field">
-          <span className="vx-mono-label">{c.fieldLabel}</span>
+      <div className={`${ns}-form-row`}>
+        <label className={`${ns}-field`}>
+          <span className={`${ns}-mono-label`}>{c.fieldLabel}</span>
           <select value={service} onChange={(e) => setService(e.target.value)}>
             <option value="">{c.fieldPlaceholder}</option>
             {c.fieldOptions.map((o) => (
@@ -136,8 +143,8 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
           </select>
         </label>
 
-        <label className="vx-field">
-          <span className="vx-mono-label">{c.budgetLabel}</span>
+        <label className={`${ns}-field`}>
+          <span className={`${ns}-mono-label`}>{c.budgetLabel}</span>
           <select value={budget} onChange={(e) => setBudget(e.target.value)}>
             <option value="">{c.budgetPlaceholder}</option>
             {c.budgetOptions.map((o) => (
@@ -150,8 +157,8 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
       </div>
 
       {!compact && (
-        <label className="vx-field">
-          <span className="vx-mono-label">{c.messageLabel}</span>
+        <label className={`${ns}-field`}>
+          <span className={`${ns}-mono-label`}>{c.messageLabel}</span>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -163,7 +170,7 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
 
       {/* Honeypot — off-screen, never announced, never focusable by tab. */}
       <input
-        className="vx-hp"
+        className={`${ns}-hp`}
         type="text"
         tabIndex={-1}
         autoComplete="off"
@@ -173,20 +180,24 @@ export function HomeForm({ compact = false }: { compact?: boolean }) {
       />
 
       {submitError && (
-        <p className="vx-field-err vx-form-error" role="alert">
+        <p className={`${ns}-field-err ${ns}-form-error`} role="alert">
           {submitError}
         </p>
       )}
 
       <button
-        className="vx-btn vx-btn-filled vx-btn-lg vx-btn-block"
+        className={
+          ns === "nx"
+            ? "nx-btn nx-btn-solid nx-btn-lg nx-btn-block"
+            : "vx-btn vx-btn-filled vx-btn-lg vx-btn-block"
+        }
         type="submit"
         disabled={status === "sending"}
       >
         {status === "sending" ? c.sending : c.submit}
       </button>
 
-      <p className="vx-mono-label vx-form-note">{c.privacy}</p>
+      <p className={`${ns}-mono-label ${ns}-form-note`}>{c.privacy}</p>
     </form>
   );
 }
