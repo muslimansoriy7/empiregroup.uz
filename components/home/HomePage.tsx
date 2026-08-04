@@ -5,8 +5,8 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toolLogos } from "@/content/logos";
-import { v3Copy, V3_CONTACT } from "@/content/v3";
-import { V3Form } from "./V3Form";
+import { homeCopy, CONTACT } from "@/content/home";
+import { HomeForm } from "./HomeForm";
 import { locales, localeShort } from "@/content";
 import { localePath, stripLocale } from "@/lib/locale-path";
 import { useI18n } from "@/lib/i18n";
@@ -208,7 +208,7 @@ function LangSwitch({ label, className = "" }: { label: string; className?: stri
 /** Projects shown before the reader asks for the rest. */
 const PROJECTS_PREVIEW = 4;
 
-export function V3Page({
+export function HomePage({
   journal,
   blogHref,
 }: {
@@ -216,7 +216,7 @@ export function V3Page({
   blogHref: string;
 }) {
   const { locale } = useI18n();
-  const t = v3Copy[locale];
+  const t = homeCopy[locale];
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
@@ -341,8 +341,8 @@ export function V3Page({
           <div className="vx-nav-actions">
             <ThemeSwitch label={t.themeLabel} />
             <LangSwitch label={t.langLabel} className="vx-hide-menu" />
-            <a className="vx-btn vx-btn-ghost vx-hide-sm" href={V3_CONTACT.phonePrimary.href}>
-              {V3_CONTACT.phonePrimary.label}
+            <a className="vx-btn vx-btn-ghost vx-hide-sm" href={CONTACT.phonePrimary.href}>
+              {CONTACT.phonePrimary.label}
             </a>
             <a className="vx-btn vx-btn-filled vx-hide-menu" href="#cta">
               {t.nav.cta}
@@ -1061,32 +1061,32 @@ export function V3Page({
                       read like a mistake rather than a second line. */}
                   <div className="vx-cta-channel vx-cta-phones">
                     <span className="vx-mono-label">{t.cta.call}</span>
-                    <a href={V3_CONTACT.phonePrimary.href}>
-                      <strong>{V3_CONTACT.phonePrimary.label}</strong>
+                    <a href={CONTACT.phonePrimary.href}>
+                      <strong>{CONTACT.phonePrimary.label}</strong>
                     </a>
-                    <a href={V3_CONTACT.phoneSecondary.href}>
-                      <strong>{V3_CONTACT.phoneSecondary.label}</strong>
+                    <a href={CONTACT.phoneSecondary.href}>
+                      <strong>{CONTACT.phoneSecondary.label}</strong>
                     </a>
                   </div>
                   <a
                     className="vx-cta-channel"
-                    href={V3_CONTACT.telegram.href}
+                    href={CONTACT.telegram.href}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <span className="vx-mono-label">{t.cta.telegram}</span>
-                    <strong>{V3_CONTACT.telegram.label}</strong>
+                    <strong>{CONTACT.telegram.label}</strong>
                   </a>
-                  <a className="vx-cta-channel" href={V3_CONTACT.email.href}>
+                  <a className="vx-cta-channel" href={CONTACT.email.href}>
                     <span className="vx-mono-label">Email</span>
-                    <strong>{V3_CONTACT.email.label}</strong>
+                    <strong>{CONTACT.email.label}</strong>
                   </a>
                 </div>
                 <p className="vx-mono-label vx-cta-meta">{t.cta.meta}</p>
               </div>
 
               <div className="vx-cta-form">
-                <V3Form />
+                <HomeForm />
               </div>
             </div>
           </div>
@@ -1108,11 +1108,17 @@ export function V3Page({
 
           <div className="vx-footer-col">
             <p className="vx-mono-label vx-footer-h">{t.footer.servicesHead}</p>
-            {t.footer.services.map(([label, href]) => (
-              <a key={label} href={href}>
-                {label}
-              </a>
-            ))}
+            {t.footer.services.map(([label, href]) =>
+              href.startsWith("#") ? (
+                <a key={href} href={href}>
+                  {label}
+                </a>
+              ) : (
+                <Link key={href} href={localePath(locale, href)}>
+                  {label}
+                </Link>
+              )
+            )}
           </div>
 
           <div className="vx-footer-col">

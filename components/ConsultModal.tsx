@@ -27,17 +27,17 @@ const AUTO_KEY = "sd_consult_autoshown";
 const AUTO_DELAY = 60_000; // 60s
 
 /**
- * `/v2`…`/v10` are self-contained design studies, each with its own visual
- * language. The shared modal is styled for the main site, so popping it over
- * one of them shows two designs at once. Matches the route with or without a
- * `/ru` / `/en` prefix.
+ * The homepage carries its own lead form in its own visual language, so the
+ * shared modal popping over it would show two designs at once and ask for
+ * details the visitor can already leave in front of them. Every other page
+ * still gets it. Matches `/`, `/ru` and `/en`.
  */
-const DESIGN_PREVIEW = /^\/(?:ru\/|en\/)?v\d+\/?$/;
+const HAS_OWN_FORM = /^\/(?:ru|en)?\/?$/;
 
 export function ConsultProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setOpen] = useState(false);
   const pathname = usePathname();
-  const isDesignPreview = DESIGN_PREVIEW.test(pathname || "/");
+  const hasOwnForm = HAS_OWN_FORM.test(pathname || "/");
   const open = useCallback(() => {
     // any manual open counts as "shown" so the timer won't pop it again
     try {
@@ -49,7 +49,7 @@ export function ConsultProvider({ children }: { children: React.ReactNode }) {
 
   // auto-open the consultation form once, ~60s into the visit
   useEffect(() => {
-    if (isDesignPreview) return;
+    if (hasOwnForm) return;
     try {
       if (sessionStorage.getItem(AUTO_KEY)) return;
     } catch {}
@@ -61,7 +61,7 @@ export function ConsultProvider({ children }: { children: React.ReactNode }) {
       setOpen(true);
     }, AUTO_DELAY);
     return () => window.clearTimeout(id);
-  }, [isDesignPreview]);
+  }, [hasOwnForm]);
 
   return (
     <ConsultContext.Provider value={{ open, close, isOpen }}>

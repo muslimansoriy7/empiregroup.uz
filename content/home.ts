@@ -46,7 +46,7 @@ export type V3Quote = { quote: string; name: string; role: string; company: stri
 export type V3Credential = { title: string; org: string; note: string };
 export type V3Faq = { q: string; a: string };
 
-export type V3Copy = {
+export type HomeCopy = {
   nav: { links: Pair[]; cta: string; openMenu: string; closeMenu: string; menuLabel: string };
   hero: {
     eyebrow: string;
@@ -140,7 +140,7 @@ export type V3Copy = {
 };
 
 /* Contact points, shared by every locale. */
-export const V3_CONTACT = {
+export const CONTACT = {
   phonePrimary: { label: "+998 99 116 46 58", href: "tel:+998991164658" },
   phoneSecondary: { label: "+998 20 009 25 88", href: "tel:+998200092588" },
   email: { label: "mirabbosjurayev17@gmail.com", href: "mailto:mirabbosjurayev17@gmail.com" },
@@ -151,7 +151,7 @@ export const V3_CONTACT = {
    can never be mistaken for verified figures. */
 const LEGAL_PLACEHOLDER = "XXX XXX XXX";
 
-const uz: V3Copy = {
+const uz: HomeCopy = {
   nav: {
     links: [
       ["Xizmatlar", "#xizmatlar"],
@@ -382,10 +382,13 @@ const uz: V3Copy = {
     servicesHead: "Xizmatlar",
     companyHead: "Kompaniya",
     contactHead: "Aloqa",
+    /* Routes, not just anchors — the service landing pages and the pricing
+       page carry their own SEO and would otherwise be unreachable from here. */
     services: [
-      ["Maxsus dasturiy ta'minot", "#xizmatlar"],
-      ["Odoo ERP & AI", "#xizmatlar"],
-      ["Texnologiyalar", "#stack"],
+      ["Veb-sayt yaratish", "/xizmatlar/veb-sayt-yaratish-toshkent"],
+      ["Mobil ilova yaratish", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
+      ["CRM va ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["Narxlar", "/narxlar"],
     ],
     company: [
       ["Loyihalar", "#loyihalar"],
@@ -394,10 +397,10 @@ const uz: V3Copy = {
       ["Blog", "/blog"],
     ],
     contact: [
-      [V3_CONTACT.phonePrimary.label, V3_CONTACT.phonePrimary.href],
-      [V3_CONTACT.phoneSecondary.label, V3_CONTACT.phoneSecondary.href],
-      ["Telegram", V3_CONTACT.telegram.href],
-      [V3_CONTACT.email.label, V3_CONTACT.email.href],
+      [CONTACT.phonePrimary.label, CONTACT.phonePrimary.href],
+      [CONTACT.phoneSecondary.label, CONTACT.phoneSecondary.href],
+      ["Telegram", CONTACT.telegram.href],
+      [CONTACT.email.label, CONTACT.email.href],
     ],
     legalHead: "Rekvizitlar",
     legal: [
@@ -413,7 +416,7 @@ const uz: V3Copy = {
   langLabel: "Til",
 };
 
-const ru: V3Copy = {
+const ru: HomeCopy = {
   nav: {
     links: [
       ["Услуги", "#xizmatlar"],
@@ -635,9 +638,10 @@ const ru: V3Copy = {
     companyHead: "Компания",
     contactHead: "Контакты",
     services: [
-      ["Заказная разработка", "#xizmatlar"],
-      ["Odoo ERP & AI", "#xizmatlar"],
-      ["Технологии", "#stack"],
+      ["Создание сайта", "/xizmatlar/veb-sayt-yaratish-toshkent"],
+      ["Мобильные приложения", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
+      ["CRM и ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["Цены", "/narxlar"],
     ],
     company: [
       ["Проекты", "#loyihalar"],
@@ -646,10 +650,10 @@ const ru: V3Copy = {
       ["Блог", "/blog"],
     ],
     contact: [
-      [V3_CONTACT.phonePrimary.label, V3_CONTACT.phonePrimary.href],
-      [V3_CONTACT.phoneSecondary.label, V3_CONTACT.phoneSecondary.href],
-      ["Telegram", V3_CONTACT.telegram.href],
-      [V3_CONTACT.email.label, V3_CONTACT.email.href],
+      [CONTACT.phonePrimary.label, CONTACT.phonePrimary.href],
+      [CONTACT.phoneSecondary.label, CONTACT.phoneSecondary.href],
+      ["Telegram", CONTACT.telegram.href],
+      [CONTACT.email.label, CONTACT.email.href],
     ],
     legalHead: "Реквизиты",
     legal: [
@@ -665,7 +669,7 @@ const ru: V3Copy = {
   langLabel: "Язык",
 };
 
-const en: V3Copy = {
+const en: HomeCopy = {
   nav: {
     links: [
       ["Services", "#xizmatlar"],
@@ -887,9 +891,10 @@ const en: V3Copy = {
     companyHead: "Company",
     contactHead: "Contact",
     services: [
-      ["Custom software", "#xizmatlar"],
-      ["Odoo ERP & AI", "#xizmatlar"],
-      ["Technology", "#stack"],
+      ["Website development", "/xizmatlar/veb-sayt-yaratish-toshkent"],
+      ["Mobile app development", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
+      ["CRM and ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["Pricing", "/narxlar"],
     ],
     company: [
       ["Work", "#loyihalar"],
@@ -898,10 +903,10 @@ const en: V3Copy = {
       ["Blog", "/blog"],
     ],
     contact: [
-      [V3_CONTACT.phonePrimary.label, V3_CONTACT.phonePrimary.href],
-      [V3_CONTACT.phoneSecondary.label, V3_CONTACT.phoneSecondary.href],
-      ["Telegram", V3_CONTACT.telegram.href],
-      [V3_CONTACT.email.label, V3_CONTACT.email.href],
+      [CONTACT.phonePrimary.label, CONTACT.phonePrimary.href],
+      [CONTACT.phoneSecondary.label, CONTACT.phoneSecondary.href],
+      ["Telegram", CONTACT.telegram.href],
+      [CONTACT.email.label, CONTACT.email.href],
     ],
     legalHead: "Company details",
     legal: [
@@ -917,7 +922,7 @@ const en: V3Copy = {
   langLabel: "Language",
 };
 
-export const v3Copy: Record<Locale, V3Copy> = { uz, ru, en };
+export const homeCopy: Record<Locale, HomeCopy> = { uz, ru, en };
 
 /**
  * English glosses for the journal cards.

@@ -15,10 +15,21 @@ const nextConfig = {
     // CMS blog template; send their old URLs to the blog index so indexed links
     // don't 404.
     const gone = ["transformatsiya-zanjiri", "odoo-joriy-qilish-bosqichlari"];
-    return gone.flatMap((slug) => [
+    const blogRedirects = gone.flatMap((slug) => [
       { source: `/blog/${slug}`, destination: "/blog", permanent: true },
       { source: `/:locale(ru|en)/blog/${slug}`, destination: "/:locale/blog", permanent: true },
     ]);
+
+    // /v2…/v10 were design studies shared for review. /v3 became the homepage
+    // and the rest were dropped; the links were passed around, so they land on
+    // the homepage rather than a 404.
+    const studies = ["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"];
+    const studyRedirects = studies.flatMap((v) => [
+      { source: `/${v}`, destination: "/", permanent: false },
+      { source: `/:locale(ru|en)/${v}`, destination: "/:locale", permanent: false },
+    ]);
+
+    return [...blogRedirects, ...studyRedirects];
   },
   async headers() {
     return [

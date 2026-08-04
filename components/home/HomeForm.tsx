@@ -14,7 +14,7 @@ import { useI18n } from "@/lib/i18n";
 
 type Status = "idle" | "sending" | "success";
 
-export function V3Form({ compact = false }: { compact?: boolean }) {
+export function HomeForm({ compact = false }: { compact?: boolean }) {
   const { t } = useI18n();
   const c = t.consult;
 
