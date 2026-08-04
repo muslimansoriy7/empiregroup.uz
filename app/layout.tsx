@@ -108,7 +108,10 @@ const websiteSchema = {
 // `.js` flag. First visit defaults to dark (the brand's established look);
 // once the header toggle is used the choice is persisted to localStorage and
 // wins here. Setting data-theme synchronously avoids a flash of the wrong theme.
-const BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){}document.documentElement.classList.add('js');})()`;
+// Runs before paint. A stored choice always wins; with nothing stored we
+// follow the operating system rather than forcing light on someone whose
+// machine is set to dark.
+const BOOT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}document.documentElement.classList.add('js');})()`;
 
 export default function RootLayout({
   children,

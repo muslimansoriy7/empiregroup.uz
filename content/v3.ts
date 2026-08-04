@@ -28,6 +28,17 @@ export type V3Service = {
 };
 
 export type V3Step = { title: string; desc: string; tags: string[] };
+export type V3Tier = {
+  tier: string;
+  price: string;
+  period: string;
+  featured: boolean;
+  desc: string;
+  items: string[];
+};
+export type V3Guarantee = { title: string; body: string };
+/** A metric we can stand behind, or one still waiting on the client's numbers. */
+export type V3Metric = { value: string; label: string; pending?: boolean };
 export type V3Member = { role: string; bio: string };
 export type V3Quote = { quote: string; name: string; role: string; company: string };
 /** Only credentials actually held. A badge you have not earned discounts the
@@ -60,6 +71,41 @@ export type V3Copy = {
     ctaLink: string;
     items: V3Project[];
   };
+  caseStudy: {
+    eyebrow: string;
+    client: string;
+    place: string;
+    title: string;
+    lede: string;
+    challengeLabel: string;
+    challenge: string[];
+    solutionLabel: string;
+    solution: string[];
+    metricsLabel: string;
+    metrics: V3Metric[];
+    stackLabel: string;
+    stack: string[];
+    pendingNote: string;
+    cta: string;
+  };
+  pricing: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    tracks: [string, string];
+    popular: string;
+    cta: string;
+    note: string;
+    software: V3Tier[];
+    odoo: V3Tier[];
+  };
+  guarantee: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    items: V3Guarantee[];
+  };
+  office: { eyebrow: string; title: string; sub: string };
   stack: { eyebrow: string; title: string };
   journal: {
     eyebrow: string;
@@ -83,11 +129,27 @@ export type V3Copy = {
     services: Pair[];
     company: Pair[];
     contact: Pair[];
+    /** Legal identity a UZ buyer checks before signing. */
+    legalHead: string;
+    legal: Pair[];
     rights: string;
     place: string;
   };
+  themeLabel: string;
   langLabel: string;
 };
+
+/* Contact points, shared by every locale. */
+export const V3_CONTACT = {
+  phonePrimary: { label: "+998 99 116 46 58", href: "tel:+998991164658" },
+  phoneSecondary: { label: "+998 20 009 25 88", href: "tel:+998200092588" },
+  email: { label: "mirabbosjurayev17@gmail.com", href: "mailto:mirabbosjurayev17@gmail.com" },
+  telegram: { label: "t.me/muslimansoriy", href: "https://t.me/muslimansoriy" },
+};
+
+/* Placeholders until the real registration data arrives — marked so they
+   can never be mistaken for verified figures. */
+const LEGAL_PLACEHOLDER = "XXX XXX XXX";
 
 const uz: V3Copy = {
   nav: {
@@ -104,7 +166,7 @@ const uz: V3Copy = {
     menuLabel: "Asosiy menyu",
   },
   hero: {
-    eyebrow: "AI & CUSTOM SOFTWARE DEVELOPMENT",
+    eyebrow: "AI, ERP VA MAXSUS DASTURIY TA'MINOT",
     titleBefore: "Biznesni ",
     titleAccent: "raqamlashtiramiz",
     titleAfter: " — g'oyadan ishga tushgan mahsulotgacha.",
@@ -163,6 +225,82 @@ const uz: V3Copy = {
       { seg: "SAVDO · POS", title: "Hilol Market — savdo avtomatlashtirish", result: "Kassa, ombor va hisobot bitta panelda", tags: ["Retail", "POS"] },
     ],
   },
+  /* The one project deep enough to answer "do you understand a business like
+     mine". Figures marked `pending` wait on the client's own reporting —
+     an invented percentage would undo everything the page is trying to do. */
+  caseStudy: {
+    eyebrow: "ASOSIY KEYS",
+    client: "Shodlik Textile",
+    place: "Qashqadaryo · vertikal to'qimachilik klasteri",
+    title: "Paxtadan tayyor kiyimgacha — bitta tizimda.",
+    lede: "Paxta xomashyosidan ip, xom mato va tayyor kiyimgacha — to'rt bosqichli ishlab chiqarish, 337 xodim, uch smena. Hammasi Excel va qog'ozda edi. Biz butun klasterni Odoo 19 Enterprise'ga ko'chirdik va zavod uskunalarini to'g'ridan-to'g'ri ERP'ga uladik.",
+    challengeLabel: "MUAMMO",
+    challenge: [
+      "Har bosqich alohida hisob yuritardi — paxta sexi ipni, ip sexi matoni ko'rmasdi.",
+      "Ombor qoldig'i qo'lda sanalardi; hisobot bir necha kun kechikardi.",
+      "Davomat qog'ozda — 337 xodimning smenasi va kechikishi qo'lda hisoblanardi.",
+      "Tarozi va stanok ko'rsatkichlari daftarga yozilib, keyin Excel'ga kiritilardi.",
+      "Bank ko'chirmasi 1C'dan qo'lda ko'chirilardi, valyuta kursi qo'lda yangilanardi.",
+    ],
+    solutionLabel: "YECHIM",
+    solution: [
+      "Odoo 19 Enterprise, Odoo.sh'da (Git CI/CD) — 28 ta maxsus modul, hammasi shu klaster uchun yozilgan.",
+      "Face-ID turniket ERP'ga ulandi: xodim o'tishi bilan davomat yoziladi, smena va kechikish avtomatik hisoblanadi.",
+      "Sanoat tarozilari ishlab chiqarish buyurtmasiga ulandi — vazn qo'lda kiritilmaydi, MO avtomatik yopiladi.",
+      "Stanoklar telemetriyasi: xato signali kelsa, texnik xizmat arizasi o'zi ochiladi.",
+      "Markaziy bank kursi kuniga avtomatik, 1C bank vipiskasi bir tugma bilan import qilinadi.",
+      "Partiyalarga GS1-128 QR yorliq — mato rulonini paxta partiyasigacha kuzatish mumkin.",
+      "B2B eksport sayti: so'rov to'g'ridan-to'g'ri CRM'ga tushadi.",
+    ],
+    metricsLabel: "NATIJA",
+    metrics: [
+      { value: "337", label: "xodim tizimda" },
+      { value: "28", label: "maxsus modul" },
+      { value: "4", label: "apparat integratsiyasi" },
+      { value: "—", label: "Inventarizatsiya vaqti", pending: true },
+    ],
+    stackLabel: "TEXNOLOGIYA",
+    stack: ["Odoo 19 Enterprise", "Odoo.sh", "PostgreSQL", "Python", "ISAPI", "GS1-128"],
+    pendingNote: "Belgilangan ko'rsatkichlar mijozning yakuniy hisoboti bilan yangilanadi.",
+    cta: "Shunga o'xshash loyihani muhokama qilish",
+  },
+  pricing: {
+    eyebrow: "NARXLAR",
+    title: "Qancha turadi — yashirmaymiz.",
+    sub: "Fixed-scope: soatbay emas. Loyiha ko'lami aniqlangach, summa shartnomada qotiriladi va o'zgarmaydi.",
+    tracks: ["Maxsus dasturiy ta'minot", "Odoo ERP & AI"],
+    popular: "KO'P TANLANADI",
+    cta: "Muhokama qilish",
+    note: "Fixed-scope · yashirin to'lov yo'q · har paketda 4 hafta bepul qo'llab-quvvatlash · kod va intellektual mulk sizga o'tadi.",
+    software: [
+      { tier: "STANDARD", price: "$5,000 dan", period: "2–3 oy", featured: false, desc: "Bitta aniq vazifani hal qiluvchi MVP.", items: ["Landing yoki MVP", "Forma va integratsiya", "Asosiy admin panel", "Responsive dizayn"] },
+      { tier: "ADVANCED", price: "$15K – $40K", period: "4–6 oy", featured: true, desc: "Murakkab biznes mantig'iga ega to'liq ilova.", items: ["To'liq web yoki mobil ilova", "CRM integratsiya", "Admin panel va rollar", "API va avtomatlashtirish"] },
+      { tier: "MEGA", price: "$50,000+", period: "6–12 oy", featured: false, desc: "Bir nechta ilovadan iborat ekotizim.", items: ["Yirik ekotizim", "Mikroxizmatlar", "Yuqori yuklama", "Uzoq muddatli SLA"] },
+    ],
+    odoo: [
+      { tier: "STANDARD", price: "$8,800 dan", period: "2–3 oy", featured: false, desc: "Odoo standart modullarini joriy qilish.", items: ["Asosiy modullar", "Ma'lumot migratsiyasi", "Xodimlarni o'qitish", "Standart hisobotlar"] },
+      { tier: "ADVANCED", price: "$25K – $35K", period: "4–6 oy", featured: true, desc: "Biznesga moslashtirilgan modullar va AI.", items: ["To'liq ERP joriy qilish", "Custom modullar", "AI avtomatlashtirish", "Tashqi integratsiya"] },
+      { tier: "MEGA", price: "$85,000+", period: "~1 yil", featured: false, desc: "Korxonaning to'liq raqamli transformatsiyasi.", items: ["Korporativ ekotizim", "Ko'p filial / kompaniya", "Apparat integratsiyalari", "24/7 SLA"] },
+    ],
+  },
+  guarantee: {
+    eyebrow: "XATO KETSA-CHI?",
+    title: "Eng ko'p beriladigan savol — mana javobi.",
+    sub: "Zavodni boshqaradigan tizimni topshirayotgan odam nimadan qo'rqishini bilamiz. Shuning uchun bularni oldindan yozib qo'yamiz.",
+    items: [
+      { title: "Kod va ma'lumot sizniki", body: "Loyiha yakunida barcha kod, dizayn va intellektual mulk sizga o'tadi. Vendor lock-in yo'q — xohlasangiz o'z jamoangiz davom ettiradi." },
+      { title: "4 hafta bepul qo'llab-quvvatlash", body: "Ishga tushgandan keyin to'rt hafta — xatolarni tuzatish va sozlash bepul. Undan keyingi texnik xizmat alohida kelishiladi va majburiy emas." },
+      { title: "Bosqichma-bosqich to'lov", body: "Boshlang'ich avans, so'ngra har bosqich yakunida. Natijani ko'rasiz, keyin to'laysiz — butun summani oldindan bermaysiz." },
+      { title: "Shartnoma va NDA", body: "\"EMPIRE GROUP CORP\" MCHJ sifatida rasmiy shartnoma tuzamiz. Biznes ma'lumotlaringiz uchun maxfiylik kelishuvi standart amaliyot." },
+      { title: "Ma'lumot xavfsizligi", body: "Ma'lumot sizning serveringizda yoki siz tanlagan bulutda saqlanadi. Kirish rollar bo'yicha cheklanadi, harakatlar jurnalga yoziladi." },
+      { title: "Zaxira nusxa va tiklash", body: "Avtomatik kunlik zaxira nusxa sozlanadi. Nosozlik yuz bersa, tizim oxirgi ishonchli holatga qaytariladi." },
+    ],
+  },
+  office: {
+    eyebrow: "OFISDA",
+    title: "Toshkentdagi jamoamiz, ish paytida.",
+    sub: "Studiya emas — haqiqiy ish kunlari.",
+  },
   stack: { eyebrow: "BIZNING STACK", title: "Ishonchli, sanoat standarti texnologiyalar." },
   journal: {
     eyebrow: "JURNAL",
@@ -175,11 +313,13 @@ const uz: V3Copy = {
   process: {
     eyebrow: "QANDAY ISHLAYMIZ",
     title: "G'oyadan mahsulotgacha — 4 bosqich.",
+    /* Named after what actually happens on an Empire project, not the
+       Explore/Plan/Build/Commit any agency could have written. */
     steps: [
-      { title: "Explore", desc: "G'oya va muammoni chuqur o'rganamiz.", tags: ["Tahlil", "Audit"] },
-      { title: "Plan", desc: "PRD, arxitektura, dizayn; muddat va byudjet aniq.", tags: ["PRD", "TZ", "Dizayn"] },
-      { title: "Build", desc: "Kod, test, integratsiya; sprintlar, demo.", tags: ["Dev", "Test", "Demo"] },
-      { title: "Commit", desc: "Ishga tushirish va uzoq muddatli qo'llab-quvvatlash.", tags: ["Deploy", "Support"] },
+      { title: "Sexga chiqamiz", desc: "Ofisda emas — ish joyingizda. Jarayonni o'z ko'zimiz bilan ko'ramiz, kim nima qilishini yozib olamiz.", tags: ["Tahlil", "Audit"] },
+      { title: "Summani qotiramiz", desc: "TZ, arxitektura va dizayn tayyor bo'lgach, narx va muddat shartnomada belgilanadi — keyin o'zgarmaydi.", tags: ["TZ", "Shartnoma", "Dizayn"] },
+      { title: "Har 2 haftada ko'rsatamiz", desc: "Sprintlar bilan quramiz. Har ikki haftada ishlaydigan versiyani ko'rasiz — oxirida emas.", tags: ["Sprint", "Demo", "Test"] },
+      { title: "Ishga tushiramiz va qolamiz", desc: "Xodimlarni o'qitamiz, ma'lumotni ko'chiramiz. 4 hafta bepul kuzatib turamiz.", tags: ["Migratsiya", "O'qitish", "Support"] },
     ],
   },
   team: {
@@ -212,6 +352,8 @@ const uz: V3Copy = {
     items: [
       { title: "Odoo Learning Partner", org: "Odoo S.A.", note: "Odoo vendorining rasmiy hamkori — mahsulot yangilanishlari, joriy qilish metodologiyasi va vendor ko'magiga to'g'ridan-to'g'ri kirish." },
       { title: "Davlat ro'yxatidan o'tganlik guvohnomasi", org: '"EMPIRE GROUP CORP" MCHJ', note: "Rasmiy yuridik shaxs — shartnoma tuzish, hisob-faktura berish va soliq majburiyatlarini bajarish huquqi hujjat bilan tasdiqlangan." },
+      { title: "IT Park rezidenti", org: "IT Park O'zbekiston", note: "O'zbekiston IT sohasi rezidentlari reyestrida — texnopark kuratorligi, soliq imtiyozlari va davlat qo'llab-quvvatlash dasturlariga kirish." },
+      { title: "ISO/IEC 27001", org: "Axborot xavfsizligi standarti", note: "Axborot xavfsizligini boshqarishning xalqaro standarti — mijoz bazasi, moliya va intellektual mulkni himoya qilish tartibi hujjatlashtirilgan." },
     ],
   },
   faq: {
@@ -252,13 +394,22 @@ const uz: V3Copy = {
       ["Blog", "/blog"],
     ],
     contact: [
-      ["Telegram", "https://t.me/muslimansoriy"],
-      ["Email", "mailto:info@empiregroup.uz"],
-      ["Telefon", "tel:+998991164658"],
+      [V3_CONTACT.phonePrimary.label, V3_CONTACT.phonePrimary.href],
+      [V3_CONTACT.phoneSecondary.label, V3_CONTACT.phoneSecondary.href],
+      ["Telegram", V3_CONTACT.telegram.href],
+      [V3_CONTACT.email.label, V3_CONTACT.email.href],
+    ],
+    legalHead: "Rekvizitlar",
+    legal: [
+      ['"EMPIRE GROUP CORP" MCHJ', ""],
+      [`STIR: ${LEGAL_PLACEHOLDER}`, ""],
+      ["Toshkent sh., —— tumani, —— ko'chasi", ""],
+      [`H/r: ${LEGAL_PLACEHOLDER} · —— bank`, ""],
     ],
     rights: "© 2026 Empire Group. Barcha huquqlar himoyalangan.",
     place: "Toshkent · O'zbekiston",
   },
+  themeLabel: "Mavzu",
   langLabel: "Til",
 };
 
@@ -277,7 +428,7 @@ const ru: V3Copy = {
     menuLabel: "Главное меню",
   },
   hero: {
-    eyebrow: "AI & CUSTOM SOFTWARE DEVELOPMENT",
+    eyebrow: "AI, ERP И ЗАКАЗНАЯ РАЗРАБОТКА",
     titleBefore: "",
     titleAccent: "Оцифровываем",
     titleAfter: " бизнес — от идеи до работающего продукта.",
@@ -331,6 +482,79 @@ const ru: V3Copy = {
       { seg: "ТОРГОВЛЯ · POS", title: "Hilol Market — автоматизация торговли", result: "Касса, склад и отчётность в одной панели", tags: ["Retail", "POS"] },
     ],
   },
+  caseStudy: {
+    eyebrow: "ГЛАВНЫЙ КЕЙС",
+    client: "Shodlik Textile",
+    place: "Кашкадарья · вертикальный текстильный кластер",
+    title: "От хлопка до готовой одежды — в одной системе.",
+    lede: "От хлопкового сырья до пряжи, суровой ткани и готовой одежды — четыре передела, 337 сотрудников, три смены. Всё держалось на Excel и бумаге. Мы перевели весь кластер на Odoo 19 Enterprise и подключили заводское оборудование напрямую к ERP.",
+    challengeLabel: "ЗАДАЧА",
+    challenge: [
+      "Каждый передел вёл свой учёт — хлопковый цех не видел пряжу, прядильный не видел ткань.",
+      "Складские остатки считались вручную, отчёт опаздывал на несколько дней.",
+      "Табель на бумаге — смены и опоздания 337 человек считались руками.",
+      "Показания весов и станков записывались в тетрадь, потом переносились в Excel.",
+      "Банковская выписка переносилась из 1С вручную, курс валют обновлялся вручную.",
+    ],
+    solutionLabel: "РЕШЕНИЕ",
+    solution: [
+      "Odoo 19 Enterprise на Odoo.sh (Git CI/CD) — 28 собственных модулей, написанных под этот кластер.",
+      "Турникет Face-ID подключён к ERP: сотрудник проходит — табель пишется, смена и опоздание считаются автоматически.",
+      "Промышленные весы связаны с производственным заказом — вес не вводится руками, MO закрывается автоматически.",
+      "Телеметрия станков: приходит сигнал об ошибке — заявка на техобслуживание открывается сама.",
+      "Курс ЦБ обновляется ежедневно автоматически, выписка 1С импортируется одной кнопкой.",
+      "GS1-128 QR на партиях — рулон ткани прослеживается до партии хлопка.",
+      "B2B экспортный сайт: заявка попадает прямо в CRM.",
+    ],
+    metricsLabel: "РЕЗУЛЬТАТ",
+    metrics: [
+      { value: "337", label: "сотрудников в системе" },
+      { value: "28", label: "собственных модулей" },
+      { value: "4", label: "аппаратные интеграции" },
+      { value: "—", label: "Время инвентаризации", pending: true },
+    ],
+    stackLabel: "ТЕХНОЛОГИИ",
+    stack: ["Odoo 19 Enterprise", "Odoo.sh", "PostgreSQL", "Python", "ISAPI", "GS1-128"],
+    pendingNote: "Отмеченные показатели будут обновлены по итоговому отчёту клиента.",
+    cta: "Обсудить похожий проект",
+  },
+  pricing: {
+    eyebrow: "ЦЕНЫ",
+    title: "Сколько стоит — не скрываем.",
+    sub: "Fixed-scope: не почасово. После определения объёма сумма фиксируется в договоре и не меняется.",
+    tracks: ["Заказная разработка", "Odoo ERP & AI"],
+    popular: "ЧАЩЕ ВЫБИРАЮТ",
+    cta: "Обсудить",
+    note: "Fixed-scope · без скрытых платежей · 4 недели бесплатной поддержки в каждом пакете · код и права переходят вам.",
+    software: [
+      { tier: "STANDARD", price: "от $5,000", period: "2–3 мес.", featured: false, desc: "MVP, решающий одну конкретную задачу.", items: ["Лендинг или MVP", "Форма и интеграция", "Базовая админ-панель", "Адаптивный дизайн"] },
+      { tier: "ADVANCED", price: "$15K – $40K", period: "4–6 мес.", featured: true, desc: "Полноценное приложение со сложной логикой.", items: ["Полное веб или мобильное приложение", "Интеграция с CRM", "Админ-панель и роли", "API и автоматизация"] },
+      { tier: "MEGA", price: "$50,000+", period: "6–12 мес.", featured: false, desc: "Экосистема из нескольких приложений.", items: ["Крупная экосистема", "Микросервисы", "Высокая нагрузка", "Долгосрочный SLA"] },
+    ],
+    odoo: [
+      { tier: "STANDARD", price: "от $8,800", period: "2–3 мес.", featured: false, desc: "Внедрение стандартных модулей Odoo.", items: ["Базовые модули", "Миграция данных", "Обучение сотрудников", "Стандартные отчёты"] },
+      { tier: "ADVANCED", price: "$25K – $35K", period: "4–6 мес.", featured: true, desc: "Модули под бизнес и AI-автоматизация.", items: ["Полное внедрение ERP", "Кастомные модули", "AI-автоматизация", "Внешние интеграции"] },
+      { tier: "MEGA", price: "$85,000+", period: "~1 год", featured: false, desc: "Полная цифровая трансформация предприятия.", items: ["Корпоративная экосистема", "Несколько филиалов / компаний", "Аппаратные интеграции", "SLA 24/7"] },
+    ],
+  },
+  guarantee: {
+    eyebrow: "А ЕСЛИ ЧТО-ТО ПОЙДЁТ НЕ ТАК?",
+    title: "Самый частый вопрос — вот ответ.",
+    sub: "Мы понимаем, чего опасается человек, доверяющий нам систему, на которой держится завод. Поэтому пишем это заранее.",
+    items: [
+      { title: "Код и данные — ваши", body: "По завершении проекта весь код, дизайн и права переходят вам. Никакого vendor lock-in — при желании ваша команда продолжит сама." },
+      { title: "4 недели бесплатной поддержки", body: "Четыре недели после запуска исправление ошибок и донастройка — бесплатно. Дальнейшее обслуживание обсуждается отдельно и не обязательно." },
+      { title: "Поэтапная оплата", body: "Аванс, затем оплата по завершении каждого этапа. Вы видите результат и только потом платите — вся сумма вперёд не нужна." },
+      { title: "Договор и NDA", body: "Работаем по официальному договору как ООО «EMPIRE GROUP CORP». Соглашение о неразглашении для ваших бизнес-данных — стандартная практика." },
+      { title: "Безопасность данных", body: "Данные хранятся на вашем сервере или в выбранном вами облаке. Доступ разграничен по ролям, действия пишутся в журнал." },
+      { title: "Резервные копии и восстановление", body: "Настраивается автоматическое ежедневное резервное копирование. При сбое система возвращается к последнему надёжному состоянию." },
+    ],
+  },
+  office: {
+    eyebrow: "В ОФИСЕ",
+    title: "Наша команда в Ташкенте, в работе.",
+    sub: "Не студия — обычные рабочие дни.",
+  },
   stack: { eyebrow: "НАШ СТЕК", title: "Надёжные технологии индустриального стандарта." },
   journal: {
     eyebrow: "ЖУРНАЛ",
@@ -344,10 +568,10 @@ const ru: V3Copy = {
     eyebrow: "КАК МЫ РАБОТАЕМ",
     title: "От идеи до продукта — 4 этапа.",
     steps: [
-      { title: "Explore", desc: "Глубоко разбираемся в идее и задаче.", tags: ["Анализ", "Аудит"] },
-      { title: "Plan", desc: "PRD, архитектура, дизайн; сроки и бюджет точны.", tags: ["PRD", "ТЗ", "Дизайн"] },
-      { title: "Build", desc: "Код, тесты, интеграции; спринты и демо.", tags: ["Dev", "Test", "Demo"] },
-      { title: "Commit", desc: "Запуск и долгосрочная поддержка.", tags: ["Deploy", "Support"] },
+      { title: "Выезжаем в цех", desc: "Не в офисе — на вашем производстве. Смотрим процесс своими глазами и записываем, кто что делает.", tags: ["Анализ", "Аудит"] },
+      { title: "Фиксируем сумму", desc: "После ТЗ, архитектуры и дизайна цена и срок закрепляются в договоре — дальше не меняются.", tags: ["ТЗ", "Договор", "Дизайн"] },
+      { title: "Показываем раз в 2 недели", desc: "Строим спринтами. Каждые две недели вы видите работающую версию — а не только в конце.", tags: ["Спринт", "Демо", "Тест"] },
+      { title: "Запускаем и остаёмся", desc: "Обучаем сотрудников, переносим данные. Четыре недели сопровождаем бесплатно.", tags: ["Миграция", "Обучение", "Support"] },
     ],
   },
   team: {
@@ -380,6 +604,8 @@ const ru: V3Copy = {
     items: [
       { title: "Odoo Learning Partner", org: "Odoo S.A.", note: "Официальный партнёр вендора Odoo — прямой доступ к обновлениям продукта, методологии внедрения и поддержке вендора." },
       { title: "Свидетельство о государственной регистрации", org: "«EMPIRE GROUP CORP» ООО", note: "Официальное юридическое лицо — право заключать договоры, выставлять счета-фактуры и исполнять налоговые обязательства подтверждено документом." },
+      { title: "Резидент IT Park", org: "IT Park Узбекистан", note: "В реестре резидентов IT-отрасли Узбекистана — кураторство технопарка, налоговые льготы и доступ к государственным программам поддержки." },
+      { title: "ISO/IEC 27001", org: "Стандарт информационной безопасности", note: "Международный стандарт управления информационной безопасностью — порядок защиты клиентской базы, финансов и интеллектуальной собственности задокументирован." },
     ],
   },
   faq: {
@@ -420,13 +646,22 @@ const ru: V3Copy = {
       ["Блог", "/blog"],
     ],
     contact: [
-      ["Telegram", "https://t.me/muslimansoriy"],
-      ["Email", "mailto:info@empiregroup.uz"],
-      ["Телефон", "tel:+998991164658"],
+      [V3_CONTACT.phonePrimary.label, V3_CONTACT.phonePrimary.href],
+      [V3_CONTACT.phoneSecondary.label, V3_CONTACT.phoneSecondary.href],
+      ["Telegram", V3_CONTACT.telegram.href],
+      [V3_CONTACT.email.label, V3_CONTACT.email.href],
+    ],
+    legalHead: "Реквизиты",
+    legal: [
+      ["ООО «EMPIRE GROUP CORP»", ""],
+      [`ИНН: ${LEGAL_PLACEHOLDER}`, ""],
+      ["г. Ташкент, —— район, ул. ——", ""],
+      [`Р/с: ${LEGAL_PLACEHOLDER} · банк ——`, ""],
     ],
     rights: "© 2026 Empire Group. Все права защищены.",
     place: "Ташкент · Узбекистан",
   },
+  themeLabel: "Тема",
   langLabel: "Язык",
 };
 
@@ -445,7 +680,7 @@ const en: V3Copy = {
     menuLabel: "Main menu",
   },
   hero: {
-    eyebrow: "AI & CUSTOM SOFTWARE DEVELOPMENT",
+    eyebrow: "AI, ERP AND CUSTOM SOFTWARE",
     titleBefore: "We ",
     titleAccent: "digitise",
     titleAfter: " your business — from idea to a product in production.",
@@ -499,6 +734,79 @@ const en: V3Copy = {
       { seg: "RETAIL · POS", title: "Hilol Market — retail automation", result: "Till, stock and reporting in one panel", tags: ["Retail", "POS"] },
     ],
   },
+  caseStudy: {
+    eyebrow: "FLAGSHIP CASE",
+    client: "Shodlik Textile",
+    place: "Qashqadaryo · vertically integrated textile cluster",
+    title: "Cotton to finished garment — in one system.",
+    lede: "From raw cotton through yarn, greige fabric and finished garments — four production stages, 337 staff, three shifts. All of it ran on Excel and paper. We moved the whole cluster onto Odoo 19 Enterprise and wired the factory hardware straight into the ERP.",
+    challengeLabel: "THE PROBLEM",
+    challenge: [
+      "Each stage kept its own books — the cotton floor could not see yarn, spinning could not see fabric.",
+      "Stock was counted by hand and the report arrived days late.",
+      "Attendance was on paper — shifts and lateness for 337 people were worked out manually.",
+      "Scale and machine readings went into a notebook, then into Excel.",
+      "Bank statements were retyped out of 1C; exchange rates were updated by hand.",
+    ],
+    solutionLabel: "WHAT WE BUILT",
+    solution: [
+      "Odoo 19 Enterprise on Odoo.sh (Git CI/CD) — 28 custom modules written for this cluster.",
+      "The Face-ID turnstile feeds the ERP: an employee walks through, attendance is written, shift and lateness are computed automatically.",
+      "Industrial scales are tied to the manufacturing order — weight is never keyed in and the MO closes itself.",
+      "Machine telemetry: an error signal opens a maintenance request on its own.",
+      "Central bank rates update daily; the 1C bank statement imports in one click.",
+      "GS1-128 QR on lots — a roll of fabric traces back to its cotton batch.",
+      "A B2B export site that drops enquiries straight into CRM.",
+    ],
+    metricsLabel: "RESULT",
+    metrics: [
+      { value: "337", label: "staff on the system" },
+      { value: "28", label: "custom modules" },
+      { value: "4", label: "hardware integrations" },
+      { value: "—", label: "Stocktake time", pending: true },
+    ],
+    stackLabel: "TECHNOLOGY",
+    stack: ["Odoo 19 Enterprise", "Odoo.sh", "PostgreSQL", "Python", "ISAPI", "GS1-128"],
+    pendingNote: "Marked figures will be updated from the client's final reporting.",
+    cta: "Discuss a project like this",
+  },
+  pricing: {
+    eyebrow: "PRICING",
+    title: "What it costs — no hiding it.",
+    sub: "Fixed scope, not hourly. Once the scope is agreed the figure is written into the contract and does not move.",
+    tracks: ["Custom software", "Odoo ERP & AI"],
+    popular: "MOST CHOSEN",
+    cta: "Talk it through",
+    note: "Fixed scope · no hidden charges · four weeks of support included · code and IP transfer to you.",
+    software: [
+      { tier: "STANDARD", price: "from $5,000", period: "2–3 months", featured: false, desc: "An MVP that solves one clear problem.", items: ["Landing page or MVP", "Forms and integration", "Basic admin panel", "Responsive design"] },
+      { tier: "ADVANCED", price: "$15K – $40K", period: "4–6 months", featured: true, desc: "A full application with real business logic.", items: ["Full web or mobile app", "CRM integration", "Admin panel and roles", "API and automation"] },
+      { tier: "MEGA", price: "$50,000+", period: "6–12 months", featured: false, desc: "An ecosystem of several applications.", items: ["Large ecosystem", "Microservices", "High load", "Long-term SLA"] },
+    ],
+    odoo: [
+      { tier: "STANDARD", price: "from $8,800", period: "2–3 months", featured: false, desc: "Rolling out standard Odoo modules.", items: ["Core modules", "Data migration", "Staff training", "Standard reports"] },
+      { tier: "ADVANCED", price: "$25K – $35K", period: "4–6 months", featured: true, desc: "Modules built around your business, plus AI.", items: ["Full ERP rollout", "Custom modules", "AI automation", "External integrations"] },
+      { tier: "MEGA", price: "$85,000+", period: "~1 year", featured: false, desc: "Full digital transformation of an enterprise.", items: ["Enterprise ecosystem", "Multi-site / multi-company", "Hardware integrations", "24/7 SLA"] },
+    ],
+  },
+  guarantee: {
+    eyebrow: "WHAT IF IT GOES WRONG?",
+    title: "The question we get most — here is the answer.",
+    sub: "We know what worries someone handing over the system their factory runs on. So we put it in writing up front.",
+    items: [
+      { title: "The code and data are yours", body: "All code, design and IP transfer to you when the project closes. No vendor lock-in — your own team can carry it on if you want." },
+      { title: "Four weeks of support included", body: "For four weeks after launch, fixes and adjustments are free. Ongoing maintenance after that is agreed separately and is not compulsory." },
+      { title: "Paid in stages", body: "A deposit, then payment at the end of each stage. You see the result before you pay for it — no paying the whole sum up front." },
+      { title: "Contract and NDA", body: 'We work under a formal contract as "EMPIRE GROUP CORP" LLC. A non-disclosure agreement covering your business data is standard practice.' },
+      { title: "Data security", body: "Data lives on your server or a cloud you choose. Access is limited by role and actions are written to an audit log." },
+      { title: "Backups and recovery", body: "Automatic daily backups are configured. If something fails, the system is restored to its last known good state." },
+    ],
+  },
+  office: {
+    eyebrow: "AT THE OFFICE",
+    title: "Our Tashkent team, mid-work.",
+    sub: "Not a studio — ordinary working days.",
+  },
   stack: { eyebrow: "OUR STACK", title: "Dependable, industry-standard technology." },
   journal: {
     eyebrow: "JOURNAL",
@@ -512,10 +820,10 @@ const en: V3Copy = {
     eyebrow: "HOW WE WORK",
     title: "Idea to product — four stages.",
     steps: [
-      { title: "Explore", desc: "We dig into the idea and the real problem.", tags: ["Analysis", "Audit"] },
-      { title: "Plan", desc: "PRD, architecture, design; timeline and budget are fixed.", tags: ["PRD", "Spec", "Design"] },
-      { title: "Build", desc: "Code, tests, integrations; sprints and demos.", tags: ["Dev", "Test", "Demo"] },
-      { title: "Commit", desc: "Launch and long-term support.", tags: ["Deploy", "Support"] },
+      { title: "We come to the floor", desc: "Not to a meeting room — to your site. We watch the process ourselves and write down who does what.", tags: ["Analysis", "Audit"] },
+      { title: "We fix the number", desc: "Once the spec, architecture and design are agreed, price and timeline go into the contract and stop moving.", tags: ["Spec", "Contract", "Design"] },
+      { title: "You see it every two weeks", desc: "We build in sprints. Every fortnight you get a working version — not just at the end.", tags: ["Sprint", "Demo", "Test"] },
+      { title: "We launch and stay", desc: "We train your staff and migrate the data, then watch over it free for four weeks.", tags: ["Migration", "Training", "Support"] },
     ],
   },
   team: {
@@ -548,6 +856,8 @@ const en: V3Copy = {
     items: [
       { title: "Odoo Learning Partner", org: "Odoo S.A.", note: "Official Odoo vendor partner — direct access to product updates, rollout methodology and vendor support." },
       { title: "Certificate of state registration", org: '"EMPIRE GROUP CORP" LLC', note: "A registered legal entity — the right to sign contracts, issue invoices and meet tax obligations is documented." },
+      { title: "IT Park resident", org: "IT Park Uzbekistan", note: "On the register of Uzbekistan's IT industry residents — technopark oversight, tax relief and access to state support programmes." },
+      { title: "ISO/IEC 27001", org: "Information security standard", note: "The international standard for managing information security — how client data, finances and IP are protected is documented." },
     ],
   },
   faq: {
@@ -588,14 +898,65 @@ const en: V3Copy = {
       ["Blog", "/blog"],
     ],
     contact: [
-      ["Telegram", "https://t.me/muslimansoriy"],
-      ["Email", "mailto:info@empiregroup.uz"],
-      ["Phone", "tel:+998991164658"],
+      [V3_CONTACT.phonePrimary.label, V3_CONTACT.phonePrimary.href],
+      [V3_CONTACT.phoneSecondary.label, V3_CONTACT.phoneSecondary.href],
+      ["Telegram", V3_CONTACT.telegram.href],
+      [V3_CONTACT.email.label, V3_CONTACT.email.href],
+    ],
+    legalHead: "Company details",
+    legal: [
+      ['"EMPIRE GROUP CORP" LLC', ""],
+      [`Tax ID: ${LEGAL_PLACEHOLDER}`, ""],
+      ["Tashkent, —— district, —— street", ""],
+      [`Account: ${LEGAL_PLACEHOLDER} · —— bank`, ""],
     ],
     rights: "© 2026 Empire Group. All rights reserved.",
     place: "Tashkent · Uzbekistan",
   },
+  themeLabel: "Theme",
   langLabel: "Language",
 };
 
 export const v3Copy: Record<Locale, V3Copy> = { uz, ru, en };
+
+/**
+ * English glosses for the journal cards.
+ *
+ * The `posts` table carries Uzbek and Russian columns only, so an English
+ * reader was being shown Uzbek headlines on the homepage. Until the table
+ * grows `title_en` / `excerpt_en` (an admin-panel change, not a copy one),
+ * this map supplies the headline. Where no excerpt is glossed the card simply
+ * renders without one rather than showing a language the reader did not pick.
+ */
+export const journalEn: Record<string, { title: string; excerpt?: string }> = {
+  "seo-xizmatlari-ozbekistonda-2026": {
+    title: "SEO services in Uzbekistan: what matters in 2026",
+    excerpt:
+      "A current SEO strategy for reaching page one on Google.uz — technical SEO, content and local optimisation.",
+  },
+  "online-dokon-yaratish-ecommerce-uzbekiston": {
+    title: "Building an online store: e-commerce in Uzbekistan, 2026",
+    excerpt:
+      "A full guide to opening an online store in Uzbekistan — platforms, costs, payment systems and logistics.",
+  },
+  "it-outsourcing-uzbekistan-kompaniyalar-uchun": {
+    title: "IT outsourcing in Uzbekistan: a guide for foreign companies",
+    excerpt:
+      "The Uzbek IT outsourcing market — rates, quality, English proficiency and time-zone advantages.",
+  },
+  "mvp-nima-goyadan-mahsulotga-60-kunda": { title: "What an MVP is: idea to product in 60 days" },
+  "it-loyiha-muvaffaqiyatining-5-omili": { title: "Five things that decide whether an IT project succeeds" },
+  "nextjs-zamonaviy-veb-sayt-texnologiyasi": { title: "Next.js: the technology behind a modern website" },
+  "crm-tizimi-mijozlarni-yoqotmaslik": { title: "A CRM system: how to stop losing customers" },
+  "veb-sayt-yoki-mobil-ilova-qaysi-biri-kerak": { title: "Website or mobile app — which do you actually need?" },
+  "ai-biznesda-qanday-ishlatish": { title: "How to put AI to work in your business" },
+  "mobil-ilova-yaratish-narxi-va-muddati": { title: "What a mobile app costs and how long it takes" },
+  "odoo-erp-biznesni-avtomatlashtirish": { title: "Odoo ERP: automating the business" },
+  "performance-marketing-haqiqiy-samaradorlik-yoki-shunchaki-reklama": {
+    title: "Performance marketing: real results or just advertising?",
+  },
+  "geo-nima-uchun-muhim": { title: "Why GEO matters" },
+  "biznes-avtomatlashtirish-erp": { title: "Business automation with ERP" },
+  "geo-generative-engine-optimization": { title: "GEO: generative engine optimisation" },
+  "seo-nima-va-biznesga-foydasi": { title: "What SEO is and what it does for a business" },
+};

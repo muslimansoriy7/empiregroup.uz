@@ -5,7 +5,8 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toolLogos } from "@/content/logos";
-import { v3Copy } from "@/content/v3";
+import { v3Copy, V3_CONTACT } from "@/content/v3";
+import { V3Form } from "./V3Form";
 import { locales, localeShort } from "@/content";
 import { localePath, stripLocale } from "@/lib/locale-path";
 import { useI18n } from "@/lib/i18n";
@@ -74,12 +75,23 @@ const TEAM_PEOPLE: { mono: string; name: string; img: string }[] = [
   { mono: "MS", name: "Malika Sobirova", img: "/team/malika-sobirova.webp" },
 ];
 
-/* Only credentials actually held. `scale` optically equalises two marks drawn
-   at very different weights — the Odoo wordmark fills its box, the scanned
-   registration certificate does not. */
+/* `scale` optically equalises marks drawn at very different weights — the Odoo
+   wordmark fills its box, the scanned registration certificate does not. */
 const CREDENTIAL_MARKS: { img: string; scale: number }[] = [
   { img: "/sertifikat/odoo-learning-partner.svg", scale: 0.86 },
   { img: "/sertifikat/davlat-royxat-guvohnomasi.png", scale: 1.5 },
+  { img: "/sertifikat/it-park.svg", scale: 1 },
+  { img: "/sertifikat/iso-27001.svg", scale: 1.45 },
+];
+
+/* Candid office photography — the first three carry the section, the rest
+   fill the mosaic. */
+const OFFICE_PHOTOS = [
+  "/office/office-01.webp",
+  "/office/office-04.webp",
+  "/office/office-03.webp",
+  "/office/office-05.webp",
+  "/office/office-07.webp",
 ];
 
 /* ============================ BRAND ============================ */
@@ -102,6 +114,47 @@ const Mark = ({ size = 12 }: { size?: number }) => (
     <path d="M594.345 0H425.063L333.576 428.184H503.271L594.345 0Z" />
   </svg>
 );
+
+/* ======================== THEME TOGGLE ========================
+   The active theme lives on <html data-theme>, written before paint by the
+   boot script in the root layout, so this only reads the attribute on mount,
+   flips it and persists the choice. Shows the theme you would switch TO. */
+
+function ThemeSwitch({ label }: { label: string }) {
+  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
+
+  useEffect(() => {
+    const current = document.documentElement.getAttribute("data-theme");
+    setTheme(current === "dark" ? "dark" : "light");
+  }, []);
+
+  const toggle = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      /* private mode — the switch still works for this session */
+    }
+    setTheme(next);
+  };
+
+  return (
+    <button type="button" className="vx-theme" onClick={toggle} aria-label={label} title={label}>
+      {/* null until mounted so SSR and first paint agree and no wrong icon flashes */}
+      {theme === null ? null : theme === "dark" ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.6" />
+          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 14.2A8.2 8.2 0 1 1 9.8 4a6.6 6.6 0 0 0 10.2 10.2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 /* ============================ ICONS ============================ */
 
@@ -167,6 +220,7 @@ export function V3Page({
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [track, setTrack] = useState<"software" | "odoo">("software");
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   const projects = t.portfolio.items.map((p, i) => ({ ...p, ...PROJECT_SHOTS[i] }));
@@ -268,14 +322,12 @@ export function V3Page({
       <header className="vx-nav">
         <div className="vx-nav-inner">
           <a className="vx-brand" href="#top" aria-label="Empire Group">
+            {/* Two files rather than a CSS filter: the white wordmark is the
+                real asset, and inverting the black one shifts the ink. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="vx-wordmark"
-              src="/logo/logotype-black.svg"
-              alt="Empire Group"
-              width={116}
-              height={22}
-            />
+            <img className="vx-wordmark vx-only-light" src="/logo/logotype-black.svg" alt="" width={116} height={22} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="vx-wordmark vx-only-dark" src="/logo/logotype-whote.svg" alt="" width={116} height={22} />
           </a>
 
           <nav className="vx-nav-links" aria-label={t.nav.menuLabel}>
@@ -287,9 +339,10 @@ export function V3Page({
           </nav>
 
           <div className="vx-nav-actions">
+            <ThemeSwitch label={t.themeLabel} />
             <LangSwitch label={t.langLabel} className="vx-hide-menu" />
-            <a className="vx-btn vx-btn-ghost vx-hide-sm" href="tel:+998991164658">
-              +998 99 116 46 58
+            <a className="vx-btn vx-btn-ghost vx-hide-sm" href={V3_CONTACT.phonePrimary.href}>
+              {V3_CONTACT.phonePrimary.label}
             </a>
             <a className="vx-btn vx-btn-filled vx-hide-menu" href="#cta">
               {t.nav.cta}
@@ -544,6 +597,84 @@ export function V3Page({
           </div>
         </section>
 
+        {/* ===================== FLAGSHIP CASE =====================
+            Seven cards say "we have done things". One project at this depth
+            says "we understand a business like yours" — which is what a
+            factory owner is actually reading for. */}
+        <section className="vx-section vx-case-section" id="keys">
+          <div className="vx-container">
+            <div className="vx-case">
+              <div className="vx-case-head">
+                <p className="vx-eyebrow vx-rise">{t.caseStudy.eyebrow}</p>
+                <h2 className="vx-heading vx-case-title vx-rise" style={d(1)}>
+                  {t.caseStudy.title}
+                </h2>
+                <p className="vx-case-client vx-rise" style={d(2)}>
+                  <strong>{t.caseStudy.client}</strong>
+                  <span className="vx-mono-label">{t.caseStudy.place}</span>
+                </p>
+                <p className="vx-sub vx-rise" style={d(2)}>
+                  {t.caseStudy.lede}
+                </p>
+              </div>
+
+              {/* Photo / video slot — swapped for factory footage when it arrives. */}
+              <div className="vx-case-media vx-rise" style={d(1)}>
+                <span className="vx-placeholder">
+                  <Mark size={26} />
+                  <span className="vx-mono-label">FOTO / VIDEO</span>
+                </span>
+              </div>
+
+              <div className="vx-case-cols">
+                <div className="vx-card vx-case-col vx-rise">
+                  <p className="vx-mono-tag vx-case-col-h">{t.caseStudy.challengeLabel}</p>
+                  <ul className="vx-case-list">
+                    {t.caseStudy.challenge.map((row) => (
+                      <li key={row}>{row}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="vx-card vx-case-col vx-rise" style={d(1)}>
+                  <p className="vx-mono-tag vx-case-col-h">{t.caseStudy.solutionLabel}</p>
+                  <ul className="vx-case-list vx-case-list-done">
+                    {t.caseStudy.solution.map((row) => (
+                      <li key={row}>
+                        <span className="vx-li-check">✓</span>
+                        {row}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="vx-case-metrics vx-rise">
+                {t.caseStudy.metrics.map((m, i) => (
+                  <div className={`vx-case-metric${m.pending ? " pending" : ""}`} key={m.label} style={d(i)}>
+                    <span className="vx-case-metric-num">{m.value}</span>
+                    <span className="vx-mono-label">{m.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="vx-case-foot vx-rise">
+                <div className="vx-chips">
+                  <span className="vx-mono-tag vx-case-stack-h">{t.caseStudy.stackLabel}</span>
+                  {t.caseStudy.stack.map((s) => (
+                    <span className="vx-chip" key={s}>
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <p className="vx-mono-label vx-case-pending">{t.caseStudy.pendingNote}</p>
+                <a className="vx-btn vx-btn-filled" href="#cta">
+                  {t.caseStudy.cta} <Arrow size={14} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ===================== STACK ===================== */}
         <section className="vx-section" id="stack">
           <div className="vx-container">
@@ -636,6 +767,31 @@ export function V3Page({
           </div>
         </section>
 
+        {/* ===================== OFFICE =====================
+            Studio portraits prove faces exist; a messy desk at 9pm proves the
+            company does. Both are needed, and they do different jobs. */}
+        <section className="vx-section-tight" id="ofis">
+          <div className="vx-container">
+            <div className="vx-sec-head vx-office-head">
+              <p className="vx-eyebrow vx-rise">{t.office.eyebrow}</p>
+              <h2 className="vx-heading vx-rise" style={d(1)}>
+                {t.office.title}
+              </h2>
+              <p className="vx-sub vx-rise" style={d(2)}>
+                {t.office.sub}
+              </p>
+            </div>
+            <div className="vx-office-grid">
+              {OFFICE_PHOTOS.map((src, i) => (
+                <figure className={`vx-office-shot vx-rise vx-office-${i + 1}`} key={src} style={d(i % 3)}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt="" loading="lazy" width={1400} height={933} />
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ===================== TESTIMONIALS ===================== */}
         <section className="vx-section" id="sharhlar">
           <div className="vx-container">
@@ -692,6 +848,95 @@ export function V3Page({
                     <p className="vx-mono-label vx-cred-org">{c.org}</p>
                     <p className="vx-card-desc vx-cred-note">{c.note}</p>
                   </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===================== PRICING =====================
+            A buyer who cannot self-qualify on budget either does not write, or
+            writes and wastes both sides' time. */}
+        <section className="vx-section" id="narxlar">
+          <div className="vx-container">
+            <div className="vx-sec-head vx-center-head">
+              <p className="vx-eyebrow vx-rise">{t.pricing.eyebrow}</p>
+              <h2 className="vx-heading vx-rise" style={d(1)}>
+                {t.pricing.title}
+              </h2>
+              <p className="vx-sub vx-rise" style={d(2)}>
+                {t.pricing.sub}
+              </p>
+            </div>
+
+            <div className="vx-track-tabs vx-rise" role="tablist" aria-label={t.pricing.eyebrow}>
+              {t.pricing.tracks.map((label, i) => {
+                const key = i === 0 ? "software" : "odoo";
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    role="tab"
+                    aria-selected={track === key}
+                    className={`vx-track-tab${track === key ? " active" : ""}`}
+                    onClick={() => setTrack(key as "software" | "odoo")}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="vx-pricing-grid">
+              {t.pricing[track].map((p, i) => (
+                <article
+                  className={`vx-card vx-price vx-rise${p.featured ? " vx-price-feat" : ""}`}
+                  key={p.tier}
+                  style={d(i)}
+                >
+                  {p.featured && <span className="vx-price-badge">{t.pricing.popular}</span>}
+                  <span className="vx-mono-tag">{p.tier}</span>
+                  <div className="vx-price-amt">{p.price}</div>
+                  <div className="vx-mono-label vx-price-period">{p.period}</div>
+                  <p className="vx-price-desc">{p.desc}</p>
+                  <ul className="vx-price-list">
+                    {p.items.map((it) => (
+                      <li key={it}>
+                        <span className="vx-li-check">✓</span>
+                        {it}
+                      </li>
+                    ))}
+                  </ul>
+                  <a className={`vx-btn ${p.featured ? "vx-btn-invert" : "vx-btn-ghost"} vx-btn-block`} href="#cta">
+                    {t.pricing.cta}
+                  </a>
+                </article>
+              ))}
+            </div>
+            <p className="vx-mono-label vx-price-note vx-rise">{t.pricing.note}</p>
+          </div>
+        </section>
+
+        {/* ===================== GUARANTEE ===================== */}
+        <section className="vx-section" id="kafolat">
+          <div className="vx-container">
+            <div className="vx-sec-head">
+              <p className="vx-eyebrow vx-rise">{t.guarantee.eyebrow}</p>
+              <h2 className="vx-heading vx-rise" style={d(1)}>
+                {t.guarantee.title}
+              </h2>
+              <p className="vx-sub vx-rise" style={d(2)}>
+                {t.guarantee.sub}
+              </p>
+            </div>
+            <div className="vx-guarantee-grid">
+              {t.guarantee.items.map((g, i) => (
+                <article className="vx-card vx-guarantee vx-rise" key={g.title} style={d(i % 3)}>
+                  <span className="vx-guarantee-mark" aria-hidden="true">
+                    <Mark size={12} />
+                  </span>
+                  <h3 className="vx-card-title vx-guarantee-title">{g.title}</h3>
+                  <p className="vx-card-desc">{g.body}</p>
                 </article>
               ))}
             </div>
@@ -806,22 +1051,43 @@ export function V3Page({
         <section className="vx-section" id="cta">
           <div className="vx-container">
             <div className="vx-ctaband vx-rise">
-              <p className="vx-eyebrow vx-center">{t.cta.eyebrow}</p>
-              <h2 className="vx-heading vx-cta-h">{t.cta.title}</h2>
-              <div className="vx-cta-btns">
-                <a className="vx-btn vx-btn-filled vx-btn-lg" href="tel:+998991164658">
-                  {t.cta.call}
-                </a>
-                <a
-                  className="vx-btn vx-btn-ghost vx-btn-lg"
-                  href="https://t.me/muslimansoriy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t.cta.telegram} <Arrow size={14} />
-                </a>
+              <div className="vx-cta-copy">
+                <p className="vx-eyebrow">{t.cta.eyebrow}</p>
+                <h2 className="vx-heading vx-cta-h">{t.cta.title}</h2>
+                {/* Every channel, not one. Someone reading at 11pm needs the
+                    form; someone mid-decision picks up the phone. */}
+                <div className="vx-cta-channels">
+                  {/* Both numbers under one heading — repeating the label twice
+                      read like a mistake rather than a second line. */}
+                  <div className="vx-cta-channel vx-cta-phones">
+                    <span className="vx-mono-label">{t.cta.call}</span>
+                    <a href={V3_CONTACT.phonePrimary.href}>
+                      <strong>{V3_CONTACT.phonePrimary.label}</strong>
+                    </a>
+                    <a href={V3_CONTACT.phoneSecondary.href}>
+                      <strong>{V3_CONTACT.phoneSecondary.label}</strong>
+                    </a>
+                  </div>
+                  <a
+                    className="vx-cta-channel"
+                    href={V3_CONTACT.telegram.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="vx-mono-label">{t.cta.telegram}</span>
+                    <strong>{V3_CONTACT.telegram.label}</strong>
+                  </a>
+                  <a className="vx-cta-channel" href={V3_CONTACT.email.href}>
+                    <span className="vx-mono-label">Email</span>
+                    <strong>{V3_CONTACT.email.label}</strong>
+                  </a>
+                </div>
+                <p className="vx-mono-label vx-cta-meta">{t.cta.meta}</p>
               </div>
-              <p className="vx-mono-label vx-cta-meta">{t.cta.meta}</p>
+
+              <div className="vx-cta-form">
+                <V3Form />
+              </div>
             </div>
           </div>
         </section>
@@ -881,6 +1147,18 @@ export function V3Page({
             ))}
           </div>
         </div>
+        {/* Registration details a buyer checks before signing. Placeholders are
+            marked with dashes so they cannot pass for verified figures. */}
+        <div className="vx-container vx-footer-legal">
+          <p className="vx-mono-label vx-footer-h">{t.footer.legalHead}</p>
+          <div className="vx-footer-legal-rows">
+            {t.footer.legal.map(([line]) => (
+              <span className="vx-mono-label" key={line}>
+                {line}
+              </span>
+            ))}
+          </div>
+        </div>
         <div className="vx-container vx-footer-bottom">
           <span className="vx-mono-label">{t.footer.rights}</span>
           <span className="vx-mono-label">{t.footer.place}</span>
@@ -901,6 +1179,9 @@ const CSS = `
   --smoke:#a8a8a8; --graphite:#8a8a8a; --slate:#707070; --stone:#666666;
   --charcoal:#4d4d4d; --obsidian:#171717; --carbon:#000000;
   --green:#297a3a;
+  /* Foreground for anything sitting ON --obsidian. Flips with the theme, so
+     a filled button never ends up light-on-light. */
+  --on-ink:#ffffff;
   --spectrum:linear-gradient(90deg,rgb(0,255,149) 0%,rgb(255,208,0) 25%,rgb(255,23,68) 50%,rgb(149,0,255) 75%,rgb(0,229,255) 100%);
   --sans:var(--font-geist-sans),ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
@@ -1030,7 +1311,7 @@ const CSS = `
   transition:color .18s ease,background .18s ease;
 }
 .vx-lang-opt:hover{color:var(--obsidian);background:var(--paper);}
-.vx-lang-opt.active{background:var(--obsidian);color:#fff;}
+.vx-lang-opt.active{background:var(--obsidian);color:var(--on-ink);}
 .vx-menu .vx-lang{width:100%;justify-content:center;}
 .vx-menu .vx-lang-opt{flex:1;text-align:center;padding:9px 8px;}
 
@@ -1088,7 +1369,7 @@ const CSS = `
   transition:transform .2s var(--ease),background .2s ease,box-shadow .2s ease,color .2s ease;
   white-space:nowrap;text-decoration:none;
 }
-.vx .vx-btn-filled{background:var(--obsidian);color:#fff;box-shadow:0 0 0 1px var(--obsidian);}
+.vx .vx-btn-filled{background:var(--obsidian);color:var(--on-ink);box-shadow:0 0 0 1px var(--obsidian);}
 .vx .vx-btn-filled:hover{background:#000;transform:translateY(-2px);}
 .vx .vx-btn-ghost{background:transparent;color:var(--charcoal);box-shadow:0 0 0 1px var(--hair);}
 .vx .vx-btn-ghost:hover{color:var(--obsidian);box-shadow:0 0 0 1px var(--obsidian);transform:translateY(-2px);}
@@ -1353,16 +1634,16 @@ const CSS = `
 /* ---------- final cta ---------- */
 .vx-ctaband{
   background:var(--white);border-radius:6px;box-shadow:var(--ring);
-  padding:72px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;
-  position:relative;overflow:hidden;
+  padding:56px 44px;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);
+  gap:48px;align-items:start;text-align:left;
 }
 .vx-ctaband:hover{transform:none;box-shadow:var(--ring);}
 .vx-ctaband::before{
   content:"";position:absolute;left:0;right:0;top:0;height:3px;
   background:var(--spectrum);background-size:200% 100%;animation:vx-sweep 5s linear infinite;
 }
-.vx-cta-h{font-size:40px;letter-spacing:-.045em;margin:14px 0 28px;line-height:1.02;max-width:640px;}
-.vx-cta-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:24px;}
+.vx-cta-h{font-size:36px;letter-spacing:-.045em;margin:14px 0 26px;line-height:1.05;max-width:520px;}
 .vx-cta-meta{color:var(--stone);}
 
 /* ---------- footer ---------- */
@@ -1377,10 +1658,205 @@ const CSS = `
 .vx-footer-col a:hover::after{width:100%;}
 .vx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:28px;border-top:1px solid var(--hair);flex-wrap:wrap;}
 
+/* ---------- theme switch ---------- */
+.vx-theme{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;padding:0;border:0;cursor:pointer;border-radius:8px;
+  background:var(--white);box-shadow:0 0 0 1px var(--hair);color:var(--charcoal);
+  transition:color .2s ease,box-shadow .2s ease;flex-shrink:0;
+}
+.vx-theme:hover{color:var(--obsidian);box-shadow:0 0 0 1px var(--obsidian);}
+/* Two classes, not one: the base .vx img rule sets display:block at (0,1,1)
+   and would otherwise out-rank a single-class hide. */
+.vx .vx-only-dark{display:none;}
+[data-theme="dark"] .vx .vx-only-light{display:none;}
+[data-theme="dark"] .vx .vx-only-dark{display:block;}
+
+/* ---------- flagship case ---------- */
+.vx-case-section{padding-top:0;}
+.vx-case{
+  background:var(--white);border-radius:6px;box-shadow:var(--ring);
+  padding:48px 44px 44px;position:relative;overflow:hidden;
+}
+.vx-case::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:var(--spectrum);background-size:200% 100%;animation:vx-sweep 5s linear infinite;
+}
+.vx-case-head{max-width:760px;}
+.vx-case-title{font-size:40px;letter-spacing:-.05em;margin-bottom:14px;}
+.vx-case-client{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin:0 0 16px;}
+.vx-case-client strong{font-family:var(--sans);font-size:16px;font-weight:500;color:var(--obsidian);}
+.vx-case-media{
+  margin:36px 0;aspect-ratio:21/9;max-height:400px;border-radius:6px;overflow:hidden;
+  background:var(--paper);box-shadow:0 0 0 1px var(--hair);
+}
+.vx-placeholder{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;color:var(--ash);
+  background-image:repeating-linear-gradient(45deg,transparent,transparent 12px,var(--hair) 12px,var(--hair) 13px);
+}
+.vx-case-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.vx-case-col{padding:26px;}
+.vx-case-col-h{display:block;margin-bottom:16px;}
+.vx-case-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
+.vx-case-list li{
+  font-family:var(--sans);font-size:14px;line-height:1.5;color:var(--charcoal);
+  display:flex;gap:9px;text-wrap:pretty;
+}
+.vx-case-list:not(.vx-case-list-done) li::before{
+  content:"—";color:var(--ash);flex-shrink:0;
+}
+.vx-case-metrics{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:28px;
+  background:var(--paper);border-radius:6px;box-shadow:0 0 0 1px var(--hair);overflow:hidden;
+}
+.vx-case-metric{padding:24px;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:6px;}
+.vx-case-metric:last-child{border-right:0;}
+.vx-case-metric-num{
+  font-family:var(--sans);font-size:34px;font-weight:450;letter-spacing:-.05em;
+  color:var(--obsidian);line-height:1;font-variant-numeric:tabular-nums;
+}
+.vx-case-metric.pending .vx-case-metric-num{color:var(--ash);}
+.vx-case-foot{display:flex;flex-direction:column;gap:16px;align-items:flex-start;margin-top:28px;}
+.vx-case-stack-h{align-self:center;margin-right:4px;}
+.vx-case-pending{color:var(--slate);}
+
+/* ---------- office ---------- */
+.vx-office-head{max-width:660px;margin-bottom:32px;}
+.vx-office-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
+.vx-office-shot{margin:0;border-radius:6px;overflow:hidden;box-shadow:var(--ring);background:var(--paper);}
+.vx-office-shot img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  filter:grayscale(1) contrast(1.04);transition:filter .4s ease,transform .6s var(--ease);
+}
+.vx-office-shot:hover img{filter:none;transform:scale(1.03);}
+.vx-office-1{grid-column:span 4;aspect-ratio:16/9;}
+.vx-office-2{grid-column:span 2;aspect-ratio:4/5;}
+.vx-office-3{grid-column:span 2;aspect-ratio:1/1;}
+.vx-office-4{grid-column:span 2;aspect-ratio:1/1;}
+.vx-office-5{grid-column:span 2;aspect-ratio:1/1;}
+
+/* ---------- pricing ---------- */
+.vx-track-tabs{
+  display:flex;gap:4px;padding:4px;margin:0 auto 32px;width:max-content;max-width:100%;
+  background:var(--white);box-shadow:var(--ring);border-radius:9999px;flex-wrap:wrap;justify-content:center;
+}
+.vx-track-tab{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:9px 18px;border-radius:9999px;border:0;background:transparent;color:var(--stone);
+  cursor:pointer;transition:background .2s ease,color .2s ease;white-space:nowrap;
+}
+.vx-track-tab:hover{color:var(--obsidian);}
+.vx-track-tab.active{background:var(--obsidian);color:var(--on-ink);}
+.vx-pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;}
+.vx-price{display:flex;flex-direction:column;padding:28px;position:relative;}
+.vx-price-amt{font-family:var(--sans);font-size:30px;font-weight:450;letter-spacing:-.04em;color:var(--obsidian);margin:14px 0 4px;line-height:1;font-variant-numeric:tabular-nums;}
+.vx-price-period{margin-bottom:14px;}
+.vx-price-desc{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--stone);margin:0 0 20px;padding-bottom:18px;border-bottom:1px solid var(--hair);}
+.vx-price-list{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:11px;}
+.vx-price-list li{font-family:var(--sans);font-size:14px;color:var(--charcoal);display:flex;align-items:flex-start;gap:9px;line-height:1.4;}
+.vx-price .vx-btn-block{margin-top:auto;}
+.vx-price-feat{background:var(--obsidian);box-shadow:0 0 0 1px var(--obsidian),0 0 0 2px var(--paper);}
+.vx-price-feat:hover{box-shadow:0 0 0 1px var(--carbon),0 0 0 2px var(--paper);}
+.vx-price-feat .vx-price-amt{color:var(--on-ink);}
+.vx-price-feat .vx-mono-tag,.vx-price-feat .vx-mono-label{color:var(--smoke);}
+.vx-price-feat .vx-price-desc{color:var(--graphite);border-bottom-color:rgba(255,255,255,.14);}
+.vx-price-feat .vx-price-list li{color:var(--hair);}
+.vx-price-badge{
+  position:absolute;top:-1px;right:-1px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;
+  background:var(--white);color:var(--obsidian);padding:6px 10px;border-radius:0 6px 0 6px;
+}
+.vx .vx-btn-invert{background:var(--white);color:var(--obsidian);box-shadow:0 0 0 1px rgba(255,255,255,.2);}
+.vx .vx-btn-invert:hover{background:var(--paper);transform:translateY(-2px);}
+.vx-price-note{display:block;text-align:center;margin-top:28px;color:var(--stone);}
+
+/* ---------- guarantee ---------- */
+.vx-guarantee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.vx-guarantee{display:flex;flex-direction:column;padding:26px;}
+.vx-guarantee-mark{color:var(--carbon);margin-bottom:16px;display:inline-flex;}
+.vx-guarantee-title{font-size:17px;margin-bottom:8px;}
+.vx-guarantee .vx-card-desc{margin:0;font-size:14px;}
+
+/* ---------- lead form ---------- */
+.vx-form{display:flex;flex-direction:column;gap:14px;}
+.vx-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.vx-field{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.vx-field input,.vx-field select,.vx-field textarea{
+  font-family:var(--sans);font-size:15px;color:var(--obsidian);
+  background:var(--white);border:0;box-shadow:0 0 0 1px var(--hair);
+  border-radius:6px;padding:11px 13px;width:100%;
+  transition:box-shadow .2s ease;
+}
+.vx-field textarea{resize:vertical;line-height:1.5;}
+.vx-field input::placeholder,.vx-field textarea::placeholder{color:var(--slate);}
+.vx-field input:focus,.vx-field select:focus,.vx-field textarea:focus{
+  outline:none;box-shadow:0 0 0 1px var(--obsidian),0 0 0 3px color-mix(in srgb,var(--obsidian) 12%,transparent);
+}
+.vx-field-err{font-family:var(--sans);font-size:12px;color:#c2352b;}
+[data-theme="dark"] .vx .vx-field-err{color:#ff8a80;}
+.vx-form-error{margin:0;}
+.vx-form-note{color:var(--slate);text-transform:none;letter-spacing:0;}
+.vx-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+.vx-form-done{align-items:flex-start;gap:10px;}
+.vx-form-check{
+  width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;
+  justify-content:center;background:var(--green);color:#fff;font-size:18px;margin-bottom:6px;
+}
+
+/* ---------- final cta layout ---------- */
+.vx-cta-copy{text-align:left;display:flex;flex-direction:column;align-items:flex-start;}
+.vx-cta-channels{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-bottom:20px;}
+.vx-cta-channel{
+  display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:6px;
+  background:var(--paper);box-shadow:0 0 0 1px var(--hair);transition:box-shadow .2s ease;
+}
+.vx-cta-channel:hover{box-shadow:0 0 0 1px var(--obsidian);}
+.vx-cta-channel strong{font-family:var(--sans);font-size:15px;font-weight:450;color:var(--obsidian);word-break:break-word;}
+.vx-cta-phones{gap:2px;}
+.vx-cta-phones a{display:block;transition:opacity .2s ease;}
+.vx-cta-phones a:hover{opacity:.7;}
+
+/* ---------- footer legal ---------- */
+.vx-footer-legal{padding-top:24px;border-top:1px solid var(--hair);}
+.vx-footer-legal-rows{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:10px;}
+
 /* ---------- focus ---------- */
-.vx a:focus-visible,.vx button:focus-visible{
+.vx a:focus-visible,.vx button:focus-visible,
+.vx input:focus-visible,.vx select:focus-visible,.vx textarea:focus-visible{
   outline:2px solid var(--obsidian);outline-offset:3px;border-radius:4px;
 }
+
+/* ---------- dark theme ----------
+   Only the tokens are redefined; every component keeps styling through them.
+   The ladder is inverted but not naively — --obsidian becomes near-white ink
+   and --on-ink flips with it, so filled buttons stay legible either way. */
+[data-theme="dark"] .vx{
+  --paper:#0b0b0c; --white:#141416; --hair:#26262a; --ash:#3a3a40;
+  --smoke:#6a6a72; --graphite:#93939c; --slate:#9c9ca5; --stone:#a8a8b0;
+  --charcoal:#c9c9d0; --obsidian:#f2f2f4; --carbon:#ffffff;
+  --green:#4ea867;
+  --on-ink:#0b0b0c;
+  --ring:0 0 0 1px rgba(255,255,255,.09),0 0 0 2px var(--paper);
+  --ring-hover:0 0 0 1px var(--obsidian),0 0 0 2px var(--paper);
+}
+[data-theme="dark"] .vx-nav{background:rgba(11,11,12,.72);}
+/* A certificate is a sheet of paper — it keeps its white plate in both themes. */
+[data-theme="dark"] .vx-cred-img{background:#fff;box-shadow:0 0 0 1px var(--hair);}
+/* Client marks are dark-on-transparent, so on a dark ground they are rendered
+   flat white rather than tinted — always legible, never half-visible. */
+[data-theme="dark"] .vx-marquee-slot img{filter:brightness(0) invert(1);opacity:.55;}
+[data-theme="dark"] .vx-marquee-slot img:hover{filter:brightness(0) invert(1);opacity:1;}
+[data-theme="dark"] .vx-price-feat{background:var(--white);box-shadow:0 0 0 1px var(--obsidian),0 0 0 2px var(--paper);}
+[data-theme="dark"] .vx-price-feat .vx-price-amt{color:var(--obsidian);}
+[data-theme="dark"] .vx-price-feat .vx-price-list li{color:var(--charcoal);}
+[data-theme="dark"] .vx-price-feat .vx-price-desc{color:var(--stone);border-bottom-color:var(--hair);}
+[data-theme="dark"] .vx .vx-btn-invert{background:var(--obsidian);color:var(--on-ink);box-shadow:0 0 0 1px var(--obsidian);}
+[data-theme="dark"] .vx .vx-btn-invert:hover{background:var(--carbon);}
+[data-theme="dark"] .vx-price-badge{background:var(--obsidian);color:var(--on-ink);}
+[data-theme="dark"] .vx-form-check{color:#0b0b0c;}
+[data-theme="dark"] .vx-menu{box-shadow:0 24px 48px -24px rgba(0,0,0,.7);}
+[data-theme="dark"] .vx-scrim{background:rgba(0,0,0,.5);}
 
 /* ---------- responsive ---------- */
 @media (max-width:1000px){
@@ -1391,6 +1867,10 @@ const CSS = `
   .vx-journal-grid{grid-template-columns:repeat(2,1fr);}
   .vx-journal-grid .vx-post:last-child{display:none;}
   .vx-display{font-size:56px;}
+  .vx-guarantee-grid{grid-template-columns:repeat(2,1fr);}
+  .vx-ctaband{grid-template-columns:1fr;gap:36px;padding:44px 32px;}
+  .vx-case{padding:36px 28px 32px;}
+  .vx-case-title{font-size:32px;}
 }
 @media (max-width:880px){
   /* The desktop links go away and the drawer takes over in the same rule,
@@ -1408,11 +1888,25 @@ const CSS = `
   .vx-quote-grid{grid-template-columns:1fr;}
   .vx-footer-grid{grid-template-columns:1fr 1fr;}
   .vx-section{padding:64px 0;}
+  .vx-case-cols{grid-template-columns:1fr;}
+  .vx-case-metrics{grid-template-columns:1fr 1fr;}
+  .vx-case-metric:nth-child(2){border-right:0;}
+  .vx-case-metric:nth-child(-n+2){border-bottom:1px solid var(--hair);}
+  .vx-pricing-grid{grid-template-columns:1fr;}
+  .vx-office-grid{grid-template-columns:repeat(4,1fr);}
+  .vx-office-1{grid-column:span 4;}
+  .vx-office-2,.vx-office-3,.vx-office-4,.vx-office-5{grid-column:span 2;aspect-ratio:4/3;}
+  .vx-office-5{display:none;}
 }
 @media (max-width:640px){
   .vx-hide-sm{display:none;}
-  .vx-cta-btns{flex-direction:column;align-self:stretch;}
-  .vx-cta-btns .vx-btn{width:100%;}
+  .vx-form-row{grid-template-columns:1fr;}
+  .vx-cta-channels{grid-template-columns:1fr;}
+  .vx-guarantee-grid{grid-template-columns:1fr;}
+  .vx-case-media{aspect-ratio:16/10;}
+  .vx-office-grid{grid-template-columns:1fr 1fr;}
+  .vx-office-1{grid-column:span 2;}
+  .vx-office-4{display:none;}
   .vx-statband{grid-template-columns:1fr 1fr;}
   .vx-stat:nth-child(2){border-right:0;}
   .vx-stat:nth-child(1),.vx-stat:nth-child(2){border-bottom:1px solid var(--hair);}

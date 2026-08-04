@@ -1,7 +1,7 @@
 import { isLocale, defaultLocale } from "@/content";
 import { localePath } from "@/lib/locale-path";
 import { getPublishedPosts, L } from "@/lib/posts";
-import { v3Copy } from "@/content/v3";
+import { v3Copy, journalEn } from "@/content/v3";
 import { V3Page, type JournalPost } from "./V3Page";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
@@ -65,14 +65,17 @@ export default async function V3Route({
   const { locale } = await params;
   const lang = isLocale(locale) ? locale : defaultLocale;
 
-  // Uzbek and Russian are the languages the posts table actually carries.
+  // Uzbek and Russian are the languages the posts table actually carries; for
+  // English the card headline comes from the gloss map in content/v3.
   const postLang = lang === "en" ? "uz" : lang;
   const posts = await getPublishedPosts();
-  const journal: JournalPost[] = posts.slice(0, JOURNAL_COUNT).map((p) => ({
+  const journal: JournalPost[] = posts.slice(0, JOURNAL_COUNT).map((p) => {
+    const gloss = lang === "en" ? journalEn[p.slug] : undefined;
+    return {
     slug: p.slug,
     href: localePath(lang, `/blog/${p.slug}`),
-    title: L(p, "title", postLang),
-    excerpt: L(p, "excerpt", postLang),
+    title: gloss?.title ?? L(p, "title", postLang),
+    excerpt: lang === "en" ? gloss?.excerpt ?? "" : L(p, "excerpt", postLang),
     category: p.category || null,
     date: p.published_at
       ? new Intl.DateTimeFormat(lang === "uz" ? "uz-UZ" : lang, {
@@ -82,7 +85,8 @@ export default async function V3Route({
         }).format(new Date(p.published_at))
       : null,
     cover: p.cover_url || null,
-  }));
+    };
+  });
 
   return (
     <>
