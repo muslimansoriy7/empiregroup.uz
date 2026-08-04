@@ -10,6 +10,8 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
  * so `getAllSlugs()` cannot see them. Keep in step with app/[locale]/blog/*.
  */
 const STATIC_POSTS = [
+  { slug: 'odoo-joriy-qilish-bosqichlari', lastModified: '2025-07-18' },
+  { slug: 'transformatsiya-zanjiri', lastModified: '2025-07-15' },
 ];
 
 /**

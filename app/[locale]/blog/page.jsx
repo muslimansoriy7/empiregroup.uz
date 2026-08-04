@@ -48,9 +48,30 @@ function fmt(d) {
   } catch { return ''; }
 }
 
-// The blog is now fully CMS-driven — every post lives in Supabase and renders
-// through the shared [slug] template, so there are no hand-built static posts.
-const STATIC_POSTS = [];
+// Two articles are hand-built pages rather than rows in `posts` — they carry
+// their own layout and CSS. They are listed here so the index shows them
+// alongside the CMS posts. Keep in step with app/[locale]/blog/* and
+// app/sitemap.js.
+const STATIC_POSTS = [
+  {
+    id: 'static-odoo',
+    slug: 'odoo-joriy-qilish-bosqichlari',
+    title_uz: "Odoo ERP joriy qilishning 5 fazasi",
+    excerpt_uz: "Discovery, Design, Build, Deploy va Support — Odoo ERP joriy qilishning beshta fazasi. Har biri uchun maqsad, faoliyat, natija va xavflar.",
+    category: 'Odoo ERP',
+    published_at: '2025-07-18',
+    cover_url: null,
+  },
+  {
+    id: 'static-tz',
+    slug: 'transformatsiya-zanjiri',
+    title_uz: "Biznes transformatsiyasining 5 bosqichli zanjiri",
+    excerpt_uz: "Raqamlashtirish — bu faqat dastur o'rnatish emas. Besh bosqichli zanjir orqali biznesingizni tizimli transformatsiya qiling.",
+    category: 'Transformatsiya',
+    published_at: '2025-07-15',
+    cover_url: null,
+  },
+];
 
 export default async function BlogPage({ params }) {
   const { locale } = await params;
