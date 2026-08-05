@@ -259,7 +259,7 @@ export const en: Dict = {
     subtitle:
       "Your system is built by people you know, not a black box. That's why we're open.",
     members: [
-      { name: "Muslim Ansoriy", role: "Founder & CEO · Technical Product Manager", bio: "7+ years in IT and business automation. Partner Manager for Odoo ERP implementation across Central Asia and the Caucasus. Has led 20+ ERP projects in textile, automotive and retail. Specializes in business-process digitization and product strategy." },
+      { name: "Muslim Jo'razoda", role: "Director, Empire Group", bio: "Technical Product Manager & IT consultant — 7+ years of experience." },
       { name: "Abbos Jo'rayev", role: "Co-founder & COO", bio: "6+ years managing IT projects. Leads client relationships, project budgets and team coordination. Strong background in business analysis and requirements (TZ) at manufacturing companies." },
       { name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 years of Python/Odoo development. Built 30+ custom modules, works with Odoo 14–18. Specializes in integration with MES and external systems (REST API, XML-RPC)." },
       { name: "Dilnoza Yusupova", role: "Business Analyst · ERP Consultant", bio: "4 years analyzing and documenting business processes. Turns client needs into technical requirements, does AS-IS / TO-BE modeling and user training." },

@@ -326,7 +326,7 @@ const uz: HomeCopy = {
     eyebrow: "BIZ KIMMIZ",
     title: "Ortida — real jamoa.",
     members: [
-      { role: "Ta'sischi va CEO · Technical Product Manager", bio: "7+ yil IT va biznes-avtomatlashtirish; Odoo ERP Partner Manager (Markaziy Osiyo/Kavkaz); 20+ ERP loyiha." },
+      { role: "Empire Group Direktori", bio: "Technical Product Manager & IT Konsultant — 7+ yil tajribaga ega." },
       { role: "Hammuassis va COO", bio: "6+ yil IT loyiha boshqaruvi; mijozlar, byudjet, jamoa koordinatsiyasi." },
       { role: "Senior Odoo Developer", bio: "5 yil Python/Odoo; 30+ custom modul; REST/XML-RPC integratsiya." },
       { role: "Biznes-analitik · ERP Consultant", bio: "4 yil biznes-tahlil; AS-IS/TO-BE; foydalanuvchi o'qitish." },
@@ -581,7 +581,7 @@ const ru: HomeCopy = {
     eyebrow: "О НАС",
     title: "За этим — реальная команда.",
     members: [
-      { role: "Основатель и CEO · Technical Product Manager", bio: "7+ лет в IT и бизнес-автоматизации; Partner Manager по Odoo ERP (Центральная Азия/Кавказ); 20+ ERP-проектов." },
+      { role: "Директор Empire Group", bio: "Technical Product Manager и IT-консультант — 7+ лет опыта." },
       { role: "Сооснователь и COO", bio: "6+ лет управления IT-проектами; клиенты, бюджет, координация команды." },
       { role: "Senior Odoo Developer", bio: "5 лет Python/Odoo; 30+ кастомных модулей; интеграции REST/XML-RPC." },
       { role: "Бизнес-аналитик · ERP Consultant", bio: "4 года бизнес-анализа; AS-IS/TO-BE; обучение пользователей." },
@@ -834,7 +834,7 @@ const en: HomeCopy = {
     eyebrow: "WHO WE ARE",
     title: "A real team behind it.",
     members: [
-      { role: "Founder & CEO · Technical Product Manager", bio: "7+ years in IT and business automation; Odoo ERP Partner Manager (Central Asia/Caucasus); 20+ ERP projects." },
+      { role: "Director, Empire Group", bio: "Technical Product Manager & IT consultant — 7+ years of experience." },
       { role: "Co-founder & COO", bio: "6+ years running IT projects; clients, budgets, team coordination." },
       { role: "Senior Odoo Developer", bio: "5 years of Python/Odoo; 30+ custom modules; REST/XML-RPC integrations." },
       { role: "Business Analyst · ERP Consultant", bio: "4 years of business analysis; AS-IS/TO-BE; user training." },

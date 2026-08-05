@@ -259,7 +259,7 @@ export const uz: Dict = {
     subtitle:
       "Tizimingizni qutini emas, tanish odamlar quradi. Shu sababli har birimiz ochiqmiz.",
     members: [
-      { name: "Muslim Ansoriy", role: "Ta'sischi va CEO · Technical Product Manager", bio: "7+ yil IT va biznes-avtomatlashtirish sohasida. Odoo ERP joriy qilish bo'yicha Markaziy Osiyo va Kavkaz mintaqasi Partner Manager. To'qimachilik, avtomobil va savdo sohalarida 20+ ERP loyihasini boshqargan. Biznes-jarayonlarni raqamlashtirish va mahsulot strategiyasi bo'yicha ixtisoslashgan." },
+      { name: "Muslim Jo'razoda", role: "Empire Group Direktori", bio: "Technical Product Manager & IT Konsultant — 7+ yil tajribaga ega." },
       { name: "Abbos Jo'rayev", role: "Hammuassis va Operatsion direktor", bio: "6+ yil IT loyihalarni boshqarish tajribasi. Mijozlar bilan ishlash, loyiha byudjeti va jamoa koordinatsiyasi yo'nalishini olib boradi. Ishlab chiqarish korxonalarida biznes-tahlil va TZ tayyorlash bo'yicha kuchli tajribaga ega." },
       { name: "Sardor Rahmatullayev", role: "Senior Odoo Developer", bio: "5 yil Python/Odoo development. 30+ custom modul ishlab chiqqan, Odoo 14–18 versiyalari bilan ishlaydi. MES va tashqi tizimlar bilan integratsiya (REST API, XML-RPC) yo'nalishida ixtisoslashgan." },
       { name: "Dilnoza Yusupova", role: "Biznes-analitik · ERP Consultant", bio: "4 yil biznes-jarayonlarni tahlil qilish va hujjatlashtirish tajribasi. Mijoz ehtiyojlarini texnik talablarga aylantirish, AS-IS / TO-BE modellashtirish va foydalanuvchilarni o'qitish bilan shug'ullanadi." },

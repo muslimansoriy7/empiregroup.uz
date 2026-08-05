@@ -65,7 +65,7 @@ const STACK_TITLES = [
 ];
 /* Team portraits, in the order content/v3 lists roles and bios. */
 const TEAM_PEOPLE: { mono: string; name: string; img: string }[] = [
-  { mono: "MA", name: "Muslim Ansoriy", img: "/team/muslim-ansoriy.webp" },
+  { mono: "MJ", name: "Muslim Jo'razoda", img: "/team/muslim-ansoriy.webp" },
   { mono: "AJ", name: "Abbos Jo'rayev", img: "/team/abbos-jorayev.webp" },
   { mono: "SR", name: "Sardor Rahmatullayev", img: "/team/sardor-rahmatullayev.webp" },
   { mono: "DY", name: "Dilnoza Yusupova", img: "/team/dilnoza-yusupova.webp" },
