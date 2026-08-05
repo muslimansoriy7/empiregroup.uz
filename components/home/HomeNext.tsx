@@ -16,8 +16,7 @@ import { NxThemeSwitch } from "./nx/ThemeSwitch";
 import { NxHoverExpand } from "./nx/HoverExpand";
 import { NxNavMenu, type NavEntry } from "./nx/NavMenu";
 import { NxGlowButton } from "./nx/GlowButton";
-import { TextReveal } from "./nx/TextReveal";
-import { NxAuroraBars } from "./nx/AuroraBars";
+import { PerWordCrossfade } from "./nx/PerWordCrossfade";
 import { NxReviews } from "./nx/Reviews";
 import { NxPriceFlow } from "./nx/PriceFlow";
 import { NxDock } from "./nx/Dock";
@@ -215,7 +214,7 @@ export function HomeNext({
     const root = document.querySelector(".nx");
     if (!root) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const els = Array.from(root.querySelectorAll<HTMLElement>(".nx-in"));
+    const els = Array.from(root.querySelectorAll<HTMLElement>(".nx-in, .nx-stagger"));
     if (reduce) {
       els.forEach((e) => e.classList.add("shown"));
       return;
@@ -479,16 +478,16 @@ export function HomeNext({
             <div className="nx-hero-copy nx-in">
               <p className="nx-eyebrow">{t.hero.eyebrow}</p>
               {/* The accent word keeps its gradient rule, so the headline is
-                  split rather than run through one TextReveal. */}
+                  split rather than run through one crossfade. */}
               <h1 className="nx-display" aria-label={`${t.hero.titleBefore}${t.hero.titleAccent}${t.hero.titleAfter}`}>
-                <TextReveal as="span" text={t.hero.titleBefore} className="nx-rv" />
+                <PerWordCrossfade as="span" text={t.hero.titleBefore} className="nx-rv" />
                 <span className="nx-grad">
-                  <TextReveal as="span" text={t.hero.titleAccent} className="nx-rv" delay={0.06} />
+                  <PerWordCrossfade as="span" text={t.hero.titleAccent} className="nx-rv" delay={0.06} />
                   <span className="nx-grad-line" aria-hidden="true" />
                 </span>
-                <TextReveal as="span" text={t.hero.titleAfter} className="nx-rv" delay={0.12} />
+                <PerWordCrossfade as="span" text={t.hero.titleAfter} className="nx-rv" delay={0.12} />
               </h1>
-              <TextReveal as="p" text={t.hero.lede} className="nx-lede" delay={0.1} />
+              <PerWordCrossfade as="p" text={t.hero.lede} className="nx-lede" delay={0.1} />
               <div className="nx-hero-btns">
                 <NxGlowButton href="#aloqa" duration={6}>
                   {t.hero.primary}
@@ -561,7 +560,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.services.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.services.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.services.title} />
               <p className="nx-sub">{t.services.sub}</p>
             </header>
             <div className="nx-duo nx-in">
@@ -606,7 +605,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.portfolio.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.portfolio.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.portfolio.title} />
               <p className="nx-sub">{t.portfolio.sub}</p>
             </header>
             {/* An index that opens under the cursor: every project readable at
@@ -632,7 +631,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-head-wide nx-in">
               <p className="nx-eyebrow">{t.caseStudy.eyebrow}</p>
-              <TextReveal as="h2" className="nx-chapter-title" text={t.caseStudy.title} />
+              <PerWordCrossfade as="h2" className="nx-chapter-title" text={t.caseStudy.title} />
               <p className="nx-case-client">
                 <strong>{t.caseStudy.client}</strong>
                 <span className="nx-micro">{t.caseStudy.place}</span>
@@ -696,7 +695,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.process.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.process.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.process.title} />
             </header>
             <ol className="nx-steps nx-in">
               {t.process.steps.map((s, i) => (
@@ -715,7 +714,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.team.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.team.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.team.title} />
               <p className="nx-sub">{t.office.sub}</p>
             </header>
 
@@ -728,7 +727,7 @@ export function HomeNext({
               ))}
             </div>
 
-            <div className="nx-team nx-in">
+            <div className="nx-team nx-stagger">
               {team.map((m, i) => (
                 <article className="nx-member" key={m.name}>
                   <figure className="nx-member-photo">
@@ -749,7 +748,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.testimonials.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.testimonials.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.testimonials.title} />
             </header>
             {/* One quote at a time, stacked. Four side by side meant three of
                 them were scenery. */}
@@ -772,7 +771,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.pricing.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.pricing.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.pricing.title} />
               <p className="nx-sub">{t.pricing.sub}</p>
             </header>
 
@@ -837,7 +836,7 @@ export function HomeNext({
               <header className="nx-head nx-head-row nx-in">
                 <div>
                   <p className="nx-eyebrow">{t.journal.eyebrow}</p>
-                  <TextReveal as="h2" className="nx-h2" text={t.journal.title} />
+                  <PerWordCrossfade as="h2" className="nx-h2" text={t.journal.title} />
                 </div>
                 <Link className="nx-btn nx-btn-line" href={blogHref}>
                   {t.journal.allLabel} <Arrow size={14} />
@@ -878,7 +877,7 @@ export function HomeNext({
           <div className="nx-wrap nx-wrap-narrow">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.faq.eyebrow}</p>
-              <TextReveal as="h2" className="nx-h2" text={t.faq.title} />
+              <PerWordCrossfade as="h2" className="nx-h2" text={t.faq.title} />
             </header>
             <div className="nx-in">
               <NxAccordion items={t.faq.items.map((f) => ({ question: f.q, answer: f.a }))} />
@@ -892,7 +891,7 @@ export function HomeNext({
             <div className="nx-contact-grid">
               <div className="nx-in">
                 <p className="nx-eyebrow">{t.cta.eyebrow}</p>
-                <TextReveal as="h2" className="nx-chapter-title nx-contact-h" text={t.cta.title} />
+                <PerWordCrossfade as="h2" className="nx-chapter-title nx-contact-h" text={t.cta.title} />
 
                 <p className="nx-lede nx-contact-lede">{t.guarantee.sub}</p>
 
@@ -944,7 +943,6 @@ export function HomeNext({
 
       {/* ===================== FOOTER ===================== */}
       <footer className="nx-footer">
-        <NxAuroraBars />
         <div className="nx-wrap">
           <div className="nx-footer-grid">
             <div>
@@ -1111,9 +1109,23 @@ const CSS = `
 .nx section[id]{scroll-margin-top:88px;}
 
 /* ---------- reveal: chapter openings only ---------- */
-.nx .nx-in{transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease);}
+.nx .nx-in{transform:translateY(16px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
 .nx.nx-ready .nx-in{opacity:0;}
 .nx .nx-in.shown{opacity:1;transform:none;}
+
+/* A grid that arrives card by card rather than as one slab. Uses the separate
+   translate property, not transform, so a card is still free to use transform
+   for its own hover without the two rules fighting. */
+.nx .nx-stagger > *{transition:opacity .6s var(--ease),translate .6s var(--ease);}
+.nx.nx-ready .nx-stagger > *{opacity:0;translate:0 18px;}
+.nx .nx-stagger.shown > *{opacity:1;translate:none;}
+.nx .nx-stagger.shown > *:nth-child(2){transition-delay:.05s;}
+.nx .nx-stagger.shown > *:nth-child(3){transition-delay:.1s;}
+.nx .nx-stagger.shown > *:nth-child(4){transition-delay:.15s;}
+.nx .nx-stagger.shown > *:nth-child(5){transition-delay:.2s;}
+.nx .nx-stagger.shown > *:nth-child(6){transition-delay:.25s;}
+.nx .nx-stagger.shown > *:nth-child(7){transition-delay:.3s;}
+.nx .nx-stagger.shown > *:nth-child(8){transition-delay:.35s;}
 
 /* ---------- layout ---------- */
 .nx-wrap{max-width:1200px;margin:0 auto;padding:0 28px;width:100%;}
@@ -1573,7 +1585,14 @@ const CSS = `
   filter:grayscale(1) contrast(1.03);
   transition:filter .5s var(--ease),transform .5s var(--ease);
 }
+/* The card lifts a little with the portrait. Transform is used here and
+   translate by the stagger, so the entrance and the hover never overwrite
+   each other. */
+.nx-member{transition:transform .45s var(--ease);}
+.nx-member:hover{transform:translateY(-5px);}
 .nx-member:hover .nx-member-photo img{filter:none;transform:scale(1.03);}
+.nx-member:hover .nx-member-photo{box-shadow:0 16px 30px -20px rgba(15,16,19,.5);}
+[data-theme="dark"] .nx-member:hover .nx-member-photo{box-shadow:0 16px 34px -20px rgba(0,0,0,.9);}
 .nx-member-name{font-family:var(--sans);font-size:var(--t-body);font-weight:500;letter-spacing:var(--track-body);color:var(--ink);margin:0 0 4px;}
 .nx-member-role{display:block;margin-bottom:10px;}
 
@@ -1780,17 +1799,7 @@ const CSS = `
 .nx-pop-tg{margin-top:12px;}
 
 /* ---------- footer ---------- */
-/* The footer sits on the aurora in both themes, so its own type is fixed
-   light rather than following the palette. */
-.nx-footer{position:relative;isolation:isolate;padding:80px 0 36px;color:#eef2f8;}
-.nx-footer > .nx-wrap{position:relative;z-index:1;}
-.nx-footer .nx-micro,.nx-footer .nx-small{color:rgba(238,242,248,.62);}
-.nx-footer .nx-footer-h{color:#fff;}
-.nx-footer .nx-footer-col a{color:rgba(238,242,248,.82);}
-.nx-footer .nx-footer-col a:hover{color:#fff;}
-.nx-footer .nx-footer-legal,.nx-footer .nx-footer-bottom{border-top-color:rgba(238,242,248,.16);}
-.nx-footer .nx-light-only{display:none;}
-.nx-footer .nx-dark-only{display:block;}
+.nx-footer{background:var(--canvas);border-top:1px solid var(--line);padding:64px 0 36px;}
 .nx-footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1.15fr 1fr 1fr;gap:32px;padding-bottom:40px;}
 .nx-footer-desc{color:var(--muted);margin-top:16px;max-width:320px;}
 .nx-footer-col{display:flex;flex-direction:column;gap:11px;}
@@ -1802,50 +1811,60 @@ const CSS = `
 .nx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;}
 
 /* ---------- bottom dock (phones) ----------
-   Hidden by default and switched on at the same width the desktop nav links
-   go away, so there is never a moment with both. */
+   The supplied dock, in this page's tokens. Hidden until the width where the
+   desktop nav links go away, so there is never a moment with both. */
 .nx-dock{display:none;}
 @media (max-width:920px){
   .nx-dock{
-    display:flex;align-items:stretch;gap:2px;
-    position:fixed;z-index:90;
+    display:flex;align-items:flex-end;justify-content:center;
+    position:fixed;z-index:90;overflow:visible;
     /* Centred with auto margins, not translateX: the dock is a motion element
        and writes its own transform for the enter and exit. */
-    left:14px;right:14px;margin-inline:auto;max-width:460px;
+    left:14px;right:14px;margin-inline:auto;width:max-content;max-width:calc(100% - 28px);
     bottom:calc(14px + env(safe-area-inset-bottom,0px));
-    padding:6px;border-radius:20px;
-    background:color-mix(in srgb,var(--surface) 88%,transparent);
+    padding:8px 8px 7px;
+    background:color-mix(in srgb,var(--surface) 82%,transparent);
     border:1px solid var(--line);
     box-shadow:0 -2px 10px rgba(15,16,19,.04),0 18px 40px -16px rgba(15,16,19,.35);
-    backdrop-filter:blur(16px) saturate(1.5);
-    -webkit-backdrop-filter:blur(16px) saturate(1.5);
+    backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
   }
   /* The dock floats over the last screen of the page; give the footer room so
      it never sits on top of the legal line. */
-  .nx-footer{padding-bottom:104px;}
+  .nx-footer{padding-bottom:112px;}
 }
-[data-theme="dark"] .nx-dock{
-  box-shadow:0 18px 44px -16px rgba(0,0,0,.85);
+[data-theme="dark"] .nx-dock{box-shadow:0 18px 44px -16px rgba(0,0,0,.85);}
+/* The slot is at least as wide as its label. The animated width still pushes
+   neighbours aside once the magnifier takes an icon past that floor — without
+   the floor the label would be clipped to the icon's 42px at rest. */
+.nx-dock-slot{
+  position:relative;display:flex;flex-direction:column;align-items:center;
+  flex-shrink:0;min-width:66px;
 }
-.nx-dock-item{
-  position:relative;flex:1 1 0;min-width:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  padding:9px 4px 8px;border-radius:15px;
+.nx-dock-iconrow{position:relative;width:100%;display:flex;justify-content:center;}
+.nx-dock-grow{position:absolute;bottom:0;}
+.nx-dock-btn{
+  display:flex;align-items:center;justify-content:center;width:100%;height:100%;
   color:var(--muted);text-decoration:none;
-  transition:color .2s ease;
+  transition:background .18s ease,color .18s ease;
 }
-.nx-dock-item.on{color:var(--ink);}
-.nx-dock-item.accent{background:var(--ink);color:var(--on-ink);}
-.nx-dock-item.accent:hover{color:var(--on-ink);}
-.nx-dock-pill{
-  position:absolute;inset:0;border-radius:15px;
-  background:var(--canvas);z-index:0;
-}
-.nx-dock-icon,.nx-dock-label{position:relative;z-index:1;}
-.nx-dock-icon{display:inline-flex;}
+.nx-dock-btn svg{width:55%;height:55%;}
+.nx-dock-btn:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink);}
+.nx-dock-btn.on{background:var(--canvas);color:var(--ink);}
+.nx-dock-btn.accent,.nx-dock-btn.accent:hover{background:var(--ink);color:var(--on-ink);}
+.nx-dock-btn:focus-visible{outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--ink) 25%,transparent);}
 .nx-dock-label{
-  font-family:var(--sans);font-size:11px;letter-spacing:.01em;line-height:1.1;
+  margin-top:3px;font-family:var(--sans);font-size:10px;font-weight:500;
+  letter-spacing:.01em;line-height:1.1;color:var(--muted);
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  pointer-events:none;user-select:none;
+}
+.nx-dock-tip{
+  position:absolute;z-index:50;pointer-events:none;white-space:nowrap;
+  padding:5px 9px;border-radius:7px;
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:0 6px 18px -8px rgba(15,16,19,.4);
+  font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--ink);
 }
 
 /* ---------- glow button ----------
@@ -1873,29 +1892,6 @@ const CSS = `
 .nx-glow-onDark .nx-glow-face{background:var(--dark-ink);color:var(--dark);}
 @property --nx-a{syntax:"<angle>";inherits:false;initial-value:0deg;}
 @keyframes nx-spin{to{--nx-a:360deg;}}
-
-/* ---------- aurora footer ---------- */
-.nx-aurora{position:absolute;inset:0;overflow:hidden;background:#05070c;pointer-events:none;}
-/* No gap and no cell padding: the columns meet edge to edge, so the wave reads
-   as one moving surface rather than a row of separate bars. */
-/* One blur on the row, not on each of the 28 bars: a single composited layer
-   instead of 28 re-rasterised ones, and it turns the stepped tops into a glow
-   rather than a skyline. Bled past the sides so the blur has material to
-   sample at the edges instead of fading into the ground. */
-.nx-aurora-row{
-  position:absolute;inset:0 -18px -18px;display:flex;align-items:flex-end;gap:0;
-  filter:blur(3px);
-}
-.nx-aurora-bar{flex:1 1 0;min-width:0;display:block;}
-/* Two layers: the radial keeps the arch reading as light, the linear holds a
-   dark ground under the columns so the footer type stays legible over the
-   brightest bars. */
-.nx-aurora-veil{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 96% 86% at 50% 100%,transparent 52%,#05070cc4 100%),
-    linear-gradient(to bottom,#05070c 0%,rgba(5,7,12,.9) 26%,rgba(5,7,12,.6) 62%,rgba(5,7,12,.42) 100%);
-}
 
 /* ---------- dropdown ---------- */
 .nx-dd{position:relative;}
@@ -1978,73 +1974,6 @@ const CSS = `
   outline:none;border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent);
 }
 .nx-field-err{font-family:var(--sans);font-size:var(--t-small);color:#c2352b;}
-
-/* ---------- animated input ----------
-   One box per field. The label lives inside it and rises when the field is
-   focused or filled, so the field never loses its name the way a placeholder
-   does the moment you start typing. */
-.nx-ai{display:flex;flex-direction:column;gap:6px;min-width:0;}
-.nx-ai-box{
-  position:relative;overflow:hidden;
-  background:var(--canvas);border:1px solid var(--line);border-radius:8px;
-  padding:23px 13px 9px;
-  transition:border-color .2s ease,box-shadow .2s ease;
-}
-.nx-ai.focused .nx-ai-box{
-  border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent);
-}
-.nx-ai.err .nx-ai-box{border-color:#c2352b;}
-.nx-ai-label{
-  position:absolute;left:13px;top:22px;transform-origin:left top;
-  font-family:var(--sans);font-size:var(--t-body);line-height:1.4;
-  color:var(--muted);white-space:nowrap;pointer-events:none;
-  max-width:calc(100% - 26px);overflow:hidden;text-overflow:ellipsis;
-  transition:color .2s ease;
-}
-.nx-ai.focused .nx-ai-label{color:var(--ink);}
-.nx-ai.err .nx-ai-label{color:#c2352b;}
-.nx-ai-field{
-  display:block;width:100%;padding:0;border:0;outline:none;background:transparent;
-  font-family:var(--sans);font-size:var(--t-body);line-height:1.4;color:var(--ink);
-}
-.nx-ai-area .nx-ai-box{padding-top:28px;}
-.nx-ai-area .nx-ai-label{top:12px;}
-.nx-ai-area .nx-ai-field{resize:vertical;line-height:1.55;min-height:86px;}
-/* Chrome paints its own ground on an autofilled field; without this the
-   transparent field would show a yellow block inside the box. */
-.nx-ai-field:-webkit-autofill,
-.nx-ai-field:-webkit-autofill:focus{
-  -webkit-text-fill-color:var(--ink);
-  -webkit-box-shadow:0 0 0 60px var(--canvas) inset;
-  caret-color:var(--ink);
-}
-.nx-ai-rule{
-  position:absolute;left:0;right:0;bottom:0;height:2px;
-  background:var(--ink);transform-origin:center;
-}
-.nx-ai-icon{
-  position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  color:var(--muted);display:inline-flex;
-}
-.nx-ai-hasicon .nx-ai-box{padding-left:42px;}
-.nx-ai-hasicon .nx-ai-label{left:42px;}
-
-/* The dropdown in the same row wears the same box, so the four controls in
-   the form read as one set. */
-.nx-dd-float .nx-dd-trigger{
-  flex-direction:column;align-items:flex-start;gap:0;
-  padding:8px 13px 9px;min-height:56px;justify-content:center;
-  position:relative;
-}
-.nx-dd-float .nx-dd-cap{
-  font-family:var(--sans);font-size:calc(var(--t-body) * .78);line-height:1.4;
-  color:var(--muted);margin-bottom:2px;
-}
-.nx-dd-float .nx-dd-trigger.open .nx-dd-cap{color:var(--ink);}
-/* Positioned without a transform: the caret is a motion element and writes its
-   own inline transform for the flip, which would win over this rule. */
-.nx-dd-float .nx-dd-caret{position:absolute;right:13px;top:calc(50% - 6.5px);}
-.nx-dd-float .nx-dd-trigger > span:not(.nx-dd-cap){padding-right:22px;}
 .nx-form-note{color:var(--muted);text-transform:none;letter-spacing:0;}
 .nx-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
 .nx-form-done{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
@@ -2151,6 +2080,7 @@ const CSS = `
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
   .nx .nx-in,.nx.nx-ready .nx-in{transform:none;transition:none;opacity:1;}
+  .nx .nx-stagger > *,.nx.nx-ready .nx-stagger > *{translate:none;transition:none;opacity:1;}
   .nx *{animation:none!important;}
   .nx-grad-line,.nx-dark-rule{background:var(--spectrum);}
   .nx-btn:hover,.nx-raised:hover{transform:none;}

@@ -106,12 +106,21 @@ export function NxReviews({
                 /* Scaling from the centre pulls the top edge back down, so the
                    offset has to out-run it or the stack shows no depth at all. */
                 y: behind ? -Math.min(d, 2) * 26 : 0,
-                filter: behind ? `blur(${Math.min(d, 2) * 2}px)` : "blur(0px)",
                 opacity: visible ? (behind ? 0.55 - (Math.min(d, 2) - 1) * 0.2 : 1) : 0,
                 zIndex: count - Math.abs(d),
               }}
               transition={spring}
-              style={{ pointerEvents: d === 0 ? "auto" : "none" }}
+              /* No blur on the back cards. A filter forces the browser to
+                 re-rasterise a full-width card every frame of the spring, on
+                 three layers at once; scale and opacity are composited on the
+                 GPU and read as the same depth. */
+              style={{
+                pointerEvents: d === 0 ? "auto" : "none",
+                willChange: "transform, opacity",
+                // Still laid out — the grid takes its height from the tallest
+                // card — but nothing behind the third one is painted.
+                visibility: visible ? "visible" : "hidden",
+              }}
             >
               {r.logo && (
                 // eslint-disable-next-line @next/next/no-img-element

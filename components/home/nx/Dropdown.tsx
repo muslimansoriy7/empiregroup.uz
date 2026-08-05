@@ -24,7 +24,6 @@ export function NxDropdown({
   placeholder,
   name,
   label,
-  floating = false,
 }: {
   items: DropdownItem[];
   value: string;
@@ -32,8 +31,6 @@ export function NxDropdown({
   placeholder: string;
   name?: string;
   label: string;
-  /** Carry the label inside the control, matching the animated inputs. */
-  floating?: boolean;
 }) {
   const reduce = useReducedMotion();
   const [open, setOpen] = React.useState(false);
@@ -116,7 +113,7 @@ export function NxDropdown({
     : { type: "spring" as const, stiffness: 420, damping: 34, bounce: 0 };
 
   return (
-    <div className={`nx-dd${floating ? " nx-dd-float" : ""}`} ref={rootRef} onKeyDown={onKeyDown}>
+    <div className="nx-dd" ref={rootRef} onKeyDown={onKeyDown}>
       {name && <input type="hidden" name={name} value={value} />}
       <button
         ref={triggerRef}
@@ -127,11 +124,6 @@ export function NxDropdown({
         aria-label={`${label}: ${selected?.label ?? placeholder}`}
         onClick={() => setOpen((v) => !v)}
       >
-        {floating && (
-          <span className="nx-dd-cap" aria-hidden="true">
-            {label}
-          </span>
-        )}
         <span className={selected ? "" : "nx-dd-placeholder"}>
           {selected?.label ?? placeholder}
         </span>
