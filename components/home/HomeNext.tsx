@@ -11,6 +11,10 @@ import { localePath, stripLocale } from "@/lib/locale-path";
 import { useI18n } from "@/lib/i18n";
 import { HomeForm } from "./HomeForm";
 import type { JournalPost } from "./HomePage";
+import { NxAccordion } from "./nx/Accordion";
+import { NxThemeSwitch } from "./nx/ThemeSwitch";
+import { NxHoverExpand } from "./nx/HoverExpand";
+import { NxNavMenu, type NavEntry } from "./nx/NavMenu";
 
 /* ------------------------------------------------------------------ *
  *  Empire Group — homepage, second pass (.nx)
@@ -128,47 +132,7 @@ const Arrow = ({ size = 14 }: { size?: number }) => (
   </svg>
 );
 
-const Chevron = ({ size = 14 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden="true" fill="none">
-    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 /* ========================= CHROME ========================= */
-
-function ThemeSwitch({ label }: { label: string }) {
-  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
-
-  useEffect(() => {
-    setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
-  }, []);
-
-  const toggle = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("theme", next);
-    } catch {
-      /* private mode — still works for this session */
-    }
-    setTheme(next);
-  };
-
-  return (
-    <button type="button" className="nx-icon-btn" onClick={toggle} aria-label={label} title={label}>
-      {theme === null ? null : theme === "dark" ? (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.6" />
-          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        </svg>
-      ) : (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M20 14.2A8.2 8.2 0 1 1 9.8 4a6.6 6.6 0 0 0 10.2 10.2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-        </svg>
-      )}
-    </button>
-  );
-}
 
 function LangSwitch({ label, className = "" }: { label: string; className?: string }) {
   const { locale } = useI18n();
@@ -194,7 +158,6 @@ function LangSwitch({ label, className = "" }: { label: string; className?: stri
 
 /* ============================== PAGE ============================== */
 
-const PROJECTS_PREVIEW = 4;
 
 /* Once per browser session, a minute in. */
 const POP_KEY = "eg_consult_shown";
@@ -213,9 +176,7 @@ export function HomeNext({
   const { locale, t: dict } = useI18n();
   const t = homeCopy[locale];
 
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showAll, setShowAll] = useState(false);
   const [track, setTrack] = useState<"software" | "odoo">("software");
   const [active, setActive] = useState<string>("");
   const [popOpen, setPopOpen] = useState(false);
@@ -333,8 +294,8 @@ export function HomeNext({
     };
   }, [menuOpen]);
 
-  /* Eyebrows are set in caps for the page; a nav of six shouting words is a
-     wall. Sentence-case them — works the same in uz, ru and en. */
+  /* Eyebrows are set in caps for the page; a nav of shouting words is a wall.
+     Sentence-case them — works the same in uz, ru and en. */
   const cap = (s: string) => s.charAt(0) + s.slice(1).toLocaleLowerCase(locale);
   const NAV_LINKS: [string, string][] = [
     [cap(t.services.eyebrow), "#xizmatlar"],
@@ -342,6 +303,35 @@ export function HomeNext({
     [cap(t.team.eyebrow), "#jamoa"],
     [cap(t.pricing.eyebrow), "#narxlar"],
     [cap(t.journal.eyebrow), "#jurnal"],
+  ];
+
+  /* Two of the five open a panel. Services points at the landing pages that
+     carry their own SEO; Portfolio lists the work by name, which is what a
+     visitor scanning the nav is actually looking for. */
+  const NAV_ENTRIES: NavEntry[] = [
+    {
+      id: "xizmatlar",
+      label: cap(t.services.eyebrow),
+      href: "#xizmatlar",
+      panel: [
+        ...t.services.items.map((s) => ({ label: s.title, href: "#xizmatlar", note: s.tag })),
+        ...t.footer.services
+          .filter(([, href]) => !href.startsWith("#"))
+          .map(([label, href]) => ({ label, href })),
+      ],
+    },
+    {
+      id: "ishlar",
+      label: cap(t.portfolio.eyebrow),
+      href: "#ishlar",
+      panel: [
+        { label: t.caseStudy.client, href: "#keys", note: t.caseStudy.eyebrow },
+        ...projects.map((p) => ({ label: p.title, href: `https://${p.url}`, note: p.seg })),
+      ],
+    },
+    { id: "jamoa", label: cap(t.team.eyebrow), href: "#jamoa" },
+    { id: "narxlar", label: cap(t.pricing.eyebrow), href: "#narxlar" },
+    { id: "jurnal", label: cap(t.journal.eyebrow), href: "#jurnal" },
   ];
 
   return (
@@ -361,23 +351,15 @@ export function HomeNext({
           </a>
 
           <nav className="nx-nav-links" aria-label={t.nav.menuLabel}>
-            {NAV_LINKS.map(([label, href]) => {
-              const id = href.slice(1);
-              return (
-                <a
-                  key={href}
-                  href={href}
-                  className={`nx-navlink${active === id ? " active" : ""}`}
-                  aria-current={active === id ? "true" : undefined}
-                >
-                  {label}
-                </a>
-              );
-            })}
+            <NxNavMenu
+              entries={NAV_ENTRIES}
+              activeId={active}
+              localePath={(href) => localePath(locale, href)}
+            />
           </nav>
 
           <div className="nx-nav-actions">
-            <ThemeSwitch label={t.themeLabel} />
+            <NxThemeSwitch label={t.themeLabel} />
             <LangSwitch label={t.langLabel} className="nx-wide-only" />
             <a className="nx-btn nx-btn-solid nx-wide-only" href="#aloqa">
               {t.nav.cta}
@@ -607,41 +589,19 @@ export function HomeNext({
               <h2 className="nx-h2">{t.portfolio.title}</h2>
               <p className="nx-sub">{t.portfolio.sub}</p>
             </header>
-            <div className="nx-duo nx-in">
-              {(showAll ? projects : projects.slice(0, PROJECTS_PREVIEW)).map((p) => (
-                <a
-                  className="nx-raised nx-work"
-                  key={p.title}
-                  href={`https://${p.url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <figure className="nx-work-shot">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.img} alt="" loading="lazy" width={1920} height={1080} />
-                  </figure>
-                  <div className="nx-work-body">
-                    <p className="nx-micro">{p.seg}</p>
-                    <h3 className="nx-h3">{p.title}</h3>
-                    {/* The payoff line is prose now — it used to be 12px mono,
-                        the least readable style on the page. */}
-                    <p className="nx-work-result">{p.result}</p>
-                    {p.source && <p className="nx-work-source">— {p.source}</p>}
-                    <span className="nx-link">
-                      {p.url} <Arrow size={13} />
-                    </span>
-                  </div>
-                </a>
-              ))}
+            {/* An index that opens under the cursor: every project readable at
+                once, the capture revealed on the row you are actually on. */}
+            <div className="nx-in">
+              <NxHoverExpand
+                items={projects.map((p) => ({
+                  label: p.title,
+                  sublabel: p.url,
+                  description: p.result,
+                  image: p.img,
+                  href: `https://${p.url}`,
+                }))}
+              />
             </div>
-            {!showAll && (
-              <div className="nx-center nx-in">
-                <button type="button" className="nx-btn nx-btn-line" onClick={() => setShowAll(true)}>
-                  {t.portfolio.showMore(projects.length - PROJECTS_PREVIEW)}
-                  <Arrow size={14} />
-                </button>
-              </div>
-            )}
           </div>
         </section>
 
@@ -903,35 +863,8 @@ export function HomeNext({
               <p className="nx-eyebrow">{t.faq.eyebrow}</p>
               <h2 className="nx-h2">{t.faq.title}</h2>
             </header>
-            <div className="nx-faq nx-in">
-              {t.faq.items.map((f, i) => {
-                const open = openFaq === i;
-                return (
-                  <div className={`nx-faq-row${open ? " open" : ""}`} key={f.q}>
-                    <button
-                      className="nx-faq-q"
-                      id={`nx-faq-q-${i}`}
-                      aria-expanded={open}
-                      aria-controls={`nx-faq-a-${i}`}
-                      onClick={() => setOpenFaq(open ? null : i)}
-                    >
-                      <span>{f.q}</span>
-                      <span className="nx-faq-ico" aria-hidden="true">
-                        <Chevron size={14} />
-                      </span>
-                    </button>
-                    <div
-                      className="nx-faq-a"
-                      id={`nx-faq-a-${i}`}
-                      role="region"
-                      aria-labelledby={`nx-faq-q-${i}`}
-                      inert={!open}
-                    >
-                      <p>{f.a}</p>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="nx-in">
+              <NxAccordion items={t.faq.items.map((f) => ({ question: f.q, answer: f.a }))} />
             </div>
           </div>
         </section>
@@ -1265,14 +1198,60 @@ const CSS = `
 .nx-wordmark{height:21px;width:auto;}
 .nx-footer .nx-wordmark{height:23px;}
 .nx .nx-dark-only{display:none;}
-.nx-nav-links{display:flex;align-items:center;gap:4px;}
+.nx-nav-links{display:flex;align-items:center;}
+.nx-nav-menu{position:relative;}
+.nx-nav-list{display:flex;align-items:center;gap:2px;}
 .nx-navlink{
+  position:relative;display:inline-flex;align-items:center;gap:5px;
   font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--muted);
-  padding:7px 11px;border-radius:7px;transition:color .2s ease,background .2s ease;
+  padding:8px 12px;border-radius:8px;transition:color .2s ease;
 }
-.nx-navlink:hover{color:var(--ink);background:var(--canvas-alt);}
-/* The reader always knows which chapter they are in. */
-.nx-navlink.active{color:var(--ink);background:var(--canvas-alt);box-shadow:inset 0 0 0 1px var(--line);}
+.nx-navlink:hover,.nx-navlink.active{color:var(--ink);}
+/* One pill travels between items rather than fading in under each. */
+.nx-nav-pill{
+  position:absolute;inset:0;border-radius:8px;background:var(--canvas-alt);
+  box-shadow:inset 0 0 0 1px var(--line);z-index:0;
+}
+.nx-nav-text,.nx-nav-caret{position:relative;z-index:1;}
+.nx-nav-caret{display:inline-flex;color:var(--faint);}
+
+/* One shared panel that slides and resizes under whichever trigger is open. */
+.nx-nav-drop-anchor{position:absolute;top:100%;transform:translateX(-50%);z-index:60;}
+.nx-nav-drop{
+  margin-top:10px;min-width:250px;max-width:min(380px,90vw);
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 24px 48px -20px rgba(15,16,19,.24);padding:8px;
+  display:flex;flex-direction:column;gap:1px;
+}
+.nx-nav-drop-link{
+  display:flex;flex-direction:column;gap:2px;padding:9px 11px;border-radius:8px;
+  font-family:var(--sans);font-size:var(--t-small);color:var(--body);
+  transition:background .18s ease,color .18s ease;
+}
+.nx-nav-drop-link:hover{background:var(--canvas);color:var(--ink);}
+.nx-nav-drop-note{
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--faint);
+}
+[data-theme="dark"] .nx-nav-drop{box-shadow:0 24px 48px -20px rgba(0,0,0,.8);}
+
+/* ---------- theme switch ---------- */
+.nx-tswitch{
+  position:relative;display:inline-flex;align-items:center;flex-shrink:0;
+  border:0;padding:0;background:transparent;border-radius:9999px;cursor:pointer;
+}
+.nx-tswitch:active{cursor:grabbing;}
+.nx-tswitch-track{
+  position:absolute;inset:0;border-radius:9999px;overflow:hidden;
+  background:var(--line);box-shadow:inset 0 1px 2px rgba(0,0,0,.06);
+}
+.nx-tswitch-fill{position:absolute;inset:0;border-radius:9999px;background:var(--ink);}
+.nx-tswitch-thumb{
+  position:relative;z-index:1;display:flex;align-items:center;justify-content:center;
+  border-radius:9999px;background:var(--surface);color:var(--ink);
+  box-shadow:0 2px 6px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.6);
+}
+.nx-tswitch-thumb svg{position:absolute;}
 .nx-nav-actions{display:flex;align-items:center;gap:9px;}
 .nx-progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;overflow:hidden;}
 .nx-progress-bar{
@@ -1418,18 +1397,48 @@ const CSS = `
 .nx-stackitem:hover{color:var(--ink);}
 .nx-stackitem:hover svg{color:var(--brand,var(--ink));transform:scale(1.1);}
 
-/* ---------- 4. work ---------- */
-.nx-work{display:flex;flex-direction:column;overflow:hidden;padding:0;}
-.nx-work-shot{margin:0;aspect-ratio:16/9;overflow:hidden;background:var(--canvas);border-bottom:1px solid var(--line);}
-.nx-work-shot img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .5s var(--ease);}
-.nx-work:hover .nx-work-shot img{transform:scale(1.03);}
-.nx-work-body{display:flex;flex-direction:column;flex:1;padding:24px 26px 26px;}
-.nx-work-body .nx-micro{margin-bottom:10px;}
-.nx-work-result{
-  font-family:var(--sans);font-size:var(--t-body);line-height:1.5;color:var(--ink);
-  margin:0 0 6px;font-weight:450;
+/* ---------- 4. work: an index that opens under the cursor ---------- */
+.nx-hx{display:flex;flex-direction:column;border-top:1px solid var(--line);}
+.nx-hx-row{
+  position:relative;display:block;overflow:hidden;
+  border-bottom:1px solid var(--line);cursor:pointer;
 }
-.nx-work-source{font-family:var(--sans);font-size:var(--t-small);color:var(--muted);margin:0 0 18px;}
+.nx-hx-media{position:absolute;inset:0;display:block;}
+.nx-hx-media img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+.nx-hx-veil{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(6,7,9,.82) 0%,rgba(6,7,9,.34) 45%,rgba(6,7,9,.16) 100%);
+}
+.nx-hx-bar{
+  position:absolute;inset:auto 0 0 0;display:flex;align-items:flex-end;
+  justify-content:space-between;gap:20px;padding:0 6px 20px;
+}
+.nx-hx-left{display:flex;align-items:baseline;gap:14px;min-width:0;}
+.nx-hx-n{
+  font-family:var(--mono);font-size:var(--t-micro);color:var(--faint);
+  flex-shrink:0;font-variant-numeric:tabular-nums;
+}
+.nx-hx-label{
+  font-family:var(--sans);font-size:var(--t-h3);font-weight:450;
+  letter-spacing:var(--track-h3);color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:color .25s ease;
+}
+.nx-hx-desc{
+  font-family:var(--sans);font-size:var(--t-small);color:rgba(255,255,255,.78);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.nx-hx-sub{
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--faint);flex-shrink:0;transition:color .25s ease;
+}
+/* Once the capture is behind it the bar sits on dark, whatever the theme. */
+.nx-hx-row.open .nx-hx-label{color:#fff;}
+.nx-hx-row.open .nx-hx-n,.nx-hx-row.open .nx-hx-sub{color:rgba(255,255,255,.6);}
+@media (max-width:640px){
+  .nx-hx-desc{display:none;}
+  .nx-hx-bar{padding:0 4px 16px;}
+}
 
 /* ---------- 5. the dark chapter ---------- */
 .nx-dark{
@@ -1585,29 +1594,29 @@ const CSS = `
 .nx-post .nx-micro{margin-bottom:12px;}
 .nx-post .nx-small{color:var(--muted);margin-bottom:20px;}
 
-/* ---------- 11. faq ---------- */
-.nx-faq{display:flex;flex-direction:column;}
-.nx-faq-row{border-top:1px solid var(--line);}
-.nx-faq-row:last-child{border-bottom:1px solid var(--line);}
-.nx-faq-q{
-  width:100%;background:transparent;border:0;cursor:pointer;
+/* ---------- 11. faq: spring accordion ---------- */
+.nx-acc{display:flex;flex-direction:column;gap:10px;}
+.nx-acc-row{
+  overflow:hidden;border-radius:16px;background:var(--surface);
+  border:1px solid var(--line);transition:border-color .3s ease,box-shadow .3s ease;
+}
+.nx-acc-row.open{border-color:var(--line-strong);box-shadow:var(--shadow);}
+.nx-acc-q{
+  width:100%;background:transparent;border:0;cursor:pointer;user-select:none;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:22px 4px;text-align:left;
-  font-family:var(--sans);font-size:var(--t-lede);font-weight:450;letter-spacing:var(--track-body);color:var(--ink);
+  padding:20px 22px;text-align:left;
+  font-family:var(--sans);font-size:var(--t-lede);font-weight:500;
+  letter-spacing:var(--track-body);color:var(--ink);
 }
-.nx-faq-ico{color:var(--faint);display:inline-flex;transition:transform .42s cubic-bezier(.42,0,.58,1),color .3s ease;flex-shrink:0;}
-.nx-faq-row.open .nx-faq-ico{transform:rotate(180deg);color:var(--ink);}
-/* grid-template-rows 0fr→1fr animates to the content's real height, so the
-   panel opens and closes at an even speed. max-height had to guess a ceiling,
-   and every answer shorter than the guess snapped at the end. Ease-in-out on
-   both directions. */
-.nx-faq-a{
-  display:grid;grid-template-rows:0fr;opacity:0;
-  transition:grid-template-rows .42s cubic-bezier(.42,0,.58,1),opacity .3s cubic-bezier(.42,0,.58,1);
+.nx-acc-ico{
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+  width:32px;height:32px;border-radius:9999px;color:var(--ink);background:var(--canvas);
 }
-.nx-faq-a > p{overflow:hidden;margin:0;padding:0 4px;font-family:var(--sans);font-size:var(--t-body);line-height:1.6;color:var(--body);max-width:68ch;}
-.nx-faq-row.open .nx-faq-a{grid-template-rows:1fr;opacity:1;}
-.nx-faq-row.open .nx-faq-a > p{padding-bottom:24px;}
+.nx-acc-a{padding:0 22px 22px;}
+.nx-acc-a p{
+  margin:0;font-family:var(--sans);font-size:var(--t-body);line-height:1.65;
+  color:var(--body);max-width:68ch;
+}
 
 /* ---------- contact ---------- */
 .nx-contact{background:var(--canvas-alt);border-top:1px solid var(--line);padding:96px 0;}
