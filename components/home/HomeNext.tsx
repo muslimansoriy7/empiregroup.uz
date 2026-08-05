@@ -345,7 +345,9 @@ export function HomeNext({
   ];
 
   return (
-    <div className="nx">
+    /* Geist Pixel has no Cyrillic, so Russian gets Geist Mono outright rather
+       than a line that switches face mid-sentence. */
+    <div className={`nx nx-${locale}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* ===================== NAV ===================== */}
@@ -582,7 +584,11 @@ export function HomeNext({
             <div className="nx-stackline nx-in">
               <span className="nx-micro">{t.stack.eyebrow}</span>
               {stack.map((tool) => (
-                <span className="nx-stackitem" key={tool.title}>
+                <span
+                  className="nx-stackitem"
+                  key={tool.title}
+                  style={{ ["--brand" as string]: tool.hex } as CSSProperties}
+                >
                   <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
                     <path d={tool.path} fill="currentColor" />
                   </svg>
@@ -1095,18 +1101,19 @@ const CSS = `
      is set 20% up from the 11px it used to be. */
   --t-micro:13px;
 
-  /* ---- Tracking. Headings were fitted tight enough that letters touched at
-     display sizes; every step is opened ~10%, and body copy gets a little air
-     of its own rather than the -0.01em it inherited. ---- */
-  --track-display:-.05em;
-  --track-figure:-.045em;
-  --track-h2:-.04em;
-  --track-h3:-.027em;
-  --track-body:.005em;
+  /* ---- Tracking. Geist is drawn tight and the first pass only relieved it
+     by a tenth, which still read as letters leaning on each other at display
+     sizes. Opened roughly a third again: the display sits near -.03em rather
+     than the -.055em it started at, and body copy now carries positive
+     tracking instead of the -.01em it inherited. ---- */
+  --track-display:-.03em;
+  --track-figure:-.028em;
+  --track-h2:-.025em;
+  --track-h3:-.014em;
+  --track-body:.012em;
 
   --sans:var(--font-geist-sans),ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  /* Geist Pixel for every label and figure; Geist Mono catches Cyrillic,
-     which the pixel face does not ship. */
+  /* Geist Pixel for every label and figure (uz, en). */
   --mono:"Geist Pixel",var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,monospace;
   --ease:cubic-bezier(0.16,1,0.3,1);
   --r:10px;
@@ -1120,6 +1127,9 @@ const CSS = `
   font-feature-settings:"rlig" 1,"ss11" 1,"calt" 0;
   letter-spacing:var(--track-body);
 }
+/* Russian runs on Geist Mono end to end — the pixel face ships latin only,
+   and half a Cyrillic label falling back mid-word reads as a bug. */
+.nx-ru{--mono:var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,monospace;}
 .nx *{box-sizing:border-box;}
 .nx a{color:inherit;text-decoration:none;}
 .nx img{display:block;max-width:100%;}
@@ -1361,7 +1371,7 @@ const CSS = `
 /* No dividers — the figures are far enough apart to group on their own. */
 .nx-stat{display:flex;flex-direction:column;gap:8px;padding:4px 24px 4px 0;}
 .nx-stat-num{
-  font-family:var(--sans);font-size:var(--t-figure);font-weight:450;letter-spacing:-.05em;
+  font-family:var(--sans);font-size:var(--t-figure);font-weight:450;letter-spacing:var(--track-figure);
   color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;
 }
 .nx-proof{margin-top:32px;padding-top:28px;border-top:1px solid var(--line);}
@@ -1394,13 +1404,19 @@ const CSS = `
   display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:36px 0 0;
   padding-top:24px;border-top:1px solid var(--line);
 }
+/* Each mark carries its own brand hex and takes it on hover, with a small
+   lift — grey-on-grey gave the row nothing to reward a cursor with. */
 .nx-stackitem{
-  display:inline-flex;align-items:center;gap:7px;
+  display:inline-flex;align-items:center;gap:7px;cursor:default;
   font-family:var(--sans);font-size:var(--t-small);color:var(--muted);
-  transition:color .2s ease;
+  transition:color .25s var(--ease);
 }
-.nx-stackitem svg{color:var(--faint);transition:color .2s ease;flex-shrink:0;}
-.nx-stackitem:hover,.nx-stackitem:hover svg{color:var(--ink);}
+.nx-stackitem svg{
+  color:var(--faint);flex-shrink:0;
+  transition:color .25s var(--ease),transform .25s var(--ease);
+}
+.nx-stackitem:hover{color:var(--ink);}
+.nx-stackitem:hover svg{color:var(--brand,var(--ink));transform:scale(1.1);}
 
 /* ---------- 4. work ---------- */
 .nx-work{display:flex;flex-direction:column;overflow:hidden;padding:0;}
@@ -1435,7 +1451,7 @@ const CSS = `
 .nx-figure:last-child{border-right:0;}
 /* Fixed line box so a pending cell keeps the same baseline as a real number. */
 .nx-figure-num{
-  font-family:var(--sans);font-size:var(--t-figure);font-weight:450;letter-spacing:-.05em;
+  font-family:var(--sans);font-size:var(--t-figure);font-weight:450;letter-spacing:var(--track-figure);
   line-height:1;font-variant-numeric:tabular-nums;color:var(--dark-ink);
   display:flex;align-items:center;height:var(--t-figure);
 }
@@ -1481,9 +1497,9 @@ const CSS = `
 .nx-office-shot{margin:0;border-radius:var(--r);overflow:hidden;background:var(--canvas);}
 .nx-office-shot img{
   width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.03);
-  transition:filter .45s cubic-bezier(.42,0,.58,1),transform .55s cubic-bezier(.42,0,.58,1);
+  transition:filter .5s var(--ease),transform .5s var(--ease);
 }
-.nx-office-shot:hover img{filter:none;transform:scale(1.04);}
+.nx-office-shot:hover img{filter:none;transform:scale(1.03);}
 .nx-office-1{grid-column:span 4;aspect-ratio:16/9;}
 .nx-office-2{grid-column:span 2;aspect-ratio:3/4;}
 .nx-office-3,.nx-office-4,.nx-office-5{grid-column:span 2;aspect-ratio:4/3;}
@@ -1491,22 +1507,22 @@ const CSS = `
 .nx-team{display:grid;grid-template-columns:repeat(4,1fr);gap:24px 20px;}
 /* Portraits sit flat on the ground — a card frame around a face adds nothing. */
 .nx-member-photo{margin:0 0 14px;aspect-ratio:1/1;overflow:hidden;border-radius:var(--r);background:var(--canvas);}
-/* Colour and scale on one transition, same duration and the same ease-in-out,
-   so they arrive together instead of the saturation trailing the zoom. */
+/* Same curve and scale as the portfolio shots — ease-in-out felt sluggish
+   next to them because it holds back at the start. */
 .nx-member-photo img{
   width:100%;height:100%;object-fit:cover;object-position:center top;
   filter:grayscale(1) contrast(1.03);
-  transition:filter .45s cubic-bezier(.42,0,.58,1),transform .45s cubic-bezier(.42,0,.58,1);
+  transition:filter .5s var(--ease),transform .5s var(--ease);
 }
-.nx-member:hover .nx-member-photo img{filter:none;transform:scale(1.04);}
-.nx-member-name{font-family:var(--sans);font-size:var(--t-body);font-weight:500;letter-spacing:-.02em;color:var(--ink);margin:0 0 4px;}
+.nx-member:hover .nx-member-photo img{filter:none;transform:scale(1.03);}
+.nx-member-name{font-family:var(--sans);font-size:var(--t-body);font-weight:500;letter-spacing:var(--track-body);color:var(--ink);margin:0 0 4px;}
 .nx-member-role{display:block;margin-bottom:10px;}
 
 /* ---------- 8. voices ---------- */
 .nx-quote{display:flex;flex-direction:column;padding:30px;}
 .nx-quote-logo{height:24px;width:auto;max-width:130px;object-fit:contain;filter:grayscale(1);opacity:.62;margin-bottom:22px;}
 .nx-quote blockquote{
-  font-family:var(--sans);font-size:var(--t-lede);line-height:1.55;letter-spacing:-.015em;
+  font-family:var(--sans);font-size:var(--t-lede);line-height:1.55;letter-spacing:var(--track-body);
   color:var(--ink);margin:0 0 22px;text-wrap:pretty;
 }
 .nx-quote figcaption{display:flex;flex-direction:column;gap:4px;margin-top:auto;}
@@ -1527,7 +1543,7 @@ const CSS = `
 .nx-price{display:flex;flex-direction:column;padding:30px;position:relative;}
 .nx-price.feat{border-color:var(--ink);box-shadow:var(--shadow-lift);}
 .nx-price-amt{
-  font-family:var(--sans);font-size:var(--t-h2);font-weight:450;letter-spacing:-.045em;color:var(--ink);
+  font-family:var(--sans);font-size:var(--t-h2);font-weight:450;letter-spacing:var(--track-h2);color:var(--ink);
   margin:14px 0 4px;line-height:1;font-variant-numeric:tabular-nums;
 }
 .nx-price-period{display:block;margin-bottom:16px;}
@@ -1577,7 +1593,7 @@ const CSS = `
   width:100%;background:transparent;border:0;cursor:pointer;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
   padding:22px 4px;text-align:left;
-  font-family:var(--sans);font-size:var(--t-lede);font-weight:450;letter-spacing:-.015em;color:var(--ink);
+  font-family:var(--sans);font-size:var(--t-lede);font-weight:450;letter-spacing:var(--track-body);color:var(--ink);
 }
 .nx-faq-ico{color:var(--faint);display:inline-flex;transition:transform .42s cubic-bezier(.42,0,.58,1),color .3s ease;flex-shrink:0;}
 .nx-faq-row.open .nx-faq-ico{transform:rotate(180deg);color:var(--ink);}
@@ -1677,6 +1693,17 @@ const CSS = `
 .nx-footer-legal-rows{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:10px;}
 .nx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;}
 
+/* ---------- cursors ----------
+   The I-beam is the browser's default over any text node, so chrome that is
+   not meant to be read as prose — eyebrows, chips, badges, figures, marks —
+   was inviting a caret it can do nothing with. Text stays selectable; only
+   the pointer changes. Anything genuinely interactive keeps its own cursor. */
+.nx-eyebrow,.nx-micro,.nx-tags li,.nx-stat,.nx-stat-num,.nx-figure,.nx-figure-num,
+.nx-figure-wait,.nx-price-badge,.nx-step-n,.nx-frame-url,.nx-slot,.nx-slot img,
+.nx-quote-logo,.nx-cred-plate,.nx-post-ph,.nx-ph,.nx-dot,.nx-member-photo,
+.nx-office-shot,.nx-hero-shot,.nx-frame{cursor:default;}
+.nx-btn,.nx-tab,.nx-icon-btn,.nx-burger,.nx-faq-q,.nx-lang-opt{cursor:pointer;}
+
 /* ---------- touch targets ----------
    Inline links and footer rows sat at 20–24px tall. Fine for a cursor,
    too small for a thumb, so they grow on coarse pointers only. */
@@ -1699,7 +1726,7 @@ const CSS = `
   font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.07em;
   text-transform:uppercase;color:var(--muted);
 }
-.nx-card-title{font-family:var(--sans);font-size:var(--t-h3);font-weight:450;letter-spacing:-.03em;color:var(--ink);margin:0 0 8px;}
+.nx-card-title{font-family:var(--sans);font-size:var(--t-h3);font-weight:450;letter-spacing:var(--track-h3);color:var(--ink);margin:0 0 8px;}
 .nx-card-desc{font-family:var(--sans);font-size:var(--t-body);line-height:1.55;color:var(--body);margin:0;}
 .nx-form{display:flex;flex-direction:column;gap:14px;}
 .nx-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
