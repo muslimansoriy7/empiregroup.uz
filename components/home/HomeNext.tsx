@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { homeCopy, CONTACT } from "@/content/home";
+import { toolLogos } from "@/content/logos";
 import { locales, localeShort } from "@/content";
 import { localePath, stripLocale } from "@/lib/locale-path";
 import { useI18n } from "@/lib/i18n";
@@ -70,10 +71,15 @@ const TEAM_PEOPLE: { name: string; img: string }[] = [
   { name: "Malika Sobirova", img: "/team/malika-sobirova.webp" },
 ];
 
+/* All seven, laid out as a mosaic rather than a fixed trio. */
 const OFFICE_PHOTOS = [
   "/office/office-01.webp",
   "/office/office-04.webp",
   "/office/office-03.webp",
+  "/office/office-05.webp",
+  "/office/office-07.webp",
+  "/office/office-02.webp",
+  "/office/office-06.webp",
 ];
 
 const CREDENTIAL_MARKS: { img: string; scale: number }[] = [
@@ -91,11 +97,13 @@ const QUOTE_LOGOS = [
   "/clients/Group.webp",
 ];
 
-/* Tech names folded into the services chapter — the twelve-tile logo wall it
-   replaces cost a full screen and told a factory director nothing. */
+/* Tech folded into the services chapter — mark plus name on one line, where
+   the twelve-tile logo wall it replaces cost a whole screen. */
+/* Only names that have a mark in content/logos — Odoo has none there, and it
+   is already carried by the service chips, the case and the credentials. */
 const STACK_LINE = [
   "React", "Next.js", "TypeScript", "Node.js", "Python", "Flutter",
-  "PostgreSQL", "Docker", "Odoo", "Supabase",
+  "PostgreSQL", "Docker", "Supabase", "Git",
 ];
 
 /* ============================== BRAND ============================== */
@@ -188,8 +196,12 @@ function LangSwitch({ label, className = "" }: { label: string; className?: stri
 
 const PROJECTS_PREVIEW = 4;
 
+/* Once per browser session, a minute in. */
+const POP_KEY = "eg_consult_shown";
+const POP_DELAY = 60_000;
+
 /** Chapters the nav tracks. Order matters — it drives the active marker. */
-const NAV_IDS = ["xizmatlar", "ishlar", "keys", "jamoa", "narxlar", "jurnal"] as const;
+const NAV_IDS = ["xizmatlar", "ishlar", "jamoa", "narxlar", "jurnal"] as const;
 
 export function HomeNext({
   journal,
@@ -198,7 +210,7 @@ export function HomeNext({
   journal: JournalPost[];
   blogHref: string;
 }) {
-  const { locale } = useI18n();
+  const { locale, t: dict } = useI18n();
   const t = homeCopy[locale];
 
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -206,9 +218,14 @@ export function HomeNext({
   const [showAll, setShowAll] = useState(false);
   const [track, setTrack] = useState<"software" | "odoo">("software");
   const [active, setActive] = useState<string>("");
+  const [popOpen, setPopOpen] = useState(false);
+  const popRef = useRef<HTMLDialogElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
+  const stack = STACK_LINE.map((title) => toolLogos.find((x) => x.title === title)).filter(
+    (x): x is (typeof toolLogos)[number] => Boolean(x && x.path)
+  );
   const projects = t.portfolio.items.map((p, i) => ({ ...p, ...PROJECT_SHOTS[i] }));
   const team = TEAM_PEOPLE.map((p, i) => ({ ...p, ...t.team.members[i] }));
   const credentials = CREDENTIAL_MARKS.map((c, i) => ({ ...c, ...t.credentials.items[i] }));
@@ -272,6 +289,33 @@ export function HomeNext({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* The consultation prompt, ~60s in, once per browser session. It carries the
+     page's own type and surfaces rather than the old site's, and the CTA
+     buttons mark it as shown so it never lands on someone already writing. */
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(POP_KEY)) return;
+    } catch {
+      return;
+    }
+    const id = window.setTimeout(() => {
+      try {
+        if (sessionStorage.getItem(POP_KEY)) return;
+        sessionStorage.setItem(POP_KEY, "1");
+      } catch {}
+      setPopOpen(true);
+    }, POP_DELAY);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  // Native <dialog> gives the modal its focus trap, Escape and inert backdrop.
+  useEffect(() => {
+    const dlg = popRef.current;
+    if (!dlg) return;
+    if (popOpen && !dlg.open) dlg.showModal();
+    else if (!popOpen && dlg.open) dlg.close();
+  }, [popOpen]);
+
   useEffect(() => {
     if (!menuOpen) return;
     const { body } = document;
@@ -295,7 +339,6 @@ export function HomeNext({
   const NAV_LINKS: [string, string][] = [
     [cap(t.services.eyebrow), "#xizmatlar"],
     [cap(t.portfolio.eyebrow), "#ishlar"],
-    [t.caseStudy.client, "#keys"],
     [cap(t.team.eyebrow), "#jamoa"],
     [cap(t.pricing.eyebrow), "#narxlar"],
     [cap(t.journal.eyebrow), "#jurnal"],
@@ -380,16 +423,59 @@ export function HomeNext({
       </header>
       <div className={`nx-scrim${menuOpen ? " open" : ""}`} onClick={closeMenu} aria-hidden="true" />
 
+      {/* ============ consultation prompt ============ */}
+      <dialog
+        ref={popRef}
+        className="nx-pop"
+        aria-labelledby="nx-pop-h"
+        onClose={() => setPopOpen(false)}
+        onClick={(e) => {
+          if (e.target === popRef.current) setPopOpen(false);
+        }}
+      >
+        <div className="nx-pop-inner">
+          <button
+            type="button"
+            className="nx-pop-x"
+            onClick={() => setPopOpen(false)}
+            aria-label={dict.consult.close}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          <p className="nx-eyebrow">{t.cta.eyebrow}</p>
+          <h2 className="nx-h3 nx-pop-h" id="nx-pop-h">
+            {dict.consult.title}
+          </h2>
+          <p className="nx-small nx-pop-sub">{dict.consult.subtitle}</p>
+
+          <p className="nx-pop-note">
+            <span className="nx-pop-dot" aria-hidden="true" />
+            <strong>{dict.consult.responseBadge}</strong> · {dict.consult.urgency}
+          </p>
+
+          <HomeForm ns="nx" compact />
+
+          <a
+            className="nx-btn nx-btn-line nx-btn-block nx-pop-tg"
+            href={CONTACT.telegram.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {dict.consult.telegramCta}
+          </a>
+        </div>
+      </dialog>
+
       <main id="top">
         {/* ============ 1. HERO — type, then the actual product ============ */}
         <section className="nx-hero">
           <div className="nx-hero-glow" aria-hidden="true" />
           <div className="nx-wrap">
             <div className="nx-hero-copy nx-in">
-              <p className="nx-eyebrow">
-                <Mark size={9} />
-                {t.hero.eyebrow}
-              </p>
+              <p className="nx-eyebrow">{t.hero.eyebrow}</p>
               <h1 className="nx-display">
                 {t.hero.titleBefore}
                 <span className="nx-grad">
@@ -491,13 +577,19 @@ export function HomeNext({
                 </article>
               ))}
             </div>
-            {/* The old twelve-tile logo wall, reduced to one honest line. */}
-            <p className="nx-stackline nx-in">
+            {/* The old twelve-tile logo wall, reduced to one line — mark and
+                name together, so it is recognisable as well as readable. */}
+            <div className="nx-stackline nx-in">
               <span className="nx-micro">{t.stack.eyebrow}</span>
-              {STACK_LINE.map((n) => (
-                <span key={n}>{n}</span>
+              {stack.map((tool) => (
+                <span className="nx-stackitem" key={tool.title}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d={tool.path} fill="currentColor" />
+                  </svg>
+                  {tool.title}
+                </span>
               ))}
-            </p>
+            </div>
           </div>
         </section>
 
@@ -771,11 +863,25 @@ export function HomeNext({
               <div className="nx-trio nx-in">
                 {journal.map((post) => (
                   <Link className="nx-raised nx-post" key={post.slug} href={post.href}>
-                    <p className="nx-micro">{[post.category, post.date].filter(Boolean).join(" · ")}</p>
-                    <h3 className="nx-h3">{post.title}</h3>
-                    {post.excerpt && <p className="nx-small">{post.excerpt}</p>}
-                    <span className="nx-link">
-                      {t.journal.readLabel} <Arrow size={13} />
+                    {/* Cover slot. Posts carry no cover_url yet, so the frame
+                        holds its place until real artwork lands. */}
+                    <span className="nx-post-cover">
+                      {post.cover ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={post.cover} alt="" loading="lazy" />
+                      ) : (
+                        <span className="nx-post-ph" aria-hidden="true">
+                          <Mark size={18} />
+                        </span>
+                      )}
+                    </span>
+                    <span className="nx-post-body">
+                      <p className="nx-micro">{[post.category, post.date].filter(Boolean).join(" · ")}</p>
+                      <h3 className="nx-h3">{post.title}</h3>
+                      {post.excerpt && <p className="nx-small">{post.excerpt}</p>}
+                      <span className="nx-link">
+                        {t.journal.readLabel} <Arrow size={13} />
+                      </span>
                     </span>
                   </Link>
                 ))}
@@ -832,6 +938,8 @@ export function HomeNext({
                 <p className="nx-eyebrow">{t.cta.eyebrow}</p>
                 <h2 className="nx-chapter-title nx-contact-h">{t.cta.title}</h2>
 
+                <p className="nx-lede nx-contact-lede">{t.guarantee.sub}</p>
+
                 <div className="nx-channels">
                   <div className="nx-channel">
                     <span className="nx-micro">{t.cta.call}</span>
@@ -846,7 +954,6 @@ export function HomeNext({
                     <a href={CONTACT.email.href}>{CONTACT.email.label}</a>
                   </div>
                 </div>
-                <p className="nx-micro nx-contact-meta">{t.cta.meta}</p>
               </div>
 
               <div className="nx-panel nx-form-card nx-in">
@@ -896,6 +1003,7 @@ export function HomeNext({
             {(
               [
                 [t.footer.servicesHead, t.footer.services],
+                [t.footer.regionsHead, t.footer.regions],
                 [t.footer.companyHead, t.footer.company],
                 [t.footer.contactHead, t.footer.contact],
               ] as [string, [string, string][]][]
@@ -983,10 +1091,23 @@ const CSS = `
   --t-lede:17px;
   --t-body:15px;
   --t-small:13px;
-  --t-micro:11px;
+  /* Pixel faces read smaller than a mono at the same size, so the label step
+     is set 20% up from the 11px it used to be. */
+  --t-micro:13px;
+
+  /* ---- Tracking. Headings were fitted tight enough that letters touched at
+     display sizes; every step is opened ~10%, and body copy gets a little air
+     of its own rather than the -0.01em it inherited. ---- */
+  --track-display:-.05em;
+  --track-figure:-.045em;
+  --track-h2:-.04em;
+  --track-h3:-.027em;
+  --track-body:.005em;
 
   --sans:var(--font-geist-sans),ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  /* Geist Pixel for every label and figure; Geist Mono catches Cyrillic,
+     which the pixel face does not ship. */
+  --mono:"Geist Pixel",var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,monospace;
   --ease:cubic-bezier(0.16,1,0.3,1);
   --r:10px;
   --shadow:0 1px 2px rgba(15,16,19,.04),0 8px 24px -12px rgba(15,16,19,.10);
@@ -997,12 +1118,15 @@ const CSS = `
   font-family:var(--sans);
   -webkit-font-smoothing:antialiased;
   font-feature-settings:"rlig" 1,"ss11" 1,"calt" 0;
-  letter-spacing:-.01em;
+  letter-spacing:var(--track-body);
 }
 .nx *{box-sizing:border-box;}
 .nx a{color:inherit;text-decoration:none;}
 .nx img{display:block;max-width:100%;}
-.nx ul,.nx ol{list-style:none;margin:0;padding:0;}
+/* :where() keeps the reset at zero specificity, so a component class can set
+   its own margin. Written as a descendant selector it scored (0,1,1), beat
+   every (0,1,0) rule, and flattened the spacing under every list on the page. */
+.nx :where(ul,ol){list-style:none;margin:0;padding:0;}
 .nx section[id]{scroll-margin-top:88px;}
 
 /* ---------- reveal: chapter openings only ---------- */
@@ -1022,19 +1146,19 @@ const CSS = `
 
 /* ---------- type ---------- */
 .nx-display{
-  font-family:var(--sans);font-size:var(--t-display);line-height:1.02;letter-spacing:-.055em;
+  font-family:var(--sans);font-size:var(--t-display);line-height:1.02;letter-spacing:var(--track-display);
   font-weight:450;color:var(--ink);margin:0 0 22px;text-wrap:balance;
 }
 .nx-chapter-title{
-  font-family:var(--sans);font-size:var(--t-figure);line-height:1.06;letter-spacing:-.05em;
+  font-family:var(--sans);font-size:var(--t-figure);line-height:1.06;letter-spacing:var(--track-figure);
   font-weight:450;margin:0 0 14px;text-wrap:balance;
 }
 .nx-h2{
-  font-family:var(--sans);font-size:var(--t-h2);line-height:1.1;letter-spacing:-.045em;
+  font-family:var(--sans);font-size:var(--t-h2);line-height:1.1;letter-spacing:var(--track-h2);
   font-weight:450;color:var(--ink);margin:0;text-wrap:balance;
 }
 .nx-h3{
-  font-family:var(--sans);font-size:var(--t-h3);line-height:1.28;letter-spacing:-.03em;
+  font-family:var(--sans);font-size:var(--t-h3);line-height:1.28;letter-spacing:var(--track-h3);
   font-weight:450;color:var(--ink);margin:0 0 10px;text-wrap:balance;
 }
 .nx-lede{
@@ -1060,9 +1184,14 @@ const CSS = `
 .nx-head{margin-bottom:48px;max-width:680px;}
 .nx-head-wide{max-width:820px;}
 .nx-head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;max-width:none;}
+/* margin-top:auto only pushes when a card has slack; when it does not, the
+   link ended up jammed against the row above it. The floor keeps the gap. */
+/* margin-top:auto only pushes when a card has slack; the floor keeps a gap
+   when it does not. */
 .nx-link{
   font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--ink);
-  display:inline-flex;align-items:center;gap:6px;margin-top:auto;position:relative;
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:auto;padding-top:10px;position:relative;
 }
 .nx-link svg{transition:transform .25s var(--ease);}
 .nx-raised:hover .nx-link svg,.nx-link:hover svg{transform:translateX(3px);}
@@ -1229,8 +1358,8 @@ const CSS = `
 
 /* ---------- 2. proof ---------- */
 .nx-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
-.nx-stat{display:flex;flex-direction:column;gap:6px;padding:4px 24px 4px 0;border-right:1px solid var(--line);}
-.nx-stat:last-child{border-right:0;}
+/* No dividers — the figures are far enough apart to group on their own. */
+.nx-stat{display:flex;flex-direction:column;gap:8px;padding:4px 24px 4px 0;}
 .nx-stat-num{
   font-family:var(--sans);font-size:var(--t-figure);font-weight:450;letter-spacing:-.05em;
   color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;
@@ -1265,9 +1394,13 @@ const CSS = `
   display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:36px 0 0;
   padding-top:24px;border-top:1px solid var(--line);
 }
-.nx-stackline span:not(.nx-micro){
+.nx-stackitem{
+  display:inline-flex;align-items:center;gap:7px;
   font-family:var(--sans);font-size:var(--t-small);color:var(--muted);
+  transition:color .2s ease;
 }
+.nx-stackitem svg{color:var(--faint);transition:color .2s ease;flex-shrink:0;}
+.nx-stackitem:hover,.nx-stackitem:hover svg{color:var(--ink);}
 
 /* ---------- 4. work ---------- */
 .nx-work{display:flex;flex-direction:column;overflow:hidden;padding:0;}
@@ -1343,17 +1476,29 @@ const CSS = `
 .nx-step .nx-body{margin:0;}
 
 /* ---------- 7. team + office ---------- */
-.nx-office{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin-bottom:56px;}
+/* Seven photos on a six-column mosaic: one wide opener, then pairs. */
+.nx-office{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:56px;}
 .nx-office-shot{margin:0;border-radius:var(--r);overflow:hidden;background:var(--canvas);}
-.nx-office-shot img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.03);transition:filter .4s ease;}
-.nx-office-shot:hover img{filter:none;}
-.nx-office-1{aspect-ratio:16/10;}
-.nx-office-2,.nx-office-3{aspect-ratio:4/5;}
+.nx-office-shot img{
+  width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.03);
+  transition:filter .45s cubic-bezier(.42,0,.58,1),transform .55s cubic-bezier(.42,0,.58,1);
+}
+.nx-office-shot:hover img{filter:none;transform:scale(1.04);}
+.nx-office-1{grid-column:span 4;aspect-ratio:16/9;}
+.nx-office-2{grid-column:span 2;aspect-ratio:3/4;}
+.nx-office-3,.nx-office-4,.nx-office-5{grid-column:span 2;aspect-ratio:4/3;}
+.nx-office-6,.nx-office-7{grid-column:span 3;aspect-ratio:16/9;}
 .nx-team{display:grid;grid-template-columns:repeat(4,1fr);gap:24px 20px;}
 /* Portraits sit flat on the ground — a card frame around a face adds nothing. */
 .nx-member-photo{margin:0 0 14px;aspect-ratio:1/1;overflow:hidden;border-radius:var(--r);background:var(--canvas);}
-.nx-member-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(1) contrast(1.03);transition:filter .35s ease;}
-.nx-member:hover .nx-member-photo img{filter:none;}
+/* Colour and scale on one transition, same duration and the same ease-in-out,
+   so they arrive together instead of the saturation trailing the zoom. */
+.nx-member-photo img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;
+  filter:grayscale(1) contrast(1.03);
+  transition:filter .45s cubic-bezier(.42,0,.58,1),transform .45s cubic-bezier(.42,0,.58,1);
+}
+.nx-member:hover .nx-member-photo img{filter:none;transform:scale(1.04);}
 .nx-member-name{font-family:var(--sans);font-size:var(--t-body);font-weight:500;letter-spacing:-.02em;color:var(--ink);margin:0 0 4px;}
 .nx-member-role{display:block;margin-bottom:10px;}
 
@@ -1387,12 +1532,14 @@ const CSS = `
 }
 .nx-price-period{display:block;margin-bottom:16px;}
 .nx-price-desc{color:var(--muted);margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line);}
-.nx-price-list{display:flex;flex-direction:column;gap:11px;margin-bottom:26px;}
+.nx-price-list{display:flex;flex-direction:column;gap:11px;margin-bottom:32px;}
 .nx-price-list li{
   font-family:var(--sans);font-size:var(--t-body);color:var(--body);line-height:1.45;
   padding-left:20px;position:relative;
 }
 .nx-price-list li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:600;}
+/* Same trap as .nx-link: on a card whose list fills the height, auto resolves
+   to zero — the 32px on the list above is what actually holds the gap. */
 .nx-price .nx-btn{margin-top:auto;}
 .nx-price-badge{
   position:absolute;top:-11px;left:30px;
@@ -1407,9 +1554,20 @@ const CSS = `
 .nx-guard-list .nx-small{color:var(--muted);}
 
 /* ---------- 10. journal ---------- */
-.nx-post{display:flex;flex-direction:column;padding:28px;}
+.nx-post{display:flex;flex-direction:column;padding:0;overflow:hidden;}
+.nx-post-cover{
+  display:block;aspect-ratio:16/9;overflow:hidden;background:var(--canvas);
+  border-bottom:1px solid var(--line);
+}
+.nx-post-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);}
+.nx-post:hover .nx-post-cover img{transform:scale(1.03);}
+.nx-post-ph{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--line-strong);
+  background-image:repeating-linear-gradient(45deg,transparent,transparent 11px,var(--line) 11px,var(--line) 12px);
+}
+.nx-post-body{display:flex;flex-direction:column;flex:1;padding:24px 26px 26px;}
 .nx-post .nx-micro{margin-bottom:12px;}
-.nx-post .nx-small{color:var(--muted);margin-bottom:22px;}
+.nx-post .nx-small{color:var(--muted);margin-bottom:20px;}
 
 /* ---------- 11. faq ---------- */
 .nx-faq{display:flex;flex-direction:column;}
@@ -1421,17 +1579,29 @@ const CSS = `
   padding:22px 4px;text-align:left;
   font-family:var(--sans);font-size:var(--t-lede);font-weight:450;letter-spacing:-.015em;color:var(--ink);
 }
-.nx-faq-ico{color:var(--faint);display:inline-flex;transition:transform .3s var(--ease);flex-shrink:0;}
+.nx-faq-ico{color:var(--faint);display:inline-flex;transition:transform .42s cubic-bezier(.42,0,.58,1),color .3s ease;flex-shrink:0;}
 .nx-faq-row.open .nx-faq-ico{transform:rotate(180deg);color:var(--ink);}
-.nx-faq-a{max-height:0;opacity:0;overflow:hidden;transition:max-height .34s var(--ease),opacity .3s ease;}
-.nx-faq-row.open .nx-faq-a{max-height:520px;opacity:1;}
-.nx-faq-a p{margin:0;padding:0 4px 24px;font-family:var(--sans);font-size:var(--t-body);line-height:1.6;color:var(--body);max-width:68ch;}
+/* grid-template-rows 0fr→1fr animates to the content's real height, so the
+   panel opens and closes at an even speed. max-height had to guess a ceiling,
+   and every answer shorter than the guess snapped at the end. Ease-in-out on
+   both directions. */
+.nx-faq-a{
+  display:grid;grid-template-rows:0fr;opacity:0;
+  transition:grid-template-rows .42s cubic-bezier(.42,0,.58,1),opacity .3s cubic-bezier(.42,0,.58,1);
+}
+.nx-faq-a > p{overflow:hidden;margin:0;padding:0 4px;font-family:var(--sans);font-size:var(--t-body);line-height:1.6;color:var(--body);max-width:68ch;}
+.nx-faq-row.open .nx-faq-a{grid-template-rows:1fr;opacity:1;}
+.nx-faq-row.open .nx-faq-a > p{padding-bottom:24px;}
 
 /* ---------- contact ---------- */
 .nx-contact{background:var(--canvas-alt);border-top:1px solid var(--line);padding:96px 0;}
 .nx-contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:56px;align-items:start;}
-.nx-contact-h{max-width:460px;}
-.nx-channels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:26px 0 18px;}
+.nx-contact-h{max-width:460px;margin-bottom:18px;}
+/* The meta line under the channels repeated the phone number that was already
+   two rows above it. Replaced with the one thing the reader still wants to
+   know before writing: that there is no obligation. */
+.nx-contact-lede{max-width:440px;margin-bottom:0;color:var(--muted);font-size:var(--t-body);}
+.nx-channels{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:28px 0 0;}
 .nx-channel{display:flex;flex-direction:column;gap:4px;}
 .nx-channel .nx-micro{margin-bottom:6px;}
 .nx-channel a{
@@ -1455,9 +1625,49 @@ const CSS = `
 .nx-cred-text{display:flex;flex-direction:column;gap:3px;min-width:0;}
 .nx-cred-text strong{font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--ink);text-wrap:balance;}
 
+/* ---------- consultation prompt ---------- */
+/* margin:auto is what centres a modal dialog. Tailwind's preflight resets
+   margin to 0 on every element, which silently kills the UA default. */
+.nx-pop{
+  margin:auto;border:0;padding:0;background:transparent;
+  width:100%;max-width:min(460px,calc(100vw - 32px));
+  max-height:calc(100dvh - 48px);overflow:visible;color:var(--ink);
+}
+.nx-pop::backdrop{background:rgba(12,13,16,.5);backdrop-filter:blur(3px);}
+.nx-pop[open]{animation:nx-pop-in .32s cubic-bezier(.42,0,.58,1);}
+@keyframes nx-pop-in{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
+.nx-pop-inner{
+  position:relative;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:32px;box-shadow:0 40px 90px -30px rgba(12,13,16,.5);
+  max-height:calc(100dvh - 48px);overflow-y:auto;
+}
+.nx-pop-x{
+  position:absolute;top:16px;right:16px;width:32px;height:32px;border:0;background:transparent;
+  color:var(--muted);border-radius:8px;cursor:pointer;display:inline-flex;
+  align-items:center;justify-content:center;transition:color .2s ease,background .2s ease;
+}
+.nx-pop-x:hover{color:var(--ink);background:var(--canvas);}
+.nx-pop-h{margin:0 0 8px;padding-right:36px;}
+.nx-pop-sub{color:var(--muted);margin-bottom:18px;}
+/* One flowing sentence — a flex row put the bold half on its own two lines
+   and left the rest hanging beside it. */
+.nx-pop-note{
+  margin:0 0 20px;padding:12px 14px;
+  border-radius:10px;background:var(--canvas);border:1px solid var(--line);
+  font-family:var(--sans);font-size:var(--t-small);line-height:1.5;color:var(--muted);
+}
+.nx-pop-note strong{color:var(--ink);font-weight:500;}
+.nx-pop-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);
+  margin-right:8px;vertical-align:middle;
+  animation:nx-pulse 1.8s ease-in-out infinite;
+}
+@keyframes nx-pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+.nx-pop-tg{margin-top:12px;}
+
 /* ---------- footer ---------- */
 .nx-footer{background:var(--canvas);border-top:1px solid var(--line);padding:64px 0 36px;}
-.nx-footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.2fr;gap:36px;padding-bottom:40px;}
+.nx-footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1.15fr 1fr 1fr;gap:32px;padding-bottom:40px;}
 .nx-footer-desc{color:var(--muted);margin-top:16px;max-width:320px;}
 .nx-footer-col{display:flex;flex-direction:column;gap:11px;}
 .nx-footer-h{display:block;margin-bottom:4px;color:var(--ink);}
@@ -1569,11 +1779,11 @@ const CSS = `
   .nx-steps{grid-template-columns:1fr 1fr;gap:28px 0;}
   .nx-step:nth-child(3){padding-left:0;border-left:0;}
   .nx-trio{grid-template-columns:1fr;}
-  /* Both cells share one ratio here — a 16/10 next to a 4/5 left 214px of
+  /* Every cell shares one ratio here — mixing 16/9 with 3/4 left a block of
      empty grey under the shorter one. */
   .nx-office{grid-template-columns:1fr 1fr;}
-  .nx-office-1,.nx-office-2{aspect-ratio:4/3;}
-  .nx-office-3{display:none;}
+  .nx-office-shot{grid-column:auto!important;aspect-ratio:4/3!important;}
+  .nx-office-7{display:none;}
   .nx-contact-grid{grid-template-columns:1fr;gap:40px;}
   .nx-creds{grid-template-columns:1fr 1fr;}
   .nx-footer-grid{grid-template-columns:1fr 1fr;}
@@ -1589,9 +1799,7 @@ const CSS = `
      phone the phone build is the honest thing to show. */
   .nx-frame-desktop{display:none;}
   .nx-frame-phone{position:static;width:200px;margin:0 auto;bottom:auto;left:auto;}
-  .nx-stats{grid-template-columns:1fr 1fr;gap:20px 0;}
-  .nx-stat{border-right:0;}
-  .nx-stat:nth-child(-n+2){padding-bottom:20px;border-bottom:1px solid var(--line);}
+  .nx-stats{grid-template-columns:1fr 1fr;gap:24px 0;}
   .nx-case-figures{grid-template-columns:1fr 1fr;}
   .nx-figure{border-right:0;padding:20px 16px 20px 0;}
   .nx-figure:nth-child(-n+2){border-bottom:1px solid var(--dark-line);}
@@ -1600,8 +1808,8 @@ const CSS = `
   .nx-step,.nx-step + .nx-step{padding:0 0 24px;border-left:0;}
   .nx-step + .nx-step{padding-top:24px;border-top:1px solid var(--line);}
   .nx-team{grid-template-columns:1fr 1fr;}
-  .nx-office{grid-template-columns:1fr;}
-  .nx-office-2{display:none;}
+  .nx-office{grid-template-columns:1fr 1fr;gap:10px;}
+  .nx-office-6,.nx-office-7{display:none;}
   .nx-guard-list{grid-template-columns:1fr;}
   .nx-channels{grid-template-columns:1fr;}
   .nx-creds{grid-template-columns:1fr;gap:18px;}

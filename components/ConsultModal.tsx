@@ -27,12 +27,12 @@ const AUTO_KEY = "sd_consult_autoshown";
 const AUTO_DELAY = 60_000; // 60s
 
 /**
- * The homepage carries its own lead form in its own visual language, so the
- * shared modal popping over it would show two designs at once and ask for
- * details the visitor can already leave in front of them. Every other page
- * still gets it. Matches `/`, `/ru` and `/en`.
+ * Pages that carry their own lead form and their own prompt: the homepage and
+ * the /v11 review copy of it. Letting the shared modal fire there would put
+ * two dialogs on screen at once, in two different visual languages.
+ * Matches `/`, `/ru`, `/en` and the same three with `/v11`.
  */
-const HAS_OWN_FORM = /^\/(?:ru|en)?\/?$/;
+const HAS_OWN_FORM = /^\/(?:ru|en)?\/?(?:v11\/?)?$/;
 
 export function ConsultProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setOpen] = useState(false);

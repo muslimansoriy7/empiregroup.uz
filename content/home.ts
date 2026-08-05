@@ -127,6 +127,9 @@ export type HomeCopy = {
     companyHead: string;
     contactHead: string;
     services: Pair[];
+    /** Local landing pages — the GEO half of the SEO work. */
+    regionsHead: string;
+    regions: Pair[];
     company: Pair[];
     contact: Pair[];
     /** Legal identity a UZ buyer checks before signing. */
@@ -158,7 +161,7 @@ const uz: HomeCopy = {
       ["Loyihalar", "#loyihalar"],
       ["Jarayon", "#jarayon"],
       ["Sharhlar", "#sharhlar"],
-      ["Jurnal", "#jurnal"],
+      ["Maqolalar", "#jurnal"],
     ],
     cta: "Bepul konsultatsiya",
     openMenu: "Menyuni ochish",
@@ -303,7 +306,7 @@ const uz: HomeCopy = {
   },
   stack: { eyebrow: "BIZNING STACK", title: "Ishonchli, sanoat standarti texnologiyalar." },
   journal: {
-    eyebrow: "JURNAL",
+    eyebrow: "MAQOLALAR",
     title: "Nimani bilamiz — ochiq yozamiz.",
     sub: "ERP joriy qilish, AI avtomatlashtirish va raqamlashtirish bo'yicha amaliy maqolalar.",
     readLabel: "O'qish",
@@ -387,14 +390,25 @@ const uz: HomeCopy = {
     services: [
       ["Veb-sayt yaratish", "/xizmatlar/veb-sayt-yaratish-toshkent"],
       ["Mobil ilova yaratish", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
-      ["CRM va ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["CRM va ERP joriy qilish", "/xizmatlar/crm-erp-toshkent"],
+      ["Odoo ERP & AI", "#xizmatlar"],
+      ["Biznes avtomatlashtirish", "/tizimlashtirish"],
       ["Narxlar", "/narxlar"],
     ],
+    regionsHead: "Hududlar",
+    regions: [
+      ["Toshkentda veb-sayt yaratish", "/xizmatlar/veb-sayt-yaratish-toshkent"],
+      ["Toshkentda mobil ilova", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
+      ["Samarqandda veb-sayt", "/xizmatlar/veb-sayt-yaratish-samarqand"],
+      ["Buxoroda IT xizmatlar", "/xizmatlar/it-xizmatlar-buxoro"],
+    ],
     company: [
-      ["Loyihalar", "#loyihalar"],
+      ["Loyihalar", "#ishlar"],
+      ["Shodlik Textile keysi", "#keys"],
       ["Jarayon", "#jarayon"],
-      ["Jamoa", "#team"],
-      ["Blog", "/blog"],
+      ["Jamoa", "#jamoa"],
+      ["Sharhlar", "#sharhlar"],
+      ["Maqolalar", "/blog"],
     ],
     contact: [
       [CONTACT.phonePrimary.label, CONTACT.phonePrimary.href],
@@ -640,13 +654,24 @@ const ru: HomeCopy = {
     services: [
       ["Создание сайта", "/xizmatlar/veb-sayt-yaratish-toshkent"],
       ["Мобильные приложения", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
-      ["CRM и ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["Внедрение CRM и ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["Odoo ERP & AI", "#xizmatlar"],
+      ["Автоматизация бизнеса", "/tizimlashtirish"],
       ["Цены", "/narxlar"],
     ],
+    regionsHead: "Регионы",
+    regions: [
+      ["Создание сайта в Ташкенте", "/xizmatlar/veb-sayt-yaratish-toshkent"],
+      ["Мобильные приложения в Ташкенте", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
+      ["Создание сайта в Самарканде", "/xizmatlar/veb-sayt-yaratish-samarqand"],
+      ["IT-услуги в Бухаре", "/xizmatlar/it-xizmatlar-buxoro"],
+    ],
     company: [
-      ["Проекты", "#loyihalar"],
+      ["Проекты", "#ishlar"],
+      ["Кейс Shodlik Textile", "#keys"],
       ["Процесс", "#jarayon"],
-      ["Команда", "#team"],
+      ["Команда", "#jamoa"],
+      ["Отзывы", "#sharhlar"],
       ["Блог", "/blog"],
     ],
     contact: [
@@ -893,13 +918,24 @@ const en: HomeCopy = {
     services: [
       ["Website development", "/xizmatlar/veb-sayt-yaratish-toshkent"],
       ["Mobile app development", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
-      ["CRM and ERP", "/xizmatlar/crm-erp-toshkent"],
+      ["CRM and ERP rollout", "/xizmatlar/crm-erp-toshkent"],
+      ["Odoo ERP & AI", "#xizmatlar"],
+      ["Business automation", "/tizimlashtirish"],
       ["Pricing", "/narxlar"],
     ],
+    regionsHead: "Regions",
+    regions: [
+      ["Website development in Tashkent", "/xizmatlar/veb-sayt-yaratish-toshkent"],
+      ["Mobile apps in Tashkent", "/xizmatlar/mobil-ilova-yaratish-toshkent"],
+      ["Website development in Samarkand", "/xizmatlar/veb-sayt-yaratish-samarqand"],
+      ["IT services in Bukhara", "/xizmatlar/it-xizmatlar-buxoro"],
+    ],
     company: [
-      ["Work", "#loyihalar"],
+      ["Work", "#ishlar"],
+      ["Shodlik Textile case", "#keys"],
       ["Process", "#jarayon"],
-      ["Team", "#team"],
+      ["Team", "#jamoa"],
+      ["Reviews", "#sharhlar"],
       ["Blog", "/blog"],
     ],
     contact: [
