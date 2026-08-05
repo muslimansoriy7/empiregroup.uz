@@ -15,6 +15,10 @@ import { NxAccordion } from "./nx/Accordion";
 import { NxThemeSwitch } from "./nx/ThemeSwitch";
 import { NxHoverExpand } from "./nx/HoverExpand";
 import { NxNavMenu, type NavEntry } from "./nx/NavMenu";
+import { NxCursor } from "./nx/Cursor";
+import { NxGlowButton } from "./nx/GlowButton";
+import { TextReveal } from "./nx/TextReveal";
+import { NxAuroraBars } from "./nx/AuroraBars";
 
 /* ------------------------------------------------------------------ *
  *  Empire Group — homepage, second pass (.nx)
@@ -339,6 +343,7 @@ export function HomeNext({
        than a line that switches face mid-sentence. */
     <div className={`nx nx-${locale}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <NxCursor />
 
       {/* ===================== NAV ===================== */}
       <header className="nx-nav">
@@ -460,19 +465,21 @@ export function HomeNext({
           <div className="nx-wrap">
             <div className="nx-hero-copy nx-in">
               <p className="nx-eyebrow">{t.hero.eyebrow}</p>
-              <h1 className="nx-display">
-                {t.hero.titleBefore}
+              {/* The accent word keeps its gradient rule, so the headline is
+                  split rather than run through one TextReveal. */}
+              <h1 className="nx-display" aria-label={`${t.hero.titleBefore}${t.hero.titleAccent}${t.hero.titleAfter}`}>
+                <TextReveal as="span" text={t.hero.titleBefore} className="nx-rv" />
                 <span className="nx-grad">
-                  {t.hero.titleAccent}
+                  <TextReveal as="span" text={t.hero.titleAccent} className="nx-rv" delay={0.06} />
                   <span className="nx-grad-line" aria-hidden="true" />
                 </span>
-                {t.hero.titleAfter}
+                <TextReveal as="span" text={t.hero.titleAfter} className="nx-rv" delay={0.12} />
               </h1>
-              <p className="nx-lede">{t.hero.lede}</p>
+              <TextReveal as="p" text={t.hero.lede} className="nx-lede" delay={0.1} />
               <div className="nx-hero-btns">
-                <a className="nx-btn nx-btn-solid nx-btn-lg" href="#aloqa">
+                <NxGlowButton href="#aloqa" duration={6}>
                   {t.hero.primary}
-                </a>
+                </NxGlowButton>
                 <a className="nx-btn nx-btn-line nx-btn-lg" href="#ishlar">
                   {t.hero.secondary} <Arrow size={14} />
                 </a>
@@ -541,7 +548,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.services.eyebrow}</p>
-              <h2 className="nx-h2">{t.services.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.services.title} />
               <p className="nx-sub">{t.services.sub}</p>
             </header>
             <div className="nx-duo nx-in">
@@ -586,7 +593,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.portfolio.eyebrow}</p>
-              <h2 className="nx-h2">{t.portfolio.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.portfolio.title} />
               <p className="nx-sub">{t.portfolio.sub}</p>
             </header>
             {/* An index that opens under the cursor: every project readable at
@@ -599,6 +606,7 @@ export function HomeNext({
                   description: p.result,
                   image: p.img,
                   href: `https://${p.url}`,
+                  cursor: t.portfolio.ctaLink,
                 }))}
               />
             </div>
@@ -611,7 +619,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-head-wide nx-in">
               <p className="nx-eyebrow">{t.caseStudy.eyebrow}</p>
-              <h2 className="nx-chapter-title">{t.caseStudy.title}</h2>
+              <TextReveal as="h2" className="nx-chapter-title" text={t.caseStudy.title} />
               <p className="nx-case-client">
                 <strong>{t.caseStudy.client}</strong>
                 <span className="nx-micro">{t.caseStudy.place}</span>
@@ -663,9 +671,9 @@ export function HomeNext({
                 ))}
               </ul>
               <p className="nx-micro nx-case-note">{t.caseStudy.pendingNote}</p>
-              <a className="nx-btn nx-btn-invert nx-btn-lg" href="#aloqa">
+              <NxGlowButton href="#aloqa" duration={7} className="nx-glow-onDark">
                 {t.caseStudy.cta} <Arrow size={14} />
-              </a>
+              </NxGlowButton>
             </div>
           </div>
         </section>
@@ -675,7 +683,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.process.eyebrow}</p>
-              <h2 className="nx-h2">{t.process.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.process.title} />
             </header>
             <ol className="nx-steps nx-in">
               {t.process.steps.map((s, i) => (
@@ -694,7 +702,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.team.eyebrow}</p>
-              <h2 className="nx-h2">{t.team.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.team.title} />
               <p className="nx-sub">{t.office.sub}</p>
             </header>
 
@@ -728,7 +736,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.testimonials.eyebrow}</p>
-              <h2 className="nx-h2">{t.testimonials.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.testimonials.title} />
             </header>
             <div className="nx-duo nx-in">
               {t.testimonials.items.map((q, i) => (
@@ -755,7 +763,7 @@ export function HomeNext({
           <div className="nx-wrap">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.pricing.eyebrow}</p>
-              <h2 className="nx-h2">{t.pricing.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.pricing.title} />
               <p className="nx-sub">{t.pricing.sub}</p>
             </header>
 
@@ -820,7 +828,7 @@ export function HomeNext({
               <header className="nx-head nx-head-row nx-in">
                 <div>
                   <p className="nx-eyebrow">{t.journal.eyebrow}</p>
-                  <h2 className="nx-h2">{t.journal.title}</h2>
+                  <TextReveal as="h2" className="nx-h2" text={t.journal.title} />
                 </div>
                 <Link className="nx-btn nx-btn-line" href={blogHref}>
                   {t.journal.allLabel} <Arrow size={14} />
@@ -861,7 +869,7 @@ export function HomeNext({
           <div className="nx-wrap nx-wrap-narrow">
             <header className="nx-head nx-in">
               <p className="nx-eyebrow">{t.faq.eyebrow}</p>
-              <h2 className="nx-h2">{t.faq.title}</h2>
+              <TextReveal as="h2" className="nx-h2" text={t.faq.title} />
             </header>
             <div className="nx-in">
               <NxAccordion items={t.faq.items.map((f) => ({ question: f.q, answer: f.a }))} />
@@ -875,7 +883,7 @@ export function HomeNext({
             <div className="nx-contact-grid">
               <div className="nx-in">
                 <p className="nx-eyebrow">{t.cta.eyebrow}</p>
-                <h2 className="nx-chapter-title nx-contact-h">{t.cta.title}</h2>
+                <TextReveal as="h2" className="nx-chapter-title nx-contact-h" text={t.cta.title} />
 
                 <p className="nx-lede nx-contact-lede">{t.guarantee.sub}</p>
 
@@ -927,6 +935,7 @@ export function HomeNext({
 
       {/* ===================== FOOTER ===================== */}
       <footer className="nx-footer">
+        <NxAuroraBars />
         <div className="nx-wrap">
           <div className="nx-footer-grid">
             <div>
@@ -1691,7 +1700,17 @@ const CSS = `
 .nx-pop-tg{margin-top:12px;}
 
 /* ---------- footer ---------- */
-.nx-footer{background:var(--canvas);border-top:1px solid var(--line);padding:64px 0 36px;}
+/* The footer sits on the aurora in both themes, so its own type is fixed
+   light rather than following the palette. */
+.nx-footer{position:relative;isolation:isolate;padding:80px 0 36px;color:#eef2f8;}
+.nx-footer > .nx-wrap{position:relative;z-index:1;}
+.nx-footer .nx-micro,.nx-footer .nx-small{color:rgba(238,242,248,.62);}
+.nx-footer .nx-footer-h{color:#fff;}
+.nx-footer .nx-footer-col a{color:rgba(238,242,248,.82);}
+.nx-footer .nx-footer-col a:hover{color:#fff;}
+.nx-footer .nx-footer-legal,.nx-footer .nx-footer-bottom{border-top-color:rgba(238,242,248,.16);}
+.nx-footer .nx-light-only{display:none;}
+.nx-footer .nx-dark-only{display:block;}
 .nx-footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1.15fr 1fr 1fr;gap:32px;padding-bottom:40px;}
 .nx-footer-desc{color:var(--muted);margin-top:16px;max-width:320px;}
 .nx-footer-col{display:flex;flex-direction:column;gap:11px;}
@@ -1701,6 +1720,98 @@ const CSS = `
 .nx-footer-legal{padding:24px 0;border-top:1px solid var(--line);}
 .nx-footer-legal-rows{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:10px;}
 .nx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;}
+
+/* ---------- custom cursor ----------
+   Rides alongside the native pointer rather than replacing it, so selection
+   and every OS affordance still work if this never paints. */
+.nx-cursor-dot,.nx-cursor-label{
+  position:fixed;top:0;left:0;z-index:200;pointer-events:none;
+  will-change:transform;
+}
+.nx-cursor-dot{
+  width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
+  background:var(--ink);mix-blend-mode:difference;
+}
+.nx-cursor-label{margin:18px 0 0 18px;}
+.nx-cursor-label span{
+  display:inline-block;padding:5px 11px;border-radius:9999px;
+  background:var(--ink);color:var(--on-ink);
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.06em;
+  text-transform:uppercase;white-space:nowrap;
+}
+
+/* ---------- glow button ----------
+   One blurred conic layer behind the face, spun by a keyframe. Reserved for
+   the primary call to action — everywhere would mean nowhere. */
+.nx-glow{
+  position:relative;display:inline-flex;isolation:isolate;border-radius:10px;
+  padding:0;border:0;background:transparent;cursor:pointer;
+}
+.nx-glow-ring{
+  position:absolute;inset:-2px;border-radius:12px;z-index:0;
+  background:conic-gradient(from var(--nx-a,0deg),var(--nx-glow));
+  filter:blur(var(--nx-glow-blur,14px));
+  transform:scale(var(--nx-glow-scale,1));
+  opacity:.85;animation:nx-spin var(--nx-glow-dur,5s) linear infinite;
+}
+.nx-glow-face{
+  position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;
+  padding:14px 26px;border-radius:10px;
+  background:var(--ink);color:var(--on-ink);
+  font-family:var(--sans);font-size:var(--t-body);font-weight:500;line-height:1;
+  transition:transform .2s var(--ease);
+}
+.nx-glow:hover .nx-glow-face{transform:translateY(-2px);}
+.nx-glow-onDark .nx-glow-face{background:var(--dark-ink);color:var(--dark);}
+@property --nx-a{syntax:"<angle>";inherits:false;initial-value:0deg;}
+@keyframes nx-spin{to{--nx-a:360deg;}}
+
+/* ---------- aurora footer ---------- */
+.nx-aurora{position:absolute;inset:0;overflow:hidden;background:#05070c;pointer-events:none;}
+.nx-aurora-row{position:absolute;inset:0;display:flex;align-items:flex-end;}
+.nx-aurora-cell{flex:1;height:100%;display:flex;align-items:flex-end;}
+.nx-aurora-bar{width:100%;border-radius:9999px 9999px 0 0;opacity:.85;display:block;}
+/* Two layers: the radial keeps the arch reading as light, the linear holds a
+   dark ground under the columns so the footer type stays legible over the
+   brightest bars. */
+.nx-aurora-veil{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 100%,transparent 42%,#05070ccc 100%),
+    linear-gradient(to bottom,#05070c 0%,rgba(5,7,12,.82) 32%,rgba(5,7,12,.62) 100%);
+}
+
+/* ---------- dropdown ---------- */
+.nx-dd{position:relative;}
+.nx-dd-trigger{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-family:var(--sans);font-size:var(--t-body);color:var(--ink);text-align:left;
+  background:var(--canvas);border:1px solid var(--line);border-radius:8px;
+  padding:11px 13px;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease;
+}
+.nx-dd-trigger:hover{border-color:var(--line-strong);}
+.nx-dd-trigger.open{border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent);}
+.nx-dd-placeholder{color:var(--muted);}
+.nx-dd-caret{display:inline-flex;color:var(--muted);flex-shrink:0;}
+.nx-dd-list{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 20px 40px -18px rgba(15,16,19,.3);padding:5px;
+  max-height:260px;overflow-y:auto;
+}
+[data-theme="dark"] .nx-dd-list{box-shadow:0 20px 40px -18px rgba(0,0,0,.85);}
+.nx-dd-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 11px;border-radius:7px;cursor:pointer;
+  font-family:var(--sans);font-size:var(--t-body);color:var(--body);
+  transition:background .15s ease,color .15s ease;
+}
+.nx-dd-item:hover,.nx-dd-item:focus-visible{background:var(--canvas);color:var(--ink);outline:none;}
+.nx-dd-item.selected{color:var(--ink);font-weight:500;}
+.nx-dd-item svg{color:var(--ink);flex-shrink:0;}
+
+/* ---------- text reveal ---------- */
+.nx-rv{display:inline;}
 
 /* ---------- cursors ----------
    The I-beam is the browser's default over any text node, so chrome that is

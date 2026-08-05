@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { NxDropdown } from "./nx/Dropdown";
 
 /**
  * The lead form in v3's own language.
@@ -133,26 +134,46 @@ export function HomeForm({
       <div className={`${ns}-form-row`}>
         <label className={`${ns}-field`}>
           <span className={`${ns}-mono-label`}>{c.fieldLabel}</span>
-          <select value={service} onChange={(e) => setService(e.target.value)}>
-            <option value="">{c.fieldPlaceholder}</option>
-            {c.fieldOptions.map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </select>
+          {ns === "nx" ? (
+            <NxDropdown
+              label={c.fieldLabel}
+              placeholder={c.fieldPlaceholder}
+              value={service}
+              onChange={setService}
+              items={c.fieldOptions.map((o) => ({ label: o, value: o }))}
+            />
+          ) : (
+            <select value={service} onChange={(e) => setService(e.target.value)}>
+              <option value="">{c.fieldPlaceholder}</option>
+              {c.fieldOptions.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
 
         <label className={`${ns}-field`}>
           <span className={`${ns}-mono-label`}>{c.budgetLabel}</span>
-          <select value={budget} onChange={(e) => setBudget(e.target.value)}>
-            <option value="">{c.budgetPlaceholder}</option>
-            {c.budgetOptions.map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </select>
+          {ns === "nx" ? (
+            <NxDropdown
+              label={c.budgetLabel}
+              placeholder={c.budgetPlaceholder}
+              value={budget}
+              onChange={setBudget}
+              items={c.budgetOptions.map((o) => ({ label: o, value: o }))}
+            />
+          ) : (
+            <select value={budget} onChange={(e) => setBudget(e.target.value)}>
+              <option value="">{c.budgetPlaceholder}</option>
+              {c.budgetOptions.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
       </div>
 

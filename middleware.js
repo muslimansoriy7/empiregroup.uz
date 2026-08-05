@@ -114,6 +114,10 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|webmanifest|vcf)$).*)',
+    // Font files must be listed here too. Without woff2 the locale rewrite
+    // turned /fonts/... into /uz/fonts/... and the face 404'd, which a
+    // @font-face swallows silently — the browser just falls back and the
+    // typeface quietly never appears.
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|txt|xml|webmanifest|vcf|woff2|woff|ttf|otf)$).*)',
   ],
 };

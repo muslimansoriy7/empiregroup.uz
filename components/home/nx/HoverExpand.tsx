@@ -21,6 +21,8 @@ export type HoverExpandItem = {
   description?: string;
   image: string;
   href: string;
+  /** Word the custom cursor shows over this row. */
+  cursor?: string;
 };
 
 export function NxHoverExpand({
@@ -59,6 +61,7 @@ export function NxHoverExpand({
             target="_blank"
             rel="noopener noreferrer"
             className={`nx-hx-row${open ? " open" : ""}`}
+            data-cursor={item.cursor}
             /* Start at the collapsed height rather than springing up from zero
                on mount — that opening animation had no meaning and left the
                row half-height if the tab was throttled while it ran. */
