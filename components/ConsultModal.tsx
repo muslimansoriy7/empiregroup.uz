@@ -27,10 +27,9 @@ const AUTO_KEY = "sd_consult_autoshown";
 const AUTO_DELAY = 60_000; // 60s
 
 /**
- * The homepage carries its own lead form in its own visual language, so the
- * shared modal popping over it would show two designs at once and ask for
- * details the visitor can already leave in front of them. Every other page
- * still gets it. Matches `/`, `/ru` and `/en`.
+ * The homepage carries its own lead form and its own prompt. Letting the shared
+ * modal fire there would put two dialogs on screen at once, in two different
+ * visual languages. Matches `/`, `/ru` and `/en`.
  */
 const HAS_OWN_FORM = /^\/(?:ru|en)?\/?$/;
 
