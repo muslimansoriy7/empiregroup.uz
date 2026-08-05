@@ -1053,7 +1053,21 @@ const CSS = `
   --dark-muted:#8b8d95;
 
   --green:#2c7a45;
-  --spectrum:linear-gradient(90deg,rgb(0,255,149) 0%,rgb(255,208,0) 25%,rgb(255,23,68) 50%,rgb(149,0,255) 75%,rgb(0,229,255) 100%);
+
+  /* ---- Accent. One hue, the agency's own, plus the two neighbours either
+     side of it. The greys above are untouched: this palette only ever paints
+     the accent — the sweep rule, the hero glow, the progress bar and the
+     glow button. The first and last stop are the same colour so the sweep
+     loops without a seam. ---- */
+  --accent:#387ccd;
+  --accent-deep:#245c9e;
+  --accent-soft:#63a8ea;
+  --accent-cyan:#2fa4d2;
+  /* The one that carries text. #387ccd is only 3.9:1 on the light ground, so
+     type takes the deep end here and the soft end in the dark theme; both
+     clear AA. Decoration keeps --accent itself. */
+  --accent-text:#245c9e;
+  --spectrum:linear-gradient(90deg,var(--accent-deep) 0%,var(--accent) 25%,var(--accent-soft) 50%,var(--accent-cyan) 75%,var(--accent-deep) 100%);
 
   /* ---- Type: eight steps, each with one job. ---- */
   --t-display:72px;
@@ -1366,7 +1380,9 @@ const CSS = `
    pastel gradient behind a hero is the most tired look on the web. */
 .nx-hero-glow{
   position:absolute;left:50%;top:340px;width:900px;height:360px;transform:translateX(-50%);
-  pointer-events:none;opacity:.10;filter:blur(110px);
+  /* One hue reads fainter than four did at the same opacity, so the glow is
+     lifted a little to land in the same place visually. */
+  pointer-events:none;opacity:.16;filter:blur(110px);
   background:var(--spectrum);
 }
 .nx-hero-copy{position:relative;z-index:1;max-width:880px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;}
@@ -1585,14 +1601,7 @@ const CSS = `
   filter:grayscale(1) contrast(1.03);
   transition:filter .5s var(--ease),transform .5s var(--ease);
 }
-/* The card lifts a little with the portrait. Transform is used here and
-   translate by the stagger, so the entrance and the hover never overwrite
-   each other. */
-.nx-member{transition:transform .45s var(--ease);}
-.nx-member:hover{transform:translateY(-5px);}
 .nx-member:hover .nx-member-photo img{filter:none;transform:scale(1.03);}
-.nx-member:hover .nx-member-photo{box-shadow:0 16px 30px -20px rgba(15,16,19,.5);}
-[data-theme="dark"] .nx-member:hover .nx-member-photo{box-shadow:0 16px 34px -20px rgba(0,0,0,.9);}
 .nx-member-name{font-family:var(--sans);font-size:var(--t-body);font-weight:500;letter-spacing:var(--track-body);color:var(--ink);margin:0 0 4px;}
 .nx-member-role{display:block;margin-bottom:10px;}
 
@@ -1753,10 +1762,23 @@ const CSS = `
 .nx-cred-plate{
   width:64px;height:64px;flex-shrink:0;border-radius:8px;background:#fff;
   border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:8px;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .25s ease;
 }
-.nx-cred-plate img{max-height:min(100%,calc(34px * var(--cs,1)));max-width:min(100%,calc(86% * var(--cs,1)));object-fit:contain;}
+/* These are marks, not links — the hover is there to say the strip is worth
+   reading, so it stays at a lift and a border in the accent, nothing more. */
+.nx-cred:hover .nx-cred-plate{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb,var(--accent) 50%,var(--line));
+  box-shadow:0 10px 20px -12px color-mix(in srgb,var(--accent) 45%,transparent);
+}
+.nx-cred-plate img{
+  max-height:min(100%,calc(34px * var(--cs,1)));max-width:min(100%,calc(86% * var(--cs,1)));
+  object-fit:contain;transition:transform .35s var(--ease);
+}
+.nx-cred:hover .nx-cred-plate img{transform:scale(1.05);}
+.nx-cred:hover .nx-cred-text strong{color:var(--accent-text);}
 .nx-cred-text{display:flex;flex-direction:column;gap:3px;min-width:0;}
-.nx-cred-text strong{font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--ink);text-wrap:balance;}
+.nx-cred-text strong{font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--ink);text-wrap:balance;transition:color .25s ease;}
 
 /* ---------- consultation prompt ---------- */
 /* margin:auto is what centres a modal dialog. Tailwind's preflight resets
@@ -1994,6 +2016,8 @@ const CSS = `
   --muted:#9c9ea6;
   --faint:#7c7e86;
   --on-ink:#0a0b0d;
+  /* Same hue, lifted, so accent type clears AA on the dark ground too. */
+  --accent-text:#63a8ea;
   --dark:#000000;
   --dark-surface:#0d0e11;
   --dark-line:#22242a;

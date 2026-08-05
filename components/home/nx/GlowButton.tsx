@@ -25,7 +25,9 @@ type Common = {
   className?: string;
 };
 
-const DEFAULT_COLORS = ["#387CCD", "#7A5CE0", "#E0457B", "#F2B705", "#387CCD"];
+/* The brand hue and its immediate neighbours. First and last stop match so the
+   conic gradient closes on itself and the rotation has no visible seam. */
+const DEFAULT_COLORS = ["#245C9E", "#387CCD", "#63A8EA", "#2FA4D2", "#245C9E"];
 
 function glowStyle({
   colors = DEFAULT_COLORS,
