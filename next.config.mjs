@@ -20,10 +20,10 @@ const nextConfig = {
       { source: `/:locale(ru|en)/blog/${slug}`, destination: "/:locale/blog", permanent: true },
     ]);
 
-    // /v2…/v10 were design studies shared for review. /v3 became the homepage
+    // /v2…/v11 were design studies shared for review. /v11 is now the homepage
     // and the rest were dropped; the links were passed around, so they land on
-    // the homepage rather than a 404.
-    const studies = ["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"];
+    // the homepage rather than a 404 — and the review URL keeps working.
+    const studies = ["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11"];
     const studyRedirects = studies.flatMap((v) => [
       { source: `/${v}`, destination: "/", permanent: false },
       { source: `/:locale(ru|en)/${v}`, destination: "/:locale", permanent: false },

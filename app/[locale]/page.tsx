@@ -2,7 +2,10 @@ import { isLocale, defaultLocale } from "@/content";
 import { localePath } from "@/lib/locale-path";
 import { getPublishedPosts, L } from "@/lib/posts";
 import { homeCopy, journalEn } from "@/content/home";
-import { HomePage, type JournalPost } from "@/components/home/HomePage";
+import { HomeNext } from "@/components/home/HomeNext";
+/* The previous design is kept in the tree, unrendered, the way the pass
+   before it was; the shared journal type still lives with it. */
+import type { JournalPost } from "@/components/home/HomePage";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
 
@@ -108,7 +111,7 @@ export default async function Home({
           __html: JSON.stringify(buildSchema(lang)).replace(/</g, "\\u003c"),
         }}
       />
-      <HomePage journal={journal} blogHref={localePath(lang, "/blog")} />
+      <HomeNext journal={journal} blogHref={localePath(lang, "/blog")} />
     </>
   );
 }
