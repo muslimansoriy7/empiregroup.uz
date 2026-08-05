@@ -66,16 +66,35 @@ export function NxNavMenu({
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  /* Closing on the leave event alone is too literal: a pointer heading for a
+     panel wider than its trigger clips the corner and the panel vanishes
+     mid-reach. A short grace period, cancelled the moment the pointer is back
+     over the menu, makes the diagonal work without keeping it open on exit. */
+  const closeTimer = React.useRef<number | null>(null);
+  const cancelClose = React.useCallback(() => {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  }, []);
+  const scheduleClose = React.useCallback(() => {
+    cancelClose();
+    closeTimer.current = window.setTimeout(() => {
+      setOpen(null);
+      setHovered(null);
+    }, 140);
+  }, [cancelClose]);
+  React.useEffect(() => cancelClose, [cancelClose]);
+
   const marker = hovered ?? (open || activeId);
 
   return (
     <div
       className="nx-nav-menu"
       ref={rootRef}
-      onPointerLeave={() => {
-        setOpen(null);
-        setHovered(null);
-      }}
+      onPointerEnter={cancelClose}
+      onPointerMove={cancelClose}
+      onPointerLeave={scheduleClose}
     >
       <ul className="nx-nav-list">
         {entries.map((e) => {
@@ -121,6 +140,7 @@ export function NxNavMenu({
                 aria-current={activeId === e.id ? "true" : undefined}
                 aria-expanded={e.panel ? open === e.id : undefined}
                 onPointerEnter={() => {
+                  cancelClose();
                   setHovered(e.id);
                   setOpen(e.panel ? e.id : null);
                 }}

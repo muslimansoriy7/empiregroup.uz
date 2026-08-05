@@ -214,7 +214,7 @@ export function HomeNext({
     const root = document.querySelector(".nx");
     if (!root) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const els = Array.from(root.querySelectorAll<HTMLElement>(".nx-in, .nx-stagger"));
+    const els = Array.from(root.querySelectorAll<HTMLElement>(".nx-in, .nx-stagger, .nx-rvw"));
     if (reduce) {
       els.forEach((e) => e.classList.add("shown"));
       return;
@@ -402,23 +402,28 @@ export function HomeNext({
           <div className="nx-progress-bar" ref={progressRef} />
         </div>
 
+        {/* The drawer opens by growing its own height, so it pushes down from
+            under the bar rather than fading in already full-size. The extra
+            wrapper is what the 0fr-to-1fr grid transition needs. */}
         <div className={`nx-menu${menuOpen ? " open" : ""}`} id="nx-menu" inert={!menuOpen}>
-          <nav className="nx-menu-links" aria-label={t.nav.menuLabel}>
-            {NAV_LINKS.map(([label, href]) => (
-              <a key={href} href={href} className="nx-menu-link" onClick={closeMenu}>
-                {label}
-                <Arrow size={14} />
+          <div className="nx-menu-inner">
+            <nav className="nx-menu-links" aria-label={t.nav.menuLabel}>
+              {NAV_LINKS.map(([label, href]) => (
+                <a key={href} href={href} className="nx-menu-link" onClick={closeMenu}>
+                  {label}
+                  <Arrow size={14} />
+                </a>
+              ))}
+            </nav>
+            <div className="nx-menu-foot">
+              <a className="nx-btn nx-btn-solid nx-btn-block" href="#aloqa" onClick={closeMenu}>
+                {t.nav.cta}
               </a>
-            ))}
-          </nav>
-          <div className="nx-menu-foot">
-            <a className="nx-btn nx-btn-solid nx-btn-block" href="#aloqa" onClick={closeMenu}>
-              {t.nav.cta}
-            </a>
-            <a className="nx-btn nx-btn-line nx-btn-block" href={CONTACT.phonePrimary.href}>
-              {CONTACT.phonePrimary.label}
-            </a>
-            <LangSwitch label={t.langLabel} />
+              <a className="nx-btn nx-btn-line nx-btn-block" href={CONTACT.phonePrimary.href}>
+                {CONTACT.phonePrimary.label}
+              </a>
+              <LangSwitch label={t.langLabel} />
+            </div>
           </div>
         </div>
       </header>
@@ -477,13 +482,13 @@ export function HomeNext({
           <div className="nx-wrap">
             <div className="nx-hero-copy nx-in">
               <p className="nx-eyebrow">{t.hero.eyebrow}</p>
-              {/* The accent word keeps its gradient rule, so the headline is
-                  split rather than run through one crossfade. */}
+              {/* Still split in three so the words arrive in reading order
+                  rather than all at once; the accent word no longer carries a
+                  rule under it. */}
               <h1 className="nx-display" aria-label={`${t.hero.titleBefore}${t.hero.titleAccent}${t.hero.titleAfter}`}>
                 <PerWordCrossfade as="span" text={t.hero.titleBefore} className="nx-rv" />
                 <span className="nx-grad">
                   <PerWordCrossfade as="span" text={t.hero.titleAccent} className="nx-rv" delay={0.06} />
-                  <span className="nx-grad-line" aria-hidden="true" />
                 </span>
                 <PerWordCrossfade as="span" text={t.hero.titleAfter} className="nx-rv" delay={0.12} />
               </h1>
@@ -885,8 +890,12 @@ export function HomeNext({
           </div>
         </section>
 
-        {/* ============ CONTACT — form, channels, credentials ============ */}
+        {/* ============ CONTACT — the close ============
+            The page's last block is the one it is all for, so it stops being
+            another light band and takes the dark ground: the reader arrives at
+            an obvious ending rather than at one more section. */}
         <section className="nx-contact" id="aloqa">
+          <span className="nx-contact-glow" aria-hidden="true" />
           <div className="nx-wrap">
             <div className="nx-contact-grid">
               <div className="nx-in">
@@ -988,17 +997,6 @@ export function HomeNext({
             ))}
           </div>
 
-          <div className="nx-footer-legal">
-            <p className="nx-micro nx-footer-h">{t.footer.legalHead}</p>
-            <div className="nx-footer-legal-rows">
-              {t.footer.legal.map(([line]) => (
-                <span className="nx-micro" key={line}>
-                  {line}
-                </span>
-              ))}
-            </div>
-          </div>
-
           <div className="nx-footer-bottom">
             <span className="nx-micro">{t.footer.rights}</span>
             <span className="nx-micro">{t.footer.place}</span>
@@ -1019,7 +1017,7 @@ export function HomeNext({
           /* Not t.nav.cta: "Bepul konsultatsiya" is four times the width a
              quarter of a 360px bar can show. The footer's own heading is the
              short, already-translated word for the same destination. */
-          { id: "aloqa", label: cap(t.footer.contactHead), href: "#aloqa", icon: <DockIcon d={ICON_CONTACT} />, accent: true },
+          { id: "aloqa", label: cap(t.footer.contactHead), href: "#aloqa", icon: <DockIcon d={ICON_CONTACT} /> },
         ]}
       />
     </div>
@@ -1131,6 +1129,14 @@ const CSS = `
 .nx .nx-stagger.shown > *:nth-child(6){transition-delay:.25s;}
 .nx .nx-stagger.shown > *:nth-child(7){transition-delay:.3s;}
 .nx .nx-stagger.shown > *:nth-child(8){transition-delay:.35s;}
+
+/* Per-word crossfade. The hidden state is scoped to .nx-ready, which only
+   script adds, so the words are visible in the served HTML — the headline is
+   never waiting on hydration to be readable. Each word carries its own
+   transition-delay inline, so the stagger costs nothing at runtime. */
+.nx .nx-w{display:inline-block;transition:opacity .62s var(--ease),translate .62s var(--ease);}
+.nx.nx-ready .nx-rvw .nx-w{opacity:0;translate:0 8px;}
+.nx .nx-rvw.shown .nx-w{opacity:1;translate:none;}
 
 /* ---------- layout ---------- */
 .nx-wrap{max-width:1200px;margin:0 auto;padding:0 28px;width:100%;}
@@ -1270,10 +1276,13 @@ const CSS = `
 .nx-nav-text,.nx-nav-caret{position:relative;z-index:1;}
 .nx-nav-caret{display:inline-flex;color:var(--faint);}
 
-/* One shared panel that slides and resizes under whichever trigger is open. */
-.nx-nav-drop-anchor{position:absolute;top:100%;transform:translateX(-50%);z-index:60;}
+/* One shared panel that slides and resizes under whichever trigger is open.
+   The 10px standoff is padding on the anchor, not margin on the panel: as a
+   margin it was dead space belonging to neither element, so the pointer left
+   the menu on its way down and the panel closed before it could be reached. */
+.nx-nav-drop-anchor{position:absolute;top:100%;transform:translateX(-50%);z-index:60;padding-top:10px;}
 .nx-nav-drop{
-  margin-top:10px;min-width:250px;max-width:min(380px,90vw);
+  min-width:250px;max-width:min(380px,90vw);
   background:var(--surface);border:1px solid var(--line);border-radius:12px;
   box-shadow:0 24px 48px -20px rgba(15,16,19,.24);padding:8px;
   display:flex;flex-direction:column;gap:1px;
@@ -1341,23 +1350,60 @@ const CSS = `
 .nx-burger-box span:last-child{bottom:0;}
 .nx-burger-box.open span:first-child{transform:translateY(4.75px) rotate(45deg);}
 .nx-burger-box.open span:last-child{transform:translateY(-4.75px) rotate(-45deg);}
+/* The drawer animates grid-template-rows from 0fr to 1fr — the one way to
+   transition to an unknown content height without measuring it in JS. The
+   inner element carries the padding and the overflow clip; putting either on
+   the outer would leak a sliver of the menu while it is closed. */
 .nx-menu{
   display:none;position:absolute;left:0;right:0;top:66px;z-index:59;
-  background:var(--surface);border-bottom:1px solid var(--line);
+  background:var(--surface);border-bottom:1px solid transparent;
   box-shadow:0 24px 48px -24px rgba(15,16,19,.2);
-  padding:16px 28px 24px;max-height:calc(100dvh - 66px);overflow-y:auto;
-  opacity:0;transform:translateY(-8px);visibility:hidden;
-  transition:opacity .22s ease,transform .26s var(--ease),visibility 0s linear .26s;
+  overflow:hidden;
+  /* minmax(0,…) rather than a bare fr: an fr track carries an automatic
+     minimum of auto, so "0fr" alone still reserved the content's min-content
+     height and the drawer never collapsed. */
+  grid-template-rows:minmax(0,0fr);visibility:hidden;
+  transition:
+    grid-template-rows .42s var(--ease),
+    border-color .2s ease,
+    visibility 0s linear .42s;
 }
-.nx-menu.open{opacity:1;transform:none;visibility:visible;transition-delay:0s;}
+.nx-menu.open{
+  grid-template-rows:minmax(0,1fr);visibility:visible;border-bottom-color:var(--line);
+  transition-delay:0s;
+}
+.nx-menu-inner{min-height:0;overflow:hidden;padding:16px 28px 24px;}
 .nx-menu-links{display:flex;flex-direction:column;}
 .nx-menu-link{
   display:flex;align-items:center;justify-content:space-between;
   font-family:var(--sans);font-size:17px;font-weight:450;color:var(--ink);
   padding:15px 2px;border-bottom:1px solid var(--line);
+  /* The rows arrive just behind the panel edge, so the drawer reads as one
+     movement rather than a box that appears with its contents already in it. */
+  opacity:0;translate:0 -8px;
+  transition:opacity .3s ease,translate .3s var(--ease);
 }
+.nx-menu.open .nx-menu-link{opacity:1;translate:none;}
+.nx-menu.open .nx-menu-link:nth-child(1){transition-delay:.08s;}
+.nx-menu.open .nx-menu-link:nth-child(2){transition-delay:.12s;}
+.nx-menu.open .nx-menu-link:nth-child(3){transition-delay:.16s;}
+.nx-menu.open .nx-menu-link:nth-child(4){transition-delay:.2s;}
+.nx-menu.open .nx-menu-link:nth-child(5){transition-delay:.24s;}
 .nx-menu-link svg{color:var(--faint);}
-.nx-menu-foot{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+.nx-menu-foot{
+  display:flex;flex-direction:column;gap:10px;margin-top:20px;
+  opacity:0;translate:0 -8px;
+  transition:opacity .3s ease,translate .3s var(--ease);
+}
+.nx-menu.open .nx-menu-foot{opacity:1;translate:none;transition-delay:.28s;}
+/* A clipped inner cannot scroll, so on a screen too short to hold the drawer
+   the animation is dropped and the panel scrolls instead — a menu you can
+   reach beats a menu that slides. */
+@media (max-height:560px){
+  .nx-menu{transition:visibility 0s linear .01s;}
+  .nx-menu-inner{overflow-y:auto;max-height:calc(100dvh - 76px);}
+  .nx-menu-link,.nx-menu-foot{transition:none;}
+}
 .nx-scrim{
   display:none;position:fixed;inset:66px 0 0;z-index:50;background:rgba(12,13,16,.34);
   opacity:0;pointer-events:none;transition:opacity .24s ease;
@@ -1377,11 +1423,8 @@ const CSS = `
 .nx-hero-copy{position:relative;z-index:1;max-width:880px;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;}
 .nx-hero-copy .nx-lede{max-width:620px;}
 .nx-hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
-.nx-grad{position:relative;display:inline-block;white-space:nowrap;}
-.nx-grad-line{
-  position:absolute;left:0;right:0;bottom:.02em;height:5px;border-radius:3px;
-  background:var(--spectrum);background-size:200% 100%;animation:nx-sweep 6s linear infinite;
-}
+/* Kept only to hold the accent word on one line; the rule under it is gone. */
+.nx-grad{display:inline-block;white-space:nowrap;}
 @keyframes nx-sweep{0%{background-position:0% 0%;}100%{background-position:200% 0%;}}
 
 /* Product shelf: real captures, cropped at the fold so the page invites scroll. */
@@ -1725,28 +1768,48 @@ const CSS = `
 }
 
 /* ---------- contact ---------- */
-.nx-contact{background:var(--canvas-alt);border-top:1px solid var(--line);padding:96px 0;}
+/* ---------- the close ----------
+   Dark, full-bleed, and taller than the chapters above it. The form card stays
+   light so it is the brightest object on the screen — the one thing the block
+   is asking for. */
+.nx-contact{
+  background:var(--dark);color:var(--dark-ink);
+  padding:120px 0 108px;position:relative;overflow:hidden;isolation:isolate;
+}
+.nx-contact > .nx-wrap{position:relative;z-index:1;}
+/* A wide, low band across the top of the block rather than a bright patch —
+   at full strength it read as a smear over the headline. */
+.nx-contact-glow{
+  position:absolute;left:50%;top:-220px;width:min(1500px,140%);height:620px;
+  transform:translateX(-50%);pointer-events:none;z-index:0;
+  opacity:.14;filter:blur(150px);background:var(--spectrum);
+}
+.nx-contact .nx-eyebrow{color:var(--dark-ink);}
+.nx-contact .nx-micro{color:var(--dark-muted);}
 .nx-contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:56px;align-items:start;}
-.nx-contact-h{max-width:460px;margin-bottom:18px;}
+/* One step up from a chapter heading: this is the page's last word. */
+.nx-contact-h{max-width:520px;margin-bottom:18px;font-size:clamp(34px,4.4vw,54px);}
 /* The meta line under the channels repeated the phone number that was already
    two rows above it. Replaced with the one thing the reader still wants to
    know before writing: that there is no obligation. */
-.nx-contact-lede{max-width:440px;margin-bottom:0;color:var(--muted);font-size:var(--t-body);}
-.nx-channels{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:28px 0 0;}
+.nx-contact-lede{max-width:460px;margin-bottom:0;color:var(--dark-body);font-size:var(--t-lede);}
+.nx-channels{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:32px 0 0;}
 .nx-channel{display:flex;flex-direction:column;gap:4px;}
 .nx-channel .nx-micro{margin-bottom:6px;}
 .nx-channel a{
-  font-family:var(--sans);font-size:var(--t-body);color:var(--ink);width:max-content;
-  border-bottom:1px solid var(--line);transition:border-color .2s ease;word-break:break-word;
+  font-family:var(--sans);font-size:var(--t-body);color:var(--dark-ink);width:max-content;
+  border-bottom:1px solid var(--dark-line);transition:border-color .2s ease;word-break:break-word;
 }
-.nx-channel a:hover{border-color:var(--ink);}
+.nx-channel a:hover{border-color:var(--dark-ink);}
 .nx-contact-meta{display:block;}
-.nx-form-card{padding:28px;}
+/* Lifted off the dark ground so it reads as the object to act on. */
+.nx-form-card{padding:30px;box-shadow:0 34px 70px -30px rgba(0,0,0,.6);}
 /* Credentials where the decision is made, as a strip. */
 .nx-creds{
   display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
-  margin-top:64px;padding-top:36px;border-top:1px solid var(--line);
+  margin-top:72px;padding-top:40px;border-top:1px solid var(--dark-line);
 }
+.nx-contact .nx-cred-text strong{color:var(--dark-ink);}
 .nx-cred{display:flex;align-items:center;gap:14px;}
 .nx-cred-plate{
   width:64px;height:64px;flex-shrink:0;border-radius:8px;background:#fff;
@@ -1818,65 +1881,59 @@ const CSS = `
 .nx-footer-h{display:block;margin-bottom:4px;color:var(--ink);}
 .nx-footer-col a{font-family:var(--sans);font-size:var(--t-small);color:var(--body);width:max-content;transition:color .2s ease;}
 .nx-footer-col a:hover{color:var(--ink);}
-.nx-footer-legal{padding:24px 0;border-top:1px solid var(--line);}
-.nx-footer-legal-rows{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:10px;}
 .nx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;}
 
 /* ---------- bottom dock (phones) ----------
-   The supplied dock, in this page's tokens. Hidden until the width where the
-   desktop nav links go away, so there is never a moment with both. */
+   Icon, label, and one bar under whichever item you are in. No chip, no filled
+   block, no tooltip — the labels are already on screen. Hidden until the width
+   where the desktop nav links go away, so there is never a moment with both. */
 .nx-dock{display:none;}
 @media (max-width:920px){
   .nx-dock{
-    display:flex;align-items:flex-end;justify-content:center;
-    position:fixed;z-index:90;overflow:visible;
+    display:flex;align-items:flex-end;justify-content:center;gap:2px;
+    position:fixed;z-index:90;
     /* Centred with auto margins, not translateX: the dock is a motion element
        and writes its own transform for the enter and exit. */
     left:14px;right:14px;margin-inline:auto;width:max-content;max-width:calc(100% - 28px);
-    bottom:calc(14px + env(safe-area-inset-bottom,0px));
-    padding:8px 8px 7px;
-    background:color-mix(in srgb,var(--surface) 82%,transparent);
-    border:1px solid var(--line);
-    box-shadow:0 -2px 10px rgba(15,16,19,.04),0 18px 40px -16px rgba(15,16,19,.35);
-    backdrop-filter:blur(18px) saturate(1.6);
-    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    padding:6px 6px 5px;border-radius:20px;
+    background:color-mix(in srgb,var(--surface) 76%,transparent);
+    border:1px solid color-mix(in srgb,var(--ink) 8%,transparent);
+    box-shadow:0 14px 34px -18px rgba(15,16,19,.4);
+    backdrop-filter:blur(20px) saturate(1.7);
+    -webkit-backdrop-filter:blur(20px) saturate(1.7);
   }
   /* The dock floats over the last screen of the page; give the footer room so
-     it never sits on top of the legal line. */
-  .nx-footer{padding-bottom:112px;}
+     it never sits on top of the last row. */
+  .nx-footer{padding-bottom:104px;}
 }
-[data-theme="dark"] .nx-dock{box-shadow:0 18px 44px -16px rgba(0,0,0,.85);}
-/* The slot is at least as wide as its label. The animated width still pushes
-   neighbours aside once the magnifier takes an icon past that floor — without
-   the floor the label would be clipped to the icon's 42px at rest. */
-.nx-dock-slot{
+[data-theme="dark"] .nx-dock{
+  border-color:color-mix(in srgb,#fff 10%,transparent);
+  box-shadow:0 16px 38px -18px rgba(0,0,0,.9);
+}
+.nx-dock-item{
   position:relative;display:flex;flex-direction:column;align-items:center;
-  flex-shrink:0;min-width:66px;
+  flex-shrink:0;min-width:68px;padding:7px 6px 6px;border-radius:15px;
+  color:var(--faint);text-decoration:none;
+  transition:color .22s ease;
 }
+.nx-dock-item.on{color:var(--ink);}
+.nx-dock-item:focus-visible{outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--ink) 25%,transparent);}
 .nx-dock-iconrow{position:relative;width:100%;display:flex;justify-content:center;}
-.nx-dock-grow{position:absolute;bottom:0;}
-.nx-dock-btn{
-  display:flex;align-items:center;justify-content:center;width:100%;height:100%;
-  color:var(--muted);text-decoration:none;
-  transition:background .18s ease,color .18s ease;
-}
-.nx-dock-btn svg{width:55%;height:55%;}
-.nx-dock-btn:hover{background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink);}
-.nx-dock-btn.on{background:var(--canvas);color:var(--ink);}
-.nx-dock-btn.accent,.nx-dock-btn.accent:hover{background:var(--ink);color:var(--on-ink);}
-.nx-dock-btn:focus-visible{outline:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--ink) 25%,transparent);}
+/* Anchored to the baseline so the magnifier grows it upward. */
+.nx-dock-icon{position:absolute;bottom:0;display:flex;align-items:center;justify-content:center;}
+.nx-dock-icon svg{width:100%;height:100%;}
 .nx-dock-label{
-  margin-top:3px;font-family:var(--sans);font-size:10px;font-weight:500;
-  letter-spacing:.01em;line-height:1.1;color:var(--muted);
+  margin-top:5px;font-family:var(--sans);font-size:10px;font-weight:450;
+  letter-spacing:.015em;line-height:1.1;color:currentColor;
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  pointer-events:none;user-select:none;
+  pointer-events:none;user-select:none;transition:font-weight .22s ease;
 }
-.nx-dock-tip{
-  position:absolute;z-index:50;pointer-events:none;white-space:nowrap;
-  padding:5px 9px;border-radius:7px;
-  background:var(--surface);border:1px solid var(--line);
-  box-shadow:0 6px 18px -8px rgba(15,16,19,.4);
-  font-family:var(--sans);font-size:var(--t-small);font-weight:500;color:var(--ink);
+.nx-dock-item.on .nx-dock-label{font-weight:550;}
+/* The only chrome left: a short rule that slides between items. */
+.nx-dock-mark{
+  position:absolute;left:50%;bottom:1px;width:16px;height:2px;margin-left:-8px;
+  border-radius:2px;background:currentColor;
 }
 
 /* ---------- glow button ----------
@@ -2039,7 +2096,7 @@ const CSS = `
   .nx-nav-links{display:none;}
   .nx-wide-only{display:none;}
   .nx-burger{display:inline-flex;}
-  .nx-menu{display:block;}
+  .nx-menu{display:grid;}
   .nx-scrim{display:block;}
   .nx{--t-display:44px;--t-h2:28px;--t-figure:32px;--t-lede:16px;}
   .nx-chapter{padding:72px 0;}
@@ -2093,8 +2150,9 @@ const CSS = `
 @media (prefers-reduced-motion:reduce){
   .nx .nx-in,.nx.nx-ready .nx-in{transform:none;transition:none;opacity:1;}
   .nx .nx-stagger > *,.nx.nx-ready .nx-stagger > *{translate:none;transition:none;opacity:1;}
+  .nx .nx-w,.nx.nx-ready .nx-rvw .nx-w{translate:none;transition:none;opacity:1;}
   .nx *{animation:none!important;}
-  .nx-grad-line,.nx-dark-rule{background:var(--spectrum);}
+  .nx-dark-rule{background:var(--spectrum);}
   .nx-btn:hover,.nx-raised:hover{transform:none;}
   .nx-work:hover .nx-work-shot img,.nx-member:hover .nx-member-photo img{transform:none;}
   .nx-menu{transition:none;}

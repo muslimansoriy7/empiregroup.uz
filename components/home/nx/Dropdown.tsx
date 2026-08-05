@@ -38,7 +38,6 @@ export function NxDropdown({
   const rootRef = React.useRef<HTMLDivElement>(null);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const listRef = React.useRef<HTMLUListElement>(null);
-  const id = React.useId().replace(/:/g, "");
 
   const selected = items.find((i) => i.value === value);
 
@@ -143,7 +142,6 @@ export function NxDropdown({
         {open && (
           <motion.ul
             ref={listRef}
-            id={`nx-dd-${id}`}
             role="listbox"
             aria-label={label}
             className="nx-dd-list"

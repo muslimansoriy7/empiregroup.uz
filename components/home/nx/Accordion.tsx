@@ -105,9 +105,19 @@ function Row({
   );
 }
 
-export function NxAccordion({ items }: { items: NxAccordionItem[] }) {
-  const rawId = React.useId();
-  const baseId = `nx-acc-${rawId.replace(/:/g, "")}`;
+export function NxAccordion({
+  items,
+  idBase = "nx-acc",
+}: {
+  items: NxAccordionItem[];
+  /* A caller-supplied, stable base rather than useId. Under the App Router the
+     server and client trees are not identical, so useId handed out different
+     values on each side and React logged a hydration mismatch on every
+     question's id, aria-controls and aria-labelledby. There is one accordion
+     on the page, so a fixed base is both unique and stable. */
+  idBase?: string;
+}) {
+  const baseId = idBase;
   const [openIndex, setOpenIndex] = React.useState<number | null>(0);
 
   return (
