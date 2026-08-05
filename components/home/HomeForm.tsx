@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { NxDropdown } from "./nx/Dropdown";
+import { NxAnimatedInput } from "./nx/AnimatedInput";
 
 /**
  * The lead form in v3's own language.
@@ -101,93 +102,125 @@ export function HomeForm({
     );
   }
 
+  const isNx = ns === "nx";
+
   return (
     <form className={`${ns}-form`} onSubmit={onSubmit} noValidate>
       <div className={`${ns}-form-row`}>
-        <label className={`${ns}-field`}>
-          <span className={`${ns}-mono-label`}>{c.nameLabel}</span>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={c.namePlaceholder}
-            autoComplete="name"
-            aria-invalid={Boolean(errors.name)}
-          />
-          {errors.name && <span className={`${ns}-field-err`}>{errors.name}</span>}
-        </label>
+        {isNx ? (
+          <>
+            <NxAnimatedInput
+              label={c.nameLabel}
+              value={name}
+              onChange={setName}
+              autoComplete="name"
+              error={errors.name}
+            />
+            <NxAnimatedInput
+              label={c.phoneLabel}
+              value={phone}
+              onChange={setPhone}
+              type="tel"
+              autoComplete="tel"
+              error={errors.phone}
+            />
+          </>
+        ) : (
+          <>
+            <label className={`${ns}-field`}>
+              <span className={`${ns}-mono-label`}>{c.nameLabel}</span>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={c.namePlaceholder}
+                autoComplete="name"
+                aria-invalid={Boolean(errors.name)}
+              />
+              {errors.name && <span className={`${ns}-field-err`}>{errors.name}</span>}
+            </label>
 
-        <label className={`${ns}-field`}>
-          <span className={`${ns}-mono-label`}>{c.phoneLabel}</span>
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder={c.phonePlaceholder}
-            autoComplete="tel"
-            aria-invalid={Boolean(errors.phone)}
-          />
-          {errors.phone && <span className={`${ns}-field-err`}>{errors.phone}</span>}
-        </label>
+            <label className={`${ns}-field`}>
+              <span className={`${ns}-mono-label`}>{c.phoneLabel}</span>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder={c.phonePlaceholder}
+                autoComplete="tel"
+                aria-invalid={Boolean(errors.phone)}
+              />
+              {errors.phone && <span className={`${ns}-field-err`}>{errors.phone}</span>}
+            </label>
+          </>
+        )}
       </div>
 
       <div className={`${ns}-form-row`}>
-        <label className={`${ns}-field`}>
-          <span className={`${ns}-mono-label`}>{c.fieldLabel}</span>
-          {ns === "nx" ? (
+        {isNx ? (
+          <>
+            {/* The dropdown wears the same floating label as the inputs, so
+                the four fields read as one row rather than two systems. */}
             <NxDropdown
+              floating
               label={c.fieldLabel}
               placeholder={c.fieldPlaceholder}
               value={service}
               onChange={setService}
               items={c.fieldOptions.map((o) => ({ label: o, value: o }))}
             />
-          ) : (
-            <select value={service} onChange={(e) => setService(e.target.value)}>
-              <option value="">{c.fieldPlaceholder}</option>
-              {c.fieldOptions.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
-          )}
-        </label>
-
-        <label className={`${ns}-field`}>
-          <span className={`${ns}-mono-label`}>{c.budgetLabel}</span>
-          {ns === "nx" ? (
             <NxDropdown
+              floating
               label={c.budgetLabel}
               placeholder={c.budgetPlaceholder}
               value={budget}
               onChange={setBudget}
               items={c.budgetOptions.map((o) => ({ label: o, value: o }))}
             />
-          ) : (
-            <select value={budget} onChange={(e) => setBudget(e.target.value)}>
-              <option value="">{c.budgetPlaceholder}</option>
-              {c.budgetOptions.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
-          )}
-        </label>
+          </>
+        ) : (
+          <>
+            <label className={`${ns}-field`}>
+              <span className={`${ns}-mono-label`}>{c.fieldLabel}</span>
+              <select value={service} onChange={(e) => setService(e.target.value)}>
+                <option value="">{c.fieldPlaceholder}</option>
+                {c.fieldOptions.map((o) => (
+                  <option key={o} value={o}>
+                    {o}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className={`${ns}-field`}>
+              <span className={`${ns}-mono-label`}>{c.budgetLabel}</span>
+              <select value={budget} onChange={(e) => setBudget(e.target.value)}>
+                <option value="">{c.budgetPlaceholder}</option>
+                {c.budgetOptions.map((o) => (
+                  <option key={o} value={o}>
+                    {o}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </>
+        )}
       </div>
 
-      {!compact && (
-        <label className={`${ns}-field`}>
-          <span className={`${ns}-mono-label`}>{c.messageLabel}</span>
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={c.messagePlaceholder}
-            rows={4}
-          />
-        </label>
-      )}
+      {!compact &&
+        (isNx ? (
+          <NxAnimatedInput as="textarea" label={c.messageLabel} value={message} onChange={setMessage} rows={4} />
+        ) : (
+          <label className={`${ns}-field`}>
+            <span className={`${ns}-mono-label`}>{c.messageLabel}</span>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={c.messagePlaceholder}
+              rows={4}
+            />
+          </label>
+        ))}
 
       {/* Honeypot — off-screen, never announced, never focusable by tab. */}
       <input

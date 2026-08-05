@@ -69,6 +69,8 @@ export type HomeCopy = {
     ctaTitle: string;
     ctaDesc: string;
     ctaLink: string;
+    /** Shown on the open portfolio row — that row links to the live site. */
+    viewLink: string;
     items: V3Project[];
   };
   caseStudy: {
@@ -117,7 +119,15 @@ export type HomeCopy = {
   };
   process: { eyebrow: string; title: string; steps: V3Step[] };
   team: { eyebrow: string; title: string; members: V3Member[] };
-  testimonials: { eyebrow: string; title: string; items: V3Quote[] };
+  testimonials: {
+    eyebrow: string;
+    title: string;
+    /* Controls for the stacked carousel the quotes are read in. */
+    prev: string;
+    next: string;
+    goTo: (n: number) => string;
+    items: V3Quote[];
+  };
   credentials: { eyebrow: string; title: string; items: V3Credential[] };
   faq: { eyebrow: string; title: string; items: V3Faq[] };
   cta: { eyebrow: string; title: string; call: string; telegram: string; meta: string };
@@ -216,6 +226,7 @@ const uz: HomeCopy = {
     ctaTitle: "Keyingisi — sizniki",
     ctaDesc: "Loyihangizni birga rejalashtiramiz va ishga tushiramiz.",
     ctaLink: "Loyihani boshlash",
+    viewLink: "Loyihani ko'rish",
     /* Where a client has gone on record, the number carries their name — an
        attributed figure is worth more than a bigger unattributed one. */
     items: [
@@ -342,6 +353,9 @@ const uz: HomeCopy = {
   testimonials: {
     eyebrow: "MIJOZLAR FIKRI",
     title: "Mijozlarimiz nima deydi.",
+    prev: "Oldingi sharh",
+    next: "Keyingi sharh",
+    goTo: (n) => `${n}-sharhga o'tish`,
     items: [
       { quote: "Empire jamoasi 15 ta omborimiz va sotuv nuqtalarimizni yagona Odoo ERP tizimiga o'tkazib berdi. Avvallari haftalab qilinadigan inventarizatsiya hozir 1 kunda tugaydi. Omboriy yo'qotishlar 90% ga kamaydi.", name: "Alisher Raximov", role: "Asoschi", company: "Grand Osiyo Textile" },
       { quote: "Bemorlarni ro'yxatga olish va shifokorlar jadvalini avtomatlashtirish bo'yicha murojaat qilgandik. 3 oyda mukammal CRM topshirishdi. Qabul samaradorligi 40% ga oshdi, mijozlar kutish vaqti 2 barobar qisqardi.", name: "Dr. Sardor Zokirov", role: "Klinika tarmog'i rahbari", company: "MedFlow" },
@@ -489,6 +503,7 @@ const ru: HomeCopy = {
     ctaTitle: "Следующий — ваш",
     ctaDesc: "Спланируем и запустим ваш проект вместе.",
     ctaLink: "Начать проект",
+    viewLink: "Посмотреть проект",
     items: [
       { seg: "АВТО · CRM", title: "Motor Lux — CRM и управление продажами", result: "Потери лидов прекратились, этап каждого продавца виден прозрачно", source: "Малика Умарова, директор по маркетингу", tags: ["CRM", "Web"] },
       { seg: "МЕДИЦИНА · CRM (PWA)", title: "MedFlow — CRM клиники и приём пациентов", result: "Эффективность приёма выросла на 40%, время ожидания сократилось вдвое", source: "Д-р Сардор Зокиров, руководитель сети", tags: ["PWA", "CRM"] },
@@ -608,6 +623,9 @@ const ru: HomeCopy = {
   testimonials: {
     eyebrow: "ОТЗЫВЫ КЛИЕНТОВ",
     title: "Что говорят наши клиенты.",
+    prev: "Предыдущий отзыв",
+    next: "Следующий отзыв",
+    goTo: (n) => `Перейти к отзыву ${n}`,
     items: [
       { quote: "Команда Empire перевела наши 15 складов и точек продаж в единую систему Odoo ERP. Инвентаризация, которая раньше занимала недели, теперь завершается за 1 день. Складские потери сократились на 90%.", name: "Алишер Рахимов", role: "Основатель", company: "Grand Osiyo Textile" },
       { quote: "Мы обратились по автоматизации регистрации пациентов и расписания врачей. За 3 месяца сдали отличную CRM. Эффективность приёма выросла на 40%, время ожидания клиентов сократилось вдвое.", name: "Д-р Сардор Зокиров", role: "Руководитель сети клиник", company: "MedFlow" },
@@ -753,6 +771,7 @@ const en: HomeCopy = {
     ctaTitle: "The next one is yours",
     ctaDesc: "We will plan and ship your project together.",
     ctaLink: "Start a project",
+    viewLink: "View project",
     items: [
       { seg: "AUTOMOTIVE · CRM", title: "Motor Lux — CRM and sales management", result: "Leads stopped falling through; every rep's stage is visible", source: "Malika Umarova, Marketing Director", tags: ["CRM", "Web"] },
       { seg: "HEALTHCARE · CRM (PWA)", title: "MedFlow — clinic CRM and patient intake", result: "Intake efficiency up 40%, patient wait time halved", source: "Dr. Sardor Zokirov, Head of clinic network", tags: ["PWA", "CRM"] },
@@ -872,6 +891,9 @@ const en: HomeCopy = {
   testimonials: {
     eyebrow: "CLIENT FEEDBACK",
     title: "What our clients say.",
+    prev: "Previous review",
+    next: "Next review",
+    goTo: (n) => `Go to review ${n}`,
     items: [
       { quote: "The Empire team moved our 15 warehouses and retail points onto a single Odoo ERP. A stocktake that used to take weeks now finishes in one day. Warehouse losses fell by 90%.", name: "Alisher Rakhimov", role: "Founder", company: "Grand Osiyo Textile" },
       { quote: "We came to them to automate patient registration and doctor scheduling. They delivered an excellent CRM in three months. Intake efficiency rose 40% and patient wait time halved.", name: "Dr. Sardor Zokirov", role: "Head of clinic network", company: "MedFlow" },

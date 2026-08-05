@@ -21,16 +21,17 @@ export type HoverExpandItem = {
   description?: string;
   image: string;
   href: string;
-  /** Word the custom cursor shows over this row. */
-  cursor?: string;
 };
 
 export function NxHoverExpand({
   items,
+  ctaLabel,
   collapsedHeight = 76,
   expandedHeight = 330,
 }: {
   items: HoverExpandItem[];
+  /** Shown on the open row — the row is a link, so it should say where to. */
+  ctaLabel: string;
   collapsedHeight?: number;
   expandedHeight?: number;
 }) {
@@ -61,7 +62,6 @@ export function NxHoverExpand({
             target="_blank"
             rel="noopener noreferrer"
             className={`nx-hx-row${open ? " open" : ""}`}
-            data-cursor={item.cursor}
             /* Start at the collapsed height rather than springing up from zero
                on mount — that opening animation had no meaning and left the
                row half-height if the tab was throttled while it ran. */
@@ -121,7 +121,22 @@ export function NxHoverExpand({
                   </motion.span>
                 )}
               </span>
-              {item.sublabel && <span className="nx-hx-sub">{item.sublabel}</span>}
+              <span className="nx-hx-right">
+                {item.sublabel && <span className="nx-hx-sub">{item.sublabel}</span>}
+                {/* The row is a link to a live site; on the open row it says so
+                    outright rather than leaving the reader to guess. */}
+                <motion.span
+                  className="nx-hx-cta"
+                  initial={false}
+                  animate={{ opacity: open ? 1 : 0, y: open ? 0 : 6 }}
+                  transition={{ duration: 0.26, delay: open ? 0.08 : 0, ease: [0.23, 1, 0.32, 1] }}
+                >
+                  {ctaLabel}
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M4.5 11.5L11.5 4.5M11.5 4.5H5.5M11.5 4.5V10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </motion.span>
+              </span>
             </span>
           </motion.a>
         );

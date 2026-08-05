@@ -15,10 +15,12 @@ import { NxAccordion } from "./nx/Accordion";
 import { NxThemeSwitch } from "./nx/ThemeSwitch";
 import { NxHoverExpand } from "./nx/HoverExpand";
 import { NxNavMenu, type NavEntry } from "./nx/NavMenu";
-import { NxCursor } from "./nx/Cursor";
 import { NxGlowButton } from "./nx/GlowButton";
 import { TextReveal } from "./nx/TextReveal";
 import { NxAuroraBars } from "./nx/AuroraBars";
+import { NxReviews } from "./nx/Reviews";
+import { NxPriceFlow } from "./nx/PriceFlow";
+import { NxDock } from "./nx/Dock";
 
 /* ------------------------------------------------------------------ *
  *  Empire Group — homepage, second pass (.nx)
@@ -135,6 +137,18 @@ const Arrow = ({ size = 14 }: { size?: number }) => (
     <path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+/* Line icons for the bottom dock. Drawn on the same 20px box and the same
+   1.6 stroke as the rest of the page's iconography. */
+const DockIcon = ({ d }: { d: string }) => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <path d={d} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const ICON_SERVICES = "M3 3h6v6H3V3Zm8 0h6v6h-6V3ZM3 11h6v6H3v-6Zm8 0h6v6h-6v-6Z";
+const ICON_WORK = "M3 6.5h14v10H3v-10Zm4 0V4.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2";
+const ICON_PRICE = "M10.5 3H16v5.5L9 15.5 3.5 10 10.5 3Zm2.5 3.2h.01";
+const ICON_CONTACT = "M3.5 5.5h13v9h-9l-4 3v-12Z";
 
 /* ========================= CHROME ========================= */
 
@@ -343,7 +357,6 @@ export function HomeNext({
        than a line that switches face mid-sentence. */
     <div className={`nx nx-${locale}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <NxCursor />
 
       {/* ===================== NAV ===================== */}
       <header className="nx-nav">
@@ -600,13 +613,13 @@ export function HomeNext({
                 once, the capture revealed on the row you are actually on. */}
             <div className="nx-in">
               <NxHoverExpand
+                ctaLabel={t.portfolio.viewLink}
                 items={projects.map((p) => ({
                   label: p.title,
                   sublabel: p.url,
                   description: p.result,
                   image: p.img,
                   href: `https://${p.url}`,
-                  cursor: t.portfolio.ctaLink,
                 }))}
               />
             </div>
@@ -738,22 +751,18 @@ export function HomeNext({
               <p className="nx-eyebrow">{t.testimonials.eyebrow}</p>
               <TextReveal as="h2" className="nx-h2" text={t.testimonials.title} />
             </header>
-            <div className="nx-duo nx-in">
-              {t.testimonials.items.map((q, i) => (
-                <figure className="nx-panel nx-quote" key={q.name}>
-                  {QUOTE_LOGOS[i] && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img className="nx-quote-logo" src={QUOTE_LOGOS[i]} alt="" loading="lazy" />
-                  )}
-                  <blockquote>{q.quote}</blockquote>
-                  <figcaption>
-                    <span className="nx-quote-name">{q.name}</span>
-                    <span className="nx-micro">
-                      {q.role} · {q.company}
-                    </span>
-                  </figcaption>
-                </figure>
-              ))}
+            {/* One quote at a time, stacked. Four side by side meant three of
+                them were scenery. */}
+            <div className="nx-in">
+              <NxReviews
+                items={t.testimonials.items.map((q, i) => ({ ...q, logo: QUOTE_LOGOS[i] }))}
+                labels={{
+                  prev: t.testimonials.prev,
+                  next: t.testimonials.next,
+                  goTo: t.testimonials.goTo,
+                  position: (n, of) => `${n} / ${of}`,
+                }}
+              />
             </div>
           </div>
         </section>
@@ -790,7 +799,7 @@ export function HomeNext({
                 <article className={`nx-raised nx-price${p.featured ? " feat" : ""}`} key={p.tier}>
                   {p.featured && <span className="nx-price-badge">{t.pricing.popular}</span>}
                   <p className="nx-micro">{p.tier}</p>
-                  <p className="nx-price-amt">{p.price}</p>
+                  <NxPriceFlow className="nx-price-amt" value={p.price} />
                   <p className="nx-micro nx-price-period">{p.period}</p>
                   <p className="nx-small nx-price-desc">{p.desc}</p>
                   <ul className="nx-price-list">
@@ -998,6 +1007,23 @@ export function HomeNext({
           </div>
         </div>
       </footer>
+
+      {/* Bottom navigation, phones only. The top bar keeps the brand, the
+          theme switch and the burger; this carries the four destinations a
+          thumb actually reaches for. */}
+      <NxDock
+        activeId={active}
+        hidden={menuOpen || popOpen}
+        items={[
+          { id: "xizmatlar", label: cap(t.services.eyebrow), href: "#xizmatlar", icon: <DockIcon d={ICON_SERVICES} /> },
+          { id: "ishlar", label: cap(t.portfolio.eyebrow), href: "#ishlar", icon: <DockIcon d={ICON_WORK} /> },
+          { id: "narxlar", label: cap(t.pricing.eyebrow), href: "#narxlar", icon: <DockIcon d={ICON_PRICE} /> },
+          /* Not t.nav.cta: "Bepul konsultatsiya" is four times the width a
+             quarter of a 360px bar can show. The footer's own heading is the
+             short, already-translated word for the same destination. */
+          { id: "aloqa", label: cap(t.footer.contactHead), href: "#aloqa", icon: <DockIcon d={ICON_CONTACT} />, accent: true },
+        ]}
+      />
     </div>
   );
 }
@@ -1074,7 +1100,10 @@ const CSS = `
 .nx-ru{--mono:var(--font-geist-mono),ui-monospace,SFMono-Regular,Menlo,monospace;}
 .nx *{box-sizing:border-box;}
 .nx a{color:inherit;text-decoration:none;}
-.nx img{display:block;max-width:100%;}
+/* :where() keeps this at zero specificity for the element part, so a single
+   class can still set its own max-width. As a plain ".nx img" it outranked
+   .nx-quote-logo and stretched every client mark to the full card. */
+.nx :where(img){display:block;max-width:100%;}
 /* :where() keeps the reset at zero specificity, so a component class can set
    its own margin. Written as a descendant selector it scored (0,1,1), beat
    every (0,1,0) rule, and flattened the spacing under every list on the page. */
@@ -1437,9 +1466,17 @@ const CSS = `
   font-family:var(--sans);font-size:var(--t-small);color:rgba(255,255,255,.78);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+.nx-hx-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
 .nx-hx-sub{
   font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.07em;
   text-transform:uppercase;color:var(--faint);flex-shrink:0;transition:color .25s ease;
+}
+.nx-hx-cta{
+  display:inline-flex;align-items:center;gap:7px;flex-shrink:0;
+  padding:7px 14px;border-radius:9999px;
+  background:#fff;color:#0f1013;
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.06em;
+  text-transform:uppercase;white-space:nowrap;
 }
 /* Once the capture is behind it the bar sits on dark, whatever the theme. */
 .nx-hx-row.open .nx-hx-label{color:#fff;}
@@ -1447,6 +1484,10 @@ const CSS = `
 @media (max-width:640px){
   .nx-hx-desc{display:none;}
   .nx-hx-bar{padding:0 4px 16px;}
+  /* Two labels do not fit a phone; the pill is the one that says what a tap
+     does, so the URL is the one that goes. */
+  .nx-hx-right .nx-hx-sub{display:none;}
+  .nx-hx-cta{padding:6px 11px;}
 }
 
 /* ---------- 5. the dark chapter ---------- */
@@ -1546,6 +1587,37 @@ const CSS = `
 .nx-quote figcaption{display:flex;flex-direction:column;gap:4px;margin-top:auto;}
 .nx-quote-name{font-family:var(--sans);font-size:var(--t-body);font-weight:500;color:var(--ink);}
 
+/* Reviews carousel. Cards share one grid cell, so the stack is exactly as tall
+   as the longest quote at the current width — no measuring, nothing clipped. */
+.nx-rc{max-width:720px;margin:0 auto;}
+.nx-rc:focus-visible{outline:2px solid var(--ink);outline-offset:10px;border-radius:16px;}
+.nx-rc-stack{display:grid;padding-top:44px;}
+.nx-rc-card{
+  grid-area:1/1;display:flex;flex-direction:column;padding:34px;
+  transform-origin:center center;
+}
+.nx-rc-card blockquote{
+  font-family:var(--sans);font-size:var(--t-lede);line-height:1.55;letter-spacing:var(--track-body);
+  color:var(--ink);margin:0 0 24px;text-wrap:pretty;
+}
+.nx-rc-card figcaption{display:flex;flex-direction:column;gap:4px;margin-top:auto;}
+.nx-rc-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-top:22px;flex-wrap:wrap;
+}
+.nx-rc-dots{display:flex;align-items:center;gap:8px;}
+.nx-rc-dot{
+  width:28px;height:4px;border-radius:9999px;border:0;padding:0;cursor:pointer;
+  background:var(--line-strong);transition:background .25s var(--ease),width .25s var(--ease);
+}
+.nx-rc-dot.on{background:var(--ink);width:44px;}
+.nx-rc-nav{display:flex;align-items:center;gap:10px;}
+.nx-rc-count{font-variant-numeric:tabular-nums;}
+.nx-rc-nav .nx-icon-btn:disabled{opacity:.35;cursor:not-allowed;}
+@media (max-width:640px){
+  .nx-rc-card{padding:24px;}
+}
+
 /* ---------- 9. pricing + guarantees ---------- */
 .nx-tabs{
   display:flex;gap:4px;padding:4px;margin:0 auto 32px;width:max-content;max-width:100%;
@@ -1561,9 +1633,17 @@ const CSS = `
 .nx-price{display:flex;flex-direction:column;padding:30px;position:relative;}
 .nx-price.feat{border-color:var(--ink);box-shadow:var(--shadow-lift);}
 .nx-price-amt{
+  display:block;
   font-family:var(--sans);font-size:var(--t-h2);font-weight:450;letter-spacing:var(--track-h2);color:var(--ink);
   margin:14px 0 4px;line-height:1;font-variant-numeric:tabular-nums;
 }
+/* Each character gets a clipped slot so the outgoing glyph leaves through the
+   top or bottom edge rather than over its neighbours. */
+.nx-pf-slot{
+  position:relative;display:inline-block;overflow:hidden;
+  vertical-align:top;line-height:1.15;
+}
+.nx-pf-ch{display:inline-block;white-space:pre;}
 .nx-price-period{display:block;margin-bottom:16px;}
 .nx-price-desc{color:var(--muted);margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--line);}
 .nx-price-list{display:flex;flex-direction:column;gap:11px;margin-bottom:32px;}
@@ -1721,23 +1801,51 @@ const CSS = `
 .nx-footer-legal-rows{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:10px;}
 .nx-footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);flex-wrap:wrap;}
 
-/* ---------- custom cursor ----------
-   Rides alongside the native pointer rather than replacing it, so selection
-   and every OS affordance still work if this never paints. */
-.nx-cursor-dot,.nx-cursor-label{
-  position:fixed;top:0;left:0;z-index:200;pointer-events:none;
-  will-change:transform;
+/* ---------- bottom dock (phones) ----------
+   Hidden by default and switched on at the same width the desktop nav links
+   go away, so there is never a moment with both. */
+.nx-dock{display:none;}
+@media (max-width:920px){
+  .nx-dock{
+    display:flex;align-items:stretch;gap:2px;
+    position:fixed;z-index:90;
+    /* Centred with auto margins, not translateX: the dock is a motion element
+       and writes its own transform for the enter and exit. */
+    left:14px;right:14px;margin-inline:auto;max-width:460px;
+    bottom:calc(14px + env(safe-area-inset-bottom,0px));
+    padding:6px;border-radius:20px;
+    background:color-mix(in srgb,var(--surface) 88%,transparent);
+    border:1px solid var(--line);
+    box-shadow:0 -2px 10px rgba(15,16,19,.04),0 18px 40px -16px rgba(15,16,19,.35);
+    backdrop-filter:blur(16px) saturate(1.5);
+    -webkit-backdrop-filter:blur(16px) saturate(1.5);
+  }
+  /* The dock floats over the last screen of the page; give the footer room so
+     it never sits on top of the legal line. */
+  .nx-footer{padding-bottom:104px;}
 }
-.nx-cursor-dot{
-  width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
-  background:var(--ink);mix-blend-mode:difference;
+[data-theme="dark"] .nx-dock{
+  box-shadow:0 18px 44px -16px rgba(0,0,0,.85);
 }
-.nx-cursor-label{margin:18px 0 0 18px;}
-.nx-cursor-label span{
-  display:inline-block;padding:5px 11px;border-radius:9999px;
-  background:var(--ink);color:var(--on-ink);
-  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.06em;
-  text-transform:uppercase;white-space:nowrap;
+.nx-dock-item{
+  position:relative;flex:1 1 0;min-width:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:9px 4px 8px;border-radius:15px;
+  color:var(--muted);text-decoration:none;
+  transition:color .2s ease;
+}
+.nx-dock-item.on{color:var(--ink);}
+.nx-dock-item.accent{background:var(--ink);color:var(--on-ink);}
+.nx-dock-item.accent:hover{color:var(--on-ink);}
+.nx-dock-pill{
+  position:absolute;inset:0;border-radius:15px;
+  background:var(--canvas);z-index:0;
+}
+.nx-dock-icon,.nx-dock-label{position:relative;z-index:1;}
+.nx-dock-icon{display:inline-flex;}
+.nx-dock-label{
+  font-family:var(--sans);font-size:11px;letter-spacing:.01em;line-height:1.1;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 
 /* ---------- glow button ----------
@@ -1768,17 +1876,25 @@ const CSS = `
 
 /* ---------- aurora footer ---------- */
 .nx-aurora{position:absolute;inset:0;overflow:hidden;background:#05070c;pointer-events:none;}
-.nx-aurora-row{position:absolute;inset:0;display:flex;align-items:flex-end;}
-.nx-aurora-cell{flex:1;height:100%;display:flex;align-items:flex-end;}
-.nx-aurora-bar{width:100%;border-radius:9999px 9999px 0 0;opacity:.85;display:block;}
+/* No gap and no cell padding: the columns meet edge to edge, so the wave reads
+   as one moving surface rather than a row of separate bars. */
+/* One blur on the row, not on each of the 28 bars: a single composited layer
+   instead of 28 re-rasterised ones, and it turns the stepped tops into a glow
+   rather than a skyline. Bled past the sides so the blur has material to
+   sample at the edges instead of fading into the ground. */
+.nx-aurora-row{
+  position:absolute;inset:0 -18px -18px;display:flex;align-items:flex-end;gap:0;
+  filter:blur(3px);
+}
+.nx-aurora-bar{flex:1 1 0;min-width:0;display:block;}
 /* Two layers: the radial keeps the arch reading as light, the linear holds a
    dark ground under the columns so the footer type stays legible over the
    brightest bars. */
 .nx-aurora-veil{
   position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 90% 80% at 50% 100%,transparent 42%,#05070ccc 100%),
-    linear-gradient(to bottom,#05070c 0%,rgba(5,7,12,.82) 32%,rgba(5,7,12,.62) 100%);
+    radial-gradient(ellipse 96% 86% at 50% 100%,transparent 52%,#05070cc4 100%),
+    linear-gradient(to bottom,#05070c 0%,rgba(5,7,12,.9) 26%,rgba(5,7,12,.6) 62%,rgba(5,7,12,.42) 100%);
 }
 
 /* ---------- dropdown ---------- */
@@ -1862,6 +1978,73 @@ const CSS = `
   outline:none;border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent);
 }
 .nx-field-err{font-family:var(--sans);font-size:var(--t-small);color:#c2352b;}
+
+/* ---------- animated input ----------
+   One box per field. The label lives inside it and rises when the field is
+   focused or filled, so the field never loses its name the way a placeholder
+   does the moment you start typing. */
+.nx-ai{display:flex;flex-direction:column;gap:6px;min-width:0;}
+.nx-ai-box{
+  position:relative;overflow:hidden;
+  background:var(--canvas);border:1px solid var(--line);border-radius:8px;
+  padding:23px 13px 9px;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.nx-ai.focused .nx-ai-box{
+  border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent);
+}
+.nx-ai.err .nx-ai-box{border-color:#c2352b;}
+.nx-ai-label{
+  position:absolute;left:13px;top:22px;transform-origin:left top;
+  font-family:var(--sans);font-size:var(--t-body);line-height:1.4;
+  color:var(--muted);white-space:nowrap;pointer-events:none;
+  max-width:calc(100% - 26px);overflow:hidden;text-overflow:ellipsis;
+  transition:color .2s ease;
+}
+.nx-ai.focused .nx-ai-label{color:var(--ink);}
+.nx-ai.err .nx-ai-label{color:#c2352b;}
+.nx-ai-field{
+  display:block;width:100%;padding:0;border:0;outline:none;background:transparent;
+  font-family:var(--sans);font-size:var(--t-body);line-height:1.4;color:var(--ink);
+}
+.nx-ai-area .nx-ai-box{padding-top:28px;}
+.nx-ai-area .nx-ai-label{top:12px;}
+.nx-ai-area .nx-ai-field{resize:vertical;line-height:1.55;min-height:86px;}
+/* Chrome paints its own ground on an autofilled field; without this the
+   transparent field would show a yellow block inside the box. */
+.nx-ai-field:-webkit-autofill,
+.nx-ai-field:-webkit-autofill:focus{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 60px var(--canvas) inset;
+  caret-color:var(--ink);
+}
+.nx-ai-rule{
+  position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:var(--ink);transform-origin:center;
+}
+.nx-ai-icon{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:var(--muted);display:inline-flex;
+}
+.nx-ai-hasicon .nx-ai-box{padding-left:42px;}
+.nx-ai-hasicon .nx-ai-label{left:42px;}
+
+/* The dropdown in the same row wears the same box, so the four controls in
+   the form read as one set. */
+.nx-dd-float .nx-dd-trigger{
+  flex-direction:column;align-items:flex-start;gap:0;
+  padding:8px 13px 9px;min-height:56px;justify-content:center;
+  position:relative;
+}
+.nx-dd-float .nx-dd-cap{
+  font-family:var(--sans);font-size:calc(var(--t-body) * .78);line-height:1.4;
+  color:var(--muted);margin-bottom:2px;
+}
+.nx-dd-float .nx-dd-trigger.open .nx-dd-cap{color:var(--ink);}
+/* Positioned without a transform: the caret is a motion element and writes its
+   own inline transform for the flip, which would win over this rule. */
+.nx-dd-float .nx-dd-caret{position:absolute;right:13px;top:calc(50% - 6.5px);}
+.nx-dd-float .nx-dd-trigger > span:not(.nx-dd-cap){padding-right:22px;}
 .nx-form-note{color:var(--muted);text-transform:none;letter-spacing:0;}
 .nx-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
 .nx-form-done{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
