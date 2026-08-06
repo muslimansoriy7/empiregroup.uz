@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { reportLeadConversion } from "@/lib/analytics";
 import { NxDropdown } from "./nx/Dropdown";
 
 /**
@@ -83,6 +84,10 @@ export function HomeForm({
       setBudget("");
       setMessage("");
       setStatus("success");
+      // This form resolves in place, so /rahmat — and the tracker living on
+      // it — is never reached. Without this call the homepage, which takes
+      // most of the leads, would report none of them.
+      reportLeadConversion(payload?.leadId, "home_form");
     } catch {
       setStatus("idle");
       setSubmitError(c.errorSubmit);

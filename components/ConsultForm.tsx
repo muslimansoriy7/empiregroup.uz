@@ -2,54 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { reportLeadConversion } from "@/lib/analytics";
 import { Button } from "./Button";
 import { Check, ArrowRight, Telegram } from "./Icons";
 
 type Status = "idle" | "sending" | "success";
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
-/**
- * Fires the lead conversion the moment the API confirms the write.
- *
- * The form resolves in place rather than navigating to /rahmat, so nothing
- * else on the page would ever report the conversion. Both events are sent:
- * `generate_lead` for GA4 reporting and the Ads conversion for bidding.
- * When gtag is absent (analytics not configured yet) this is a no-op, so the
- * wiring can land before the measurement IDs do.
- */
-function reportConversion(leadId?: string) {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
-
-  const id = leadId || "anon";
-  const key = `conv_${id}`;
-  try {
-    if (sessionStorage.getItem(key)) return;
-    sessionStorage.setItem(key, "1");
-  } catch {
-    // private mode — reporting once more beats not reporting at all
-  }
-
-  window.gtag("event", "generate_lead", {
-    event_category: "engagement",
-    event_label: "consult_form_submit",
-    value: 1,
-  });
-
-  const convId = process.env.NEXT_PUBLIC_GADS_CONVERSION_ID;
-  if (convId) {
-    window.gtag("event", "conversion", {
-      send_to: convId,
-      transaction_id: id,
-      value: 1.0,
-      currency: "USD",
-    });
-  }
-}
 
 const TELEGRAM = "https://t.me/muslimansoriy";
 
@@ -152,7 +109,7 @@ export function ConsultForm({
       setBudget("");
       setMessage("");
       setStatus("success");
-      reportConversion(payload?.leadId);
+      reportLeadConversion(payload?.leadId, "consult_form");
     } catch {
       setStatus("idle");
       setSubmitError(c.errorSubmit);

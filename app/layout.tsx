@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { defaultLocale } from "@/content";
+import { ContactTracking } from "@/components/ContactTracking";
 import "./globals.css";
 
 // The real Geist from Google Fonts (self-hosted by next/font at build time),
@@ -20,6 +21,11 @@ const geistMono = Geist_Mono({
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://empiregroup.uz";
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GADS_ID = process.env.NEXT_PUBLIC_GADS_ID;
+// Yandex is a real share of search here, and Bing is what ChatGPT and Copilot
+// read when they answer about us — both are worth as much as Google.
+const YM_ID = process.env.NEXT_PUBLIC_YM_ID;
+const YANDEX_VERIFICATION = process.env.NEXT_PUBLIC_YANDEX_VERIFICATION;
+const BING_VERIFICATION = process.env.NEXT_PUBLIC_BING_VERIFICATION;
 
 /**
  * Root shell. Deliberately free of `cookies()` and `headers()` — reading
@@ -36,6 +42,15 @@ export const metadata: Metadata = {
     apple: "/icon.svg",
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
+  // Google verifies ownership through the registrar's DNS record, so it needs
+  // no tag. Yandex and Bing were verified by meta tag, and dropping the tags
+  // un-verifies both properties.
+  verification: {
+    ...(YANDEX_VERIFICATION ? { yandex: YANDEX_VERIFICATION } : {}),
+    ...(BING_VERIFICATION
+      ? { other: { "msvalidate.01": BING_VERIFICATION } }
+      : {}),
+  },
 };
 
 export const viewport: Viewport = {
@@ -142,6 +157,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <ContactTracking />
         {GA_ID && (
           <>
             <Script
@@ -153,6 +169,22 @@ export default function RootLayout({
                 GADS_ID ? `gtag('config','${GADS_ID}');` : ""
               }`}
             </Script>
+          </>
+        )}
+        {YM_ID && (
+          <>
+            <Script id="ym-init" strategy="afterInteractive">
+              {`(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<e.length;j++){if(e[j].src===r){return}}k=t.createElement("script");a=t.getElementsByTagName("script")[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})(window,document.scripts,"document","https://mc.yandex.ru/metrika/tag.js","ym");ym(${YM_ID},"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});`}
+            </Script>
+            <noscript>
+              <div>
+                <img
+                  src={`https://mc.yandex.ru/watch/${YM_ID}`}
+                  style={{ position: "absolute", left: "-9999px" }}
+                  alt=""
+                />
+              </div>
+            </noscript>
           </>
         )}
       </body>
