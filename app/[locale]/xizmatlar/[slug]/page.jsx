@@ -7,14 +7,17 @@ import { TelegramFab } from '@/components/TelegramFab';
 import { Container } from '@/components/Container';
 import { ConsultForm } from '@/components/ConsultForm';
 import { getGeoEntry, geoSlugs } from '@/lib/geo';
-import { getServiceEntry, serviceSlugs } from '@/lib/services';
+import { getServiceEntry, serviceSlugs, serviceLocales } from '@/lib/services';
 import { ServiceLanding } from '@/components/ServiceLanding';
 import { localePath, localeAlternates, canonicalFor } from '@/lib/locale-path';
 
-// These pages carry Uzbek copy for every locale (neither getGeoEntry nor
-// getServiceEntry is translated), so they must NOT advertise distinct ru/en
-// versions — that is duplicate content with false hreflang. Treat them as
-// uz-only: ru/en requests canonicalize to uz.
+// The city pages carry Uzbek copy for every locale, so they must NOT advertise
+// distinct ru/en versions — that is duplicate content with false hreflang.
+// Treat them as uz-only: ru/en requests canonicalize to uz.
+//
+// The service pages are written in Uzbek and Russian, so they declare both and
+// each is its own canonical. English has no translation and defers to Uzbek —
+// `serviceLocales` carries that list.
 const GEO_LOCALES = ['uz'];
 import { isLocale, defaultLocale } from '@/content';
 
@@ -34,15 +37,15 @@ export async function generateMetadata({ params }) {
   const { slug, locale } = await params;
   const lang = isLocale(locale) ? locale : defaultLocale;
 
-  const service = getServiceEntry(slug);
+  const service = getServiceEntry(slug, lang);
   if (service) {
     return {
       title: { absolute: service.title },
       description: service.description,
       alternates: {
-        canonical: canonicalFor(lang, `/xizmatlar/${slug}`, GEO_LOCALES),
+        canonical: canonicalFor(lang, `/xizmatlar/${slug}`, serviceLocales),
         languages: {
-          ...localeAlternates(`/xizmatlar/${slug}`, GEO_LOCALES),
+          ...localeAlternates(`/xizmatlar/${slug}`, serviceLocales),
           'x-default': `/xizmatlar/${slug}`,
         },
       },
@@ -50,7 +53,7 @@ export async function generateMetadata({ params }) {
         type: 'website',
         title: service.title,
         description: service.description,
-        url: `${SITE}${canonicalFor(lang, `/xizmatlar/${slug}`, GEO_LOCALES)}`,
+        url: `${SITE}${canonicalFor(lang, `/xizmatlar/${slug}`, serviceLocales)}`,
         images: [{ url: `${SITE}/og.png`, width: 1200, height: 630 }],
       },
       twitter: {
@@ -92,7 +95,7 @@ function serviceSchemaFor(service, lang) {
     serviceType: service.h1,
     areaServed: { '@type': 'Country', name: "O'zbekiston" },
     provider: { '@id': `${SITE}#organisation` },
-    url: `${SITE}${canonicalFor(lang, `/xizmatlar/${service.slug}`, GEO_LOCALES)}`,
+    url: `${SITE}${canonicalFor(lang, `/xizmatlar/${service.slug}`, serviceLocales)}`,
     offers: service.tiers.map((t) => ({
       '@type': 'Offer',
       name: t.tier,
@@ -138,7 +141,7 @@ export default async function GeoServicePage({ params }) {
   const { slug, locale } = await params;
   const lang = isLocale(locale) ? locale : defaultLocale;
 
-  const service = getServiceEntry(slug);
+  const service = getServiceEntry(slug, lang);
   if (service) {
     return (
       <>

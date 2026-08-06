@@ -21,9 +21,51 @@ import { localePath } from '@/lib/locale-path';
  * waiting at the bottom: a reader convinced by the third section should not
  * have to scroll past four more to act.
  */
+/* Section headings and the fixed sentences around the price table. The copy
+   itself is translated in lib/services.js; these are the page's own words. */
+const LABELS = {
+  uz: {
+    home: 'Bosh sahifa',
+    forWho: 'Kimga mos',
+    problems: 'Nimani hal qiladi',
+    deliverables: 'Nima olasiz',
+    pricing: 'Narx va muddat',
+    pricingNote:
+      "Fixed-scope: TZ tasdiqlangach summa shartnomada qotiriladi va o'zgarmaydi.",
+    pricingFoot:
+      "Har paketda 4 hafta bepul qo'llab-quvvatlash · bosqichma-bosqich to'lov · kod va intellektual mulk sizga o'tadi.",
+    allPrices: 'Barcha narxlar',
+    caseTitle: (client) => `Real loyiha — ${client}`,
+    stack: 'Texnologiyalar',
+    faq: "Ko'p beriladigan savollar",
+    related: 'Boshqa xizmatlar',
+    formTitle: 'Bepul konsultatsiya',
+    formSub: "Loyihangiz haqida ayting — 1 ish kunida javob beramiz.",
+  },
+  ru: {
+    home: 'Главная',
+    forWho: 'Кому подходит',
+    problems: 'Что решает',
+    deliverables: 'Что вы получаете',
+    pricing: 'Цена и сроки',
+    pricingNote:
+      'Fixed-scope: после утверждения ТЗ сумма закрепляется в договоре и не меняется.',
+    pricingFoot:
+      'В каждом пакете 4 недели бесплатной поддержки · поэтапная оплата · код и права переходят к вам.',
+    allPrices: 'Все цены',
+    caseTitle: (client) => `Реальный проект — ${client}`,
+    stack: 'Технологии',
+    faq: 'Частые вопросы',
+    related: 'Другие услуги',
+    formTitle: 'Бесплатная консультация',
+    formSub: 'Расскажите о проекте — ответим в течение одного рабочего дня.',
+  },
+};
+
 export function ServiceLanding({ entry, lang }) {
+  const l = LABELS[lang] || LABELS.uz;
   const related = (entry.related || [])
-    .map((slug) => getServiceEntry(slug))
+    .map((slug) => getServiceEntry(slug, lang))
     .filter(Boolean);
 
   return (
@@ -38,7 +80,7 @@ export function ServiceLanding({ entry, lang }) {
               href={localePath(lang, '/')}
               className="inline-flex items-center gap-1.5 text-sm text-mute transition-colors hover:text-ink"
             >
-              ← Bosh sahifa
+              ← {l.home}
             </Link>
             <div className="eyebrow mt-6">{entry.eyebrow}</div>
             <h1 className="mt-3 max-w-3xl text-h2 font-semibold">{entry.h1}</h1>
@@ -55,7 +97,7 @@ export function ServiceLanding({ entry, lang }) {
 
               {/* ------------------------------------------ kimga mos */}
               <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                <h2 className="text-h3 font-semibold text-ink">Kimga mos</h2>
+                <h2 className="text-h3 font-semibold text-ink">{l.forWho}</h2>
                 <ul className="mt-3 grid gap-2">
                   {entry.forWho.map((w) => (
                     <li key={w} className="flex items-start gap-2.5 text-sm text-body">
@@ -68,7 +110,7 @@ export function ServiceLanding({ entry, lang }) {
 
               {/* -------------------------------- muammo → yechim */}
               <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                <h2 className="text-h3 font-semibold text-ink">Nimani hal qiladi</h2>
+                <h2 className="text-h3 font-semibold text-ink">{l.problems}</h2>
                 <div className="mt-4 flex flex-col">
                   {entry.problems.map(({ p, s }) => (
                     <div
@@ -84,7 +126,7 @@ export function ServiceLanding({ entry, lang }) {
 
               {/* ------------------------------------ nima olasiz */}
               <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                <h2 className="text-h3 font-semibold text-ink">Nima olasiz</h2>
+                <h2 className="text-h3 font-semibold text-ink">{l.deliverables}</h2>
                 <ul className="mt-3 grid gap-2 sm:grid-cols-2">
                   {entry.deliverables.map((d) => (
                     <li key={d} className="flex items-start gap-2 text-sm text-body">
@@ -97,10 +139,8 @@ export function ServiceLanding({ entry, lang }) {
 
               {/* ------------------------------------------ narxlar */}
               <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                <h2 className="text-h3 font-semibold text-ink">Narx va muddat</h2>
-                <p className="mt-1.5 text-sm text-mute">
-                  Fixed-scope: TZ tasdiqlangach summa shartnomada qotiriladi va o&apos;zgarmaydi.
-                </p>
+                <h2 className="text-h3 font-semibold text-ink">{l.pricing}</h2>
+                <p className="mt-1.5 text-sm text-mute">{l.pricingNote}</p>
                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
                   {entry.tiers.map((t) => (
                     <div
@@ -128,10 +168,9 @@ export function ServiceLanding({ entry, lang }) {
                   ))}
                 </div>
                 <p className="mt-4 text-[13px] text-mute">
-                  Har paketda 4 hafta bepul qo&apos;llab-quvvatlash · bosqichma-bosqich to&apos;lov ·
-                  kod va intellektual mulk sizga o&apos;tadi.{' '}
+                  {l.pricingFoot}{' '}
                   <Link href={localePath(lang, '/narxlar')} className="text-link underline-offset-2 hover:underline">
-                    Barcha narxlar
+                    {l.allPrices}
                   </Link>
                 </p>
               </section>
@@ -140,7 +179,7 @@ export function ServiceLanding({ entry, lang }) {
               {entry.caseRef && (
                 <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
                   <h2 className="text-h3 font-semibold text-ink">
-                    Real loyiha — {entry.caseRef.client}
+                    {l.caseTitle(entry.caseRef.client)}
                   </h2>
                   <p className="mt-2.5 text-sm leading-relaxed text-body">
                     {entry.caseRef.body}
@@ -164,7 +203,7 @@ export function ServiceLanding({ entry, lang }) {
 
               {/* ------------------------------------------- stack */}
               <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                <h2 className="text-h3 font-semibold text-ink">Texnologiyalar</h2>
+                <h2 className="text-h3 font-semibold text-ink">{l.stack}</h2>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {entry.stack.map((s) => (
                     <li
@@ -179,7 +218,7 @@ export function ServiceLanding({ entry, lang }) {
 
               {/* --------------------------------------------- FAQ */}
               <section className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                <h2 className="text-h3 font-semibold text-ink">Ko&apos;p beriladigan savollar</h2>
+                <h2 className="text-h3 font-semibold text-ink">{l.faq}</h2>
                 <div className="mt-4 flex flex-col">
                   {entry.faq.map(({ q, a }) => (
                     <details
@@ -206,7 +245,7 @@ export function ServiceLanding({ entry, lang }) {
               {/* ------------------------------------- related links */}
               {related.length > 0 && (
                 <nav className="rounded-[var(--radius-card-lg)] border border-hairline bg-elevated p-6">
-                  <h2 className="text-h3 font-semibold text-ink">Boshqa xizmatlar</h2>
+                  <h2 className="text-h3 font-semibold text-ink">{l.related}</h2>
                   <ul className="mt-3 flex flex-col gap-2">
                     {related.map((r) => (
                       <li key={r.slug}>
@@ -229,10 +268,8 @@ export function ServiceLanding({ entry, lang }) {
                 <ConsultForm
                   header={
                     <div className="mb-5">
-                      <h2 className="text-h3 font-semibold text-ink">Bepul konsultatsiya</h2>
-                      <p className="mt-1.5 text-sm text-body">
-                        Loyihangiz haqida ayting — 1 ish kunida javob beramiz.
-                      </p>
+                      <h2 className="text-h3 font-semibold text-ink">{l.formTitle}</h2>
+                      <p className="mt-1.5 text-sm text-body">{l.formSub}</p>
                     </div>
                   }
                 />

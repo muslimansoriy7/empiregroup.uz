@@ -1,7 +1,7 @@
 import { getAllSlugs } from '@/lib/posts';
 import { geoSlugs } from '@/lib/geo';
-import { serviceSlugs } from '@/lib/services';
-import { localePath, localeAlternates } from '@/lib/locale-path';
+import { serviceSlugs, serviceLocales } from '@/lib/services';
+import { localePath, localeAlternates, postLocales } from '@/lib/locale-path';
 import { defaultLocale } from '@/content';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || 'https://empiregroup.uz';
@@ -25,9 +25,16 @@ function abs(p) {
   return p === '/' ? SITE : `${SITE}${p}`;
 }
 
-function entry(path, { lastModified, changeFrequency, priority }) {
+/**
+ * `only` is the list of languages the page is actually written in. Declaring
+ * an alternate that shows a different language is a false hreflang: Google
+ * follows it, finds Uzbek where English was promised, and discounts the whole
+ * cluster. The city pages exist in Uzbek alone; the blog and the service pages
+ * in Uzbek and Russian; the rest in all three.
+ */
+function entry(path, { lastModified, changeFrequency, priority, only }) {
   const languages = Object.fromEntries(
-    Object.entries(localeAlternates(path)).map(([l, p]) => [l, abs(p)])
+    Object.entries(localeAlternates(path, only)).map(([l, p]) => [l, abs(p)])
   );
   return {
     url: abs(localePath(defaultLocale, path)),
@@ -48,6 +55,7 @@ export default async function sitemap() {
       lastModified: s.updated_at ? new Date(s.updated_at) : now,
       changeFrequency: 'weekly',
       priority: 0.7,
+      only: postLocales,
     })
   );
 
@@ -56,6 +64,7 @@ export default async function sitemap() {
       lastModified: new Date(p.lastModified),
       changeFrequency: 'monthly',
       priority: 0.7,
+      only: postLocales,
     })
   );
 
@@ -64,6 +73,7 @@ export default async function sitemap() {
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.9,
+      only: ['uz'],
     })
   );
 
@@ -74,6 +84,7 @@ export default async function sitemap() {
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.95,
+      only: serviceLocales,
     })
   );
 
