@@ -1,5 +1,6 @@
 import { getAllSlugs } from '@/lib/posts';
 import { geoSlugs } from '@/lib/geo';
+import { serviceSlugs } from '@/lib/services';
 import { localePath, localeAlternates } from '@/lib/locale-path';
 import { defaultLocale } from '@/content';
 
@@ -66,6 +67,16 @@ export default async function sitemap() {
     })
   );
 
+  // The service pages answer the query someone types once they know the work
+  // they need, so they rank above the city pages in importance, not below.
+  const servicePages = serviceSlugs.map((slug) =>
+    entry(`/xizmatlar/${slug}`, {
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.95,
+    })
+  );
+
   // Anchors are deliberately absent: a fragment is not a separate document,
   // and the previous entries pointed at section ids the redesign renamed.
   return [
@@ -73,6 +84,7 @@ export default async function sitemap() {
     entry('/blog', { lastModified: now, changeFrequency: 'daily', priority: 0.9 }),
     entry('/narxlar', { lastModified: now, changeFrequency: 'monthly', priority: 0.9 }),
     entry('/tizimlashtirish', { lastModified: now, changeFrequency: 'monthly', priority: 0.8 }),
+    ...servicePages,
     ...geoPages,
     ...posts,
     ...staticPosts,
